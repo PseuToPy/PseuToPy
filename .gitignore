@@ -138,6 +138,7 @@ dmypy.json
 # Remove everything related to IntelliJ
 
 .idea/
+*.iml
 
 ### textX
 # Remove .dot and .png files generated after executing script with mode debug

@@ -1,0 +1,183 @@
+/**
+ * This grammar is taken from the grammar definition of Python 3.8.2, available
+ * here: https://docs.python.org/3/reference/grammar.html
+ *
+ * Some changes were made at very specific points in order to adapt this
+ * grammar to the pseudocode grammar we wish to create.
+ *
+ * A side-effect of this approach is that instructions written in Python 3.8
+ * will be accepted as valid pseudocode instructions.
+ */
+
+
+Module: statements*=Stmt;
+Stmt: (SimpleStmt | CompoundStmt);
+SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
+SmallStmt: (PrintStmt | InputStmt | ExprStmt | DelStmt | PassStmt | FlowStmt |
+    ImportStmt | GlobalStmt | NonLocalStmt | AssertStmt);
+
+PrintStmt: ('print' | 'display' | 'show') 
+    '('? (TestList ((',' | 'followed by') TestList)*) ')'?;
+
+InputStmt: 'input' ('number' | 'integer')? '('?
+    (TestList (',' TestList)?) ')'?;
+
+ExprStmt: 
+    Assign | 
+    TestListStarExpr (AnnAssign |
+        AugAssign (YieldExpr | TestList) | 
+       (('=' (YieldExpr | TestListStarExpr))+)?)
+;
+AnnAssign: ':' Test ('=' (YieldExpr | TestListStarExpr))?;
+TestListStarExpr: (Test | StarExpr) (',' (Test | StarExpr))* (',')?;
+AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
+    '<<=' | '>>=' | '**==' | '//=')
+;
+Assign: AssignStmt | DeclareStmt;
+AssignStmt : 'set' (Name (',' Name)*) 'to' 
+    ('the result of' InputStmt | (TestList (',' TestList)*))
+;
+DeclareStmt: 'declare' (Name (',' Name)*);
+
+DelStmt: 'del' ExprList;
+PassStmt: 'pass';
+FlowStmt: BreakStmt | ContinueStmt | ReturnStmt | RaiseStmt | YieldStmt;
+BreakStmt: 'break';
+ContinueStmt: 'continue';
+ReturnStmt: 'return' TestListStarExpr?;
+YieldStmt: YieldExpr;
+RaiseStmt: 'raise' (Test ('from' Test)?)?;
+ImportStmt: ImportName | ImportFrom;
+ImportName: 'import' DottedAsNames;
+ImportFrom: ('from' (('.' | '...')* DottedName | ('.' | '...')+)
+                'import' ('*' | '(' ImportAsNames ')' | ImportAsNames)
+);
+ImportAsName: Name ('as' Name)?;
+DottedAsName: DottedName ('as' Name)?;
+ImportAsNames: ImportAsName (',' ImportAsName)? ','?;
+DottedAsNames: DottedAsName (',' DottedAsName)?;
+DottedName: Name ('.' Name)*;
+GlobalStmt: 'declare global' Name (',' Name)*;
+NonLocalStmt: 'declare non local' Name (',' Name)*;
+AssertStmt: 'assert' Test (',' Test)?;
+
+CompoundStmt: IfStmt | WhileStmt | ForStmt | TryStmt | WithStmt | FuncDef |
+    ClassDef | Decorated | AsyncStmt;
+Decorator: '@' DottedName ('(' ArgList? ')')?;
+Decorators: Decorator+;
+Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
+
+AsyncFuncDef: 'ASYNC' FuncDef;
+FuncDef: 'def' Name 'with arguments' Parameters 
+    ('->' Test)? /:|as((\s)?:)?/ FuncBodySuite 'end';
+Parameters: '(' TypedArgsList? ')';
+
+TypedArgsList: (
+    (TfpDef ('=' Test)? (','  TfpDef ('=' Test)?)* ','  '/' 
+        (','(TfpDef ('=' Test)? (',' TfpDef ('=' Test)?)*
+            ((','  ('*' (TfpDef)? (','  TfpDef ('=' Test)?)* 
+            ((','  ('**' TfpDef (',')?)?)?) | '**' TfpDef (',')?))) | 
+            '*' (TfpDef)? (','  TfpDef ('=' Test)?)* ((','  ('**' TfpDef (',')?)?)?) |
+            '**' TfpDef (',')?)?)?)? |  
+    (TfpDef ('=' Test)? (',' TfpDef ('=' Test)?)* 
+        ((','  ('*' (TfpDef)? (','  TfpDef ('=' Test)?)* 
+        ((','  ('**' TfpDef (',')?))?) |
+        '**' TfpDef (',')?)?)?) | 
+        '*' (TfpDef)? (','  TfpDef ('=' Test)?)* ((','  ('**' TfpDef (',')?)?)?) |
+        '**' TfpDef (',')?)
+);
+
+TfpDef: Name (':' Test)?;
+
+
+AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
+IfStmt: 'if' NamedExprTest /:|then((\s)*:)?/ Suite 
+    (('elif' | 'else if') NamedExprTest /:|then((\s)*:)?/ Suite)*
+    ('else' /:|then((\s)*:)?/ Suite)?
+    'end'
+;
+WhileStmt: 'while' NamedExprTest /:|do((\s)*:)?/ Suite 
+    ('else' /:|do((\s)*:)?/ Suite)?
+    'end'
+;
+ForStmt: 'for' ExprList 'in' TestList /:|do((\s)*:)?/ Suite 
+    ('else' /:|do((\s)*:)?/ Suite)?
+    'end'
+;
+TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
+            ('else' ':' Suite)?
+            ('finally' ':' Suite) ? |
+            'finally' ':' Suite)
+);
+WithStmt: 'with' WithItem (',' WithItem)* ':' Suite;
+WithItem: Test ('as' Expr)?;
+ExceptClause: 'except' (Test ('as' Name)?)?;
+Suite: (SimpleStmt | Stmt)+;
+
+NamedExprTest: Test (':=' Test)?;
+
+Test: OrTest ('if' OrTest 'else' OrTest)*;
+TestNoCond: OrTest;
+OrTest: AndTest (('or' | '||') AndTest)*;
+AndTest: NotTest (('and' | '&&') NotTest)*;
+NotTest: 'not' NotTest | Comparison;
+Comparison: Expr (CompOp Expr)*;
+CompOp: '<' | 'is lower than' | '>' | 'is greater than' | 
+    '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
+    '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
+    'in' | 'not in' | 'is' | 'is not';
+StarExpr: '*' Expr;
+Expr: XorExpr ('|' XorExpr)*;
+XorExpr: AndExpr ('^' AndExpr)*;
+AndExpr: ShiftExpr ('&' ShiftExpr)*;
+ShiftExpr: ArithExpr (('<<' | '>>') ArithExpr)*;
+ArithExpr: Term (('+' | 'plus' | '-' | 'minus') Term)*;
+Term: Factor (('*' | 'times' | '@' | '/' | 'divided by' | '%' | 'modulo' | 
+    '//') Factor)*;
+Factor: ('+' | '-' | '~') Factor | Power;
+Power: AtomExpr ('**' Factor)?;
+AtomExpr: 'AWAIT'? Atom Trailer*;
+Atom: ('(' (YieldExpr | TestListComp)? ')' |
+    '[' TestListComp? ']' |
+    '{' DictOrSetMaker '}' |
+    Name | Number | String+ | '...' | 'None' | Boolean
+);
+TestListComp: (NamedExprTest | StarExpr) 
+    (CompFor | (',' (NamedExprTest | StarExpr))* (',')?);
+Trailer: '(' ArgList? ')' | '[' SubscriptList ']' | '.' Name;
+SubscriptList: Subscript (',' Subscript)* ','?;
+Subscript: Test | Test? ':' Test? SliceOp?;
+SliceOp: ':' Test?;
+ExprList: (Expr | StarExpr) (',' (Expr | StarExpr))* ','?;
+TestList: 'range' '(' RangeParams ')' |
+    (Test (',' Test)* ', '?);
+RangeParams: Term ((',' Term)?)?;
+DictOrSetMaker: ( ((Test ':' Test | '**' Expr)
+                    (CompFor | (',' (Test ':' Test | '**' Expr))* (',')?)) |
+                    ((Test | StarExpr)
+                     (CompFor | (',' (Test | StarExpr))* (',')?))
+);
+
+ClassDef: 'class' Name ('(' ArgList? ')')? ':' Suite;
+
+ArgList: Argument (',' Argument)* ','?;
+Argument: ( Test CompFor? |
+            Test ':=' Test |
+            Test '=' Test |
+            '**' Test |
+            '*' Test
+);
+CompIter: CompFor | CompIf;
+SyncCompFor: 'for' ExprList 'in' OrTest CompIter?;
+CompFor: 'ASYNC'? SyncCompFor;
+CompIf: 'if' TestNoCond CompIter?;
+
+YieldExpr: 'yield' YieldArg?;
+YieldArg: 'from' Test | TestListStarExpr;
+
+FuncBodySuite: (SimpleStmt | Stmt)+;
+
+Name: id=ID;
+String: value=STRING;
+Number: value=NUMBER;
+Boolean: value=BOOL;
