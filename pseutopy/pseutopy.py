@@ -3,7 +3,7 @@ import ast
 from textx import metamodel_from_file
 
 
-# TODO: Input, Function Calls
+# TODO: Function Calls
 # TODO: Then, the only missing aspect will be lists
 # TODO: But we could create expressions that are methods and see how that goes
 
@@ -11,6 +11,8 @@ def main():
     program = """
     set a, b to 1 + 2 - True * a < b, 3
     set c to ()
+
+    input("Hello")
 
     a = 1
     declare bix
@@ -57,15 +59,33 @@ def main():
         e = 5
     end
 
-    def fizz with arguments (a, b, c) as :
-        a = None
-        b = 1
-        return (b, c)
+    def fizz(a):
+        return None
+    end
+    def fizz():
+        return 1
+    end
+    def fizz with no parameter to do:
+        print("Hello")
+    end
+    define function fizz with a as parameter to do:
+        return a
+    end
+    define function fizzbuzz with a, b as parameters:
+        return b
+    end
+    define function fizzbuzz with (a,b,c) as parameters to do  :
+        return 1
     end
 
+    call function fizzbuzz
+    call function fizzbuzz with a as parameter
+    call function fizzbuzz with (a, b) as parameters
+    set a to (a, b, c)
+    set a to the result of call function fizzbuzz with a, b as parameters
     """
 
-    meta_model = metamodel_from_file('pseudocode.tx', debug=True)
+    meta_model = metamodel_from_file('pseudocode.tx', debug=False)
     model = meta_model.model_from_str(program)
     for statement in model.statements:
         print(statement)

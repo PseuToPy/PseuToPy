@@ -13,14 +13,16 @@
 Module: statements*=Stmt;
 Stmt: (SimpleStmt | CompoundStmt);
 SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
-SmallStmt: (PrintStmt | InputStmt | ExprStmt | DelStmt | PassStmt | FlowStmt |
-    ImportStmt | GlobalStmt | NonLocalStmt | AssertStmt);
+SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | ExprStmt | DelStmt | 
+    PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt | AssertStmt)
+;
 
 PrintStmt: ('print' | 'display' | 'show') 
     '('? (TestList ((',' | 'followed by') TestList)*) ')'?;
-
 InputStmt: 'input' ('number' | 'integer')? '('?
     (TestList (',' TestList)?) ')'?;
+FuncCallStmt: 'call function' Name 
+    ('with' '('? (TestList (',' TestList)?) ')'? /as parameter(s)?/)?;
 
 ExprStmt: 
     Assign | 
@@ -35,8 +37,9 @@ AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
 ;
 Assign: AssignStmt | DeclareStmt;
 AssignStmt : 'set' (Name (',' Name)*) 'to' 
-    ('the result of' InputStmt | (TestList (',' TestList)*))
-;
+    (('the result of' (InputStmt | FuncCallStmt)) | 
+    (TestList (',' TestList)*)
+);
 DeclareStmt: 'declare' (Name (',' Name)*);
 
 DelStmt: 'del' ExprList;
@@ -68,9 +71,10 @@ Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 
 AsyncFuncDef: 'ASYNC' FuncDef;
-FuncDef: 'def' Name 'with arguments' Parameters 
-    ('->' Test)? /:|as((\s)?:)?/ FuncBodySuite 'end';
-Parameters: '(' TypedArgsList? ')';
+FuncDef: ('define function' | 'def') Name 'with'? 
+    ('no parameter' | Parameters /as parameter(s)?/?)
+    /:|to do((\s)*:)?/ ('->' Test)? FuncBodySuite 'end';
+Parameters: '('? TypedArgsList? ')'?;
 
 TypedArgsList: (
     (TfpDef ('=' Test)? (','  TfpDef ('=' Test)?)* ','  '/' 
