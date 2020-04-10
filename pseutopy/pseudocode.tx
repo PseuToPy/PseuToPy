@@ -21,7 +21,8 @@ PrintStmt: ('print' | 'display' | 'show')
     '('? (TestList ((',' | 'followed by') TestList)*) ')'?;
 InputStmt: 'input' ('number' | 'integer')? '('?
     (TestList (',' TestList)?) ')'?;
-FuncCallStmt: 'call';
+FuncCallStmt: 'call function' Name 
+    ('with' '('? (TestList (',' TestList)?) ')'? /as parameter(s)?/)?;
 
 ExprStmt: 
     Assign | 
@@ -36,8 +37,9 @@ AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
 ;
 Assign: AssignStmt | DeclareStmt;
 AssignStmt : 'set' (Name (',' Name)*) 'to' 
-    ('the result of' InputStmt | (TestList (',' TestList)*))
-;
+    (('the result of' (InputStmt | FuncCallStmt)) | 
+    (TestList (',' TestList)*)
+);
 DeclareStmt: 'declare' (Name (',' Name)*);
 
 DelStmt: 'del' ExprList;

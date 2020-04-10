@@ -77,6 +77,12 @@ def main():
     define function fizzbuzz with (a,b,c) as parameters to do  :
         return 1
     end
+
+    call function fizzbuzz
+    call function fizzbuzz with a as parameter
+    call function fizzbuzz with (a, b) as parameters
+    set a to (a, b, c)
+    set a to the result of call function fizzbuzz with a, b as parameters
     """
 
     meta_model = metamodel_from_file('pseudocode.tx', debug=False)
