@@ -12,6 +12,8 @@ def main():
     set a, b to 1 + 2 - True * a < b, 3
     set c to ()
 
+    input("Hello")
+
     a = 1
     declare bix
 
@@ -57,15 +59,18 @@ def main():
         e = 5
     end
 
-    def fizz with arguments (a, b, c) as :
+    define function fizz with arguments (a, b, c) as :
         a = None
         b = 1
         return (b, c)
     end
 
+    def fizzbuzz with arguments (a) as:
+        a = None
+    end
     """
 
-    meta_model = metamodel_from_file('pseudocode.tx', debug=True)
+    meta_model = metamodel_from_file('pseudocode.tx', debug=False)
     model = meta_model.model_from_str(program)
     for statement in model.statements:
         print(statement)

@@ -68,7 +68,7 @@ Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 
 AsyncFuncDef: 'ASYNC' FuncDef;
-FuncDef: 'def' Name 'with arguments' Parameters 
+FuncDef: ('define function' | 'def') Name 'with arguments'? Parameters 
     ('->' Test)? /:|as((\s)?:)?/ FuncBodySuite 'end';
 Parameters: '(' TypedArgsList? ')';
 
