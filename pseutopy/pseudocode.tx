@@ -13,14 +13,15 @@
 Module: statements*=Stmt;
 Stmt: (SimpleStmt | CompoundStmt);
 SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
-SmallStmt: (PrintStmt | InputStmt | ExprStmt | DelStmt | PassStmt | FlowStmt |
-    ImportStmt | GlobalStmt | NonLocalStmt | AssertStmt);
+SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | ExprStmt | DelStmt | 
+    PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt | AssertStmt)
+;
 
 PrintStmt: ('print' | 'display' | 'show') 
     '('? (TestList ((',' | 'followed by') TestList)*) ')'?;
-
 InputStmt: 'input' ('number' | 'integer')? '('?
     (TestList (',' TestList)?) ')'?;
+FuncCallStmt: 'call';
 
 ExprStmt: 
     Assign | 
@@ -68,9 +69,10 @@ Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 
 AsyncFuncDef: 'ASYNC' FuncDef;
-FuncDef: ('define function' | 'def') Name 'with arguments'? Parameters 
-    ('->' Test)? /:|as((\s)?:)?/ FuncBodySuite 'end';
-Parameters: '(' TypedArgsList? ')';
+FuncDef: ('define function' | 'def') Name 'with'? 
+    ('no parameter' | Parameters /as parameter(s)?/?)
+    /:|to do((\s)*:)?/ ('->' Test)? FuncBodySuite 'end';
+Parameters: '('? TypedArgsList? ')'?;
 
 TypedArgsList: (
     (TfpDef ('=' Test)? (','  TfpDef ('=' Test)?)* ','  '/' 

@@ -3,7 +3,7 @@ import ast
 from textx import metamodel_from_file
 
 
-# TODO: Input, Function Calls
+# TODO: Function Calls
 # TODO: Then, the only missing aspect will be lists
 # TODO: But we could create expressions that are methods and see how that goes
 
@@ -59,14 +59,23 @@ def main():
         e = 5
     end
 
-    define function fizz with arguments (a, b, c) as :
-        a = None
-        b = 1
-        return (b, c)
+    def fizz(a):
+        return None
     end
-
-    def fizzbuzz with arguments (a) as:
-        a = None
+    def fizz():
+        return 1
+    end
+    def fizz with no parameter to do:
+        print("Hello")
+    end
+    define function fizz with a as parameter to do:
+        return a
+    end
+    define function fizzbuzz with a, b as parameters:
+        return b
+    end
+    define function fizzbuzz with (a,b,c) as parameters to do  :
+        return 1
     end
     """
 
