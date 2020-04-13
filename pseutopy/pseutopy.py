@@ -56,7 +56,7 @@ def main():
     else if True:
         d = 4
     else:
-        e = 5
+        e = 5 to the power of 2
     end
 
     def fizz(a):

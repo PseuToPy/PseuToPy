@@ -140,7 +140,7 @@ ArithExpr: left=Term (('+' | 'plus' | '-' | 'minus') right=Term)*;
 Term: left=Factor (('*' | 'times' | '@' | '/' | 'divided by' | '%' | 'modulo' | 
     '//') right=Factor)*;
 Factor: ('+' | '-' | '~') value=Factor | value=Power;
-Power: base=AtomExpr ('**' exponent=Factor)?;
+Power: base=AtomExpr (('**' | 'to the power of') exponent=Factor)?;
 AtomExpr: 'AWAIT'? Atom Trailer*;
 Atom: ('(' (YieldExpr | TestListComp)? ')' |
     '[' TestListComp? ']' |
@@ -182,7 +182,13 @@ YieldArg: 'from' Test | TestListStarExpr;
 
 FuncBodySuite: (SimpleStmt | Stmt)+;
 
-Keyword: 'input' | 'number' | 'integer';
+Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' | 
+    'followed by' | 'call' | 'function' | 'with' | 'parameter' | 'parameters' |
+    'set' | 'to' | 'the' | 'result' | 'of' | 'declare' | 'pass' | 'break' |
+    'continue' | 'return'| 'define' | 'do' | 'end' | 'as' | 'if' | 'elif' |
+    'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 'or' | 'not' |
+    'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' | 'times' |
+    'divided' | 'by' | 'modulo' | 'power';
 SafeId: !Keyword ID;
 Name: id=SafeId;
 String: value=STRING;
