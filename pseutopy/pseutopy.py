@@ -79,10 +79,10 @@ def main():
     end
 
     call function fizzbuzz
-    call function fizzbuzz with a as parameter
-    call function fizzbuzz with (a, b) as parameters
+    call function fizzbuzz with parameter a
+    call function fizzbuzz with parameters a, b
     set a to (a, b, c)
-    set a to the result of call function fizzbuzz with a, b as parameters
+    set a to the result of call function fizzbuzz with parameters a, b
     """
 
     meta_model = metamodel_from_file('pseudocode.tx', debug=False)
