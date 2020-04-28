@@ -17,8 +17,8 @@ class PseuToPy(object):
         self.variables = []
         self.meta_model = metamodel_from_file('pseudocode.tx', debug=False,
                                               classes={DeclareStmt, InputStmt,
-                                                       PrintStmt,
-                                                       FuncCallStmt, DelStmt,
+                                                       PrintStmt, DelStmt,
+                                                       FuncCallStmt,
                                                        BinaryOp, OrTest,
                                                        AndTest, Comparison,
                                                        Expr, XorExpr,
@@ -60,12 +60,20 @@ class PseuToPy(object):
     def to_node(self, stmt):
         if isinstance(stmt, Statement):
             return stmt.to_node()
+        if stmt == 'pass':
+            return ast.Pass()
+        if stmt == 'break':
+            return ast.Break()
+        if stmt == 'continue':
+            return ast.Continue()
 
 
 def main():
     pseutopy = PseuToPy()
-    model = pseutopy.convert_from_string("""
-    del a
+    model = pseutopy.convert_from_file("""
+    break
+    continue
+    pass
     """)
     print(astor.to_source(model))
 
