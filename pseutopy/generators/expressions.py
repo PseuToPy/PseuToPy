@@ -287,13 +287,18 @@ class Atom(object):
             elements = self.__create_elements()
             return ast.List(elts=elements, ctx=ast.Load)
         elif self.is_dict != '':
-            pass
+            if self.__is_dict():
+                keys, values = self.__create_keys_values()
+                return ast.Dict(keys=keys, values=values)
+            else:
+                elements = self.__create_elements()
+                return ast.Set(elts=elements, ctx=ast.Load)
         elif self.name is not None:
             return self.name.to_node()
         elif self.number is not None:
             return self.number.to_node()
         elif self.string is not None:
-            return self.string.to_node()
+            return self.string[0].to_node()
         elif self.none is not None:
             return self.none.to_node()
         elif self.boolean is not None:
@@ -308,9 +313,17 @@ class Atom(object):
             elements.append(element.to_node())
         return elements
 
+    def __is_dict(self):
+        return len(self.values.keys) > 0
+
     def __create_keys_values(self):
-        # TODO: Implement the AST generator for Dict
-        pass
+        keys = []
+        values = []
+        for key in self.values.keys:
+            keys.append(key.to_node())
+        for value in self.values.values:
+            values.append(value.to_node())
+        return keys, values
 
 
 class TestListComp(object):

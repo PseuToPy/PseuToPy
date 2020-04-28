@@ -60,7 +60,8 @@ class PseuToPy(object):
 
 def main():
     pseutopy = PseuToPy()
-    model = pseutopy.convert_from_string('set a, b to c, d to [1, 2]')
+    model = pseutopy.convert_from_string("set a to {1: b, 2: 3+3, 3: "
+                                         "'Hello', 4: None, 5: True}")
     print(astor.to_source(model))
 
 

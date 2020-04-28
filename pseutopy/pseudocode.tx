@@ -162,10 +162,11 @@ SliceOp: ':' Test?;
 ExprList: (Expr | StarExpr) (',' (Expr | StarExpr))* ','?;
 TestList: 'range' '(' range_params=RangeParams ')' | args+=Test[eolterm];
 RangeParams: args=Term ((',' args=Term)?)?;
-DictOrSetMaker: ( ((Test ':' Test | '**' Expr)
-                    (CompFor | (',' (Test ':' Test | '**' Expr))* (',')?)) |
-                    ((Test | StarExpr)
-                     (CompFor | (',' (Test | StarExpr))* (',')?))
+DictOrSetMaker: (
+    ((keys=Test ':' values=Test | '**' values=Expr) 
+        (values=CompFor | (',' (keys=Test ':' values=Test | '**' values=Expr))*)(',')?) |
+    ((values=Test | values=StarExpr) (values=CompFor | (',' (values=Test |
+    values=StarExpr))* (',')?))
 );
 
 ClassDef: 'class' Name ('(' ArgList? ')')? ':' Suite;
