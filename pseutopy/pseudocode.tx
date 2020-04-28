@@ -20,8 +20,8 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
 
 PrintStmt: ('print' | 'display' | 'show') 
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
-InputStmt: 'input' ('number' | 'integer')? '('?
-    (args=Atom (',' TestList)?) ')'?;
+InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
+    (args=Atom (',' values=TestList)*) ')'?;
 FuncCallStmt: 'call function' name=Name 
     ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
 
