@@ -106,3 +106,16 @@ class DeclareStmt(Statement):
     def to_node(self):
         return ast.Assign(targets=[self.name.to_node()],
                           value=ast.NameConstant(value="None"))
+
+
+class DelStmt(Statement):
+    def __init__(self, parent, name):
+        super().__init__(parent)
+        self.name = name
+
+    def to_node(self):
+        targets = []
+        for name in self.name.value:
+            targets.append(name.to_node())
+        return ast.Delete(targets=targets)
+

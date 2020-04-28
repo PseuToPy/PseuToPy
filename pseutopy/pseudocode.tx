@@ -41,7 +41,7 @@ AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
 ;
 DeclareStmt: 'declare' name=Name;
 
-DelStmt: 'del' ExprList;
+DelStmt: 'del' name=ExprList;
 PassStmt: 'pass';
 FlowStmt: BreakStmt | ContinueStmt | ReturnStmt | RaiseStmt | YieldStmt;
 BreakStmt: 'break';
@@ -159,7 +159,7 @@ Trailer: '(' tuple_values=ArgList? ')' | '[' list_values=SubscriptList ']' |
 SubscriptList: Subscript (',' Subscript)* ','?;
 Subscript: Test | Test? ':' Test? SliceOp?;
 SliceOp: ':' Test?;
-ExprList: (Expr | StarExpr) (',' (Expr | StarExpr))* ','?;
+ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','?;
 TestList: 'range' '(' range_params=RangeParams ')' | args+=Test[eolterm];
 RangeParams: args=Term ((',' args=Term)?)?;
 DictOrSetMaker: (
