@@ -17,8 +17,6 @@ class ExprStmt(Statement):
         self.value = value
 
     def to_node(self):
-        # TODO: Finish the implementation here to manage assignments with
-        #  functions
         if len(self.chained_value) > 0:
             return self.__create_chained_assignment_node()
         if self.value is not None:
@@ -85,3 +83,13 @@ class FuncCallStmt(Statement):
             args.append(arg.to_node())
         return ast.Call(func=ast.Name(id=self.name.to_node(), ctx=ast.Load),
                         args=args, keywords=[])
+
+
+class DeclareStmt(Statement):
+    def __init__(self, parent, name):
+        super().__init__(parent)
+        self.name = name
+
+    def to_node(self):
+        return ast.Assign(targets=[self.name.to_node()],
+                          value=ast.NameConstant(value="None"))

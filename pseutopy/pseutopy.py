@@ -6,7 +6,8 @@ from textx import metamodel_from_file
 from generators.expressions import Factor, UnaryOp, NotTest, BinaryOp, \
     OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, ShiftExpr, \
     ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom
-from generators.statements import Statement, ExprStmt, InputStmt, FuncCallStmt
+from generators.statements import Statement, ExprStmt, InputStmt, \
+    FuncCallStmt, DeclareStmt
 from generators.values import Number, Name, String, NoneType
 
 
@@ -15,7 +16,8 @@ class PseuToPy(object):
         self.python_ast = ast.Module(body=[])
         self.variables = []
         self.meta_model = metamodel_from_file('pseudocode.tx', debug=False,
-                                              classes={InputStmt, FuncCallStmt,
+                                              classes={DeclareStmt, InputStmt,
+                                                       FuncCallStmt,
                                                        BinaryOp, OrTest,
                                                        AndTest, Comparison,
                                                        Expr, XorExpr,
@@ -62,8 +64,9 @@ class PseuToPy(object):
 def main():
     pseutopy = PseuToPy()
     model = pseutopy.convert_from_string("""
-    set a to the result of input "number", "message", "other"
-    set b to the result of call function buzz with parameters 1, 2""")
+    declare a
+    declare b
+    """)
     print(astor.to_source(model))
 
 

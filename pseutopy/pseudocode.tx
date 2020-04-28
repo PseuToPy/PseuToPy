@@ -39,7 +39,7 @@ TestListStarExpr: (values=Test | values=StarExpr)
 AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
     '<<=' | '>>=' | '**==' | '//=')
 ;
-DeclareStmt: 'declare' (name=Name (',' Name)*);
+DeclareStmt: 'declare' name=Name;
 
 DelStmt: 'del' ExprList;
 PassStmt: 'pass';
