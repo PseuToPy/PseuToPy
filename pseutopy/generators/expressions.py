@@ -306,12 +306,15 @@ class Atom(object):
 
     def __create_elements(self):
         elements = []
-        values = self.values.values
-        if len(values) == 1:
-            return values.to_node()
-        for element in values:
-            elements.append(element.to_node())
-        return elements
+        if self.values is None:
+            return elements
+        else:
+            values = self.values.values
+            if len(values) == 1:
+                return values.to_node()
+            for element in values:
+                elements.append(element.to_node())
+            return elements
 
     def __is_dict(self):
         return len(self.values.keys) > 0

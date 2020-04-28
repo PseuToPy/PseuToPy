@@ -64,8 +64,7 @@ class PseuToPy(object):
 def main():
     pseutopy = PseuToPy()
     model = pseutopy.convert_from_string("""
-    declare a
-    declare b
+    set a to []
     """)
     print(astor.to_source(model))
 
