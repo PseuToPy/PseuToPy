@@ -7,7 +7,7 @@ from generators.expressions import Factor, UnaryOp, NotTest, BinaryOp, \
     OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, ShiftExpr, \
     ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom
 from generators.statements import Statement, ExprStmt, InputStmt, \
-    FuncCallStmt, DeclareStmt
+    FuncCallStmt, DeclareStmt, PrintStmt
 from generators.values import Number, Name, String, NoneType
 
 
@@ -17,7 +17,7 @@ class PseuToPy(object):
         self.variables = []
         self.meta_model = metamodel_from_file('pseudocode.tx', debug=False,
                                               classes={DeclareStmt, InputStmt,
-                                                       FuncCallStmt,
+                                                       PrintStmt, FuncCallStmt,
                                                        BinaryOp, OrTest,
                                                        AndTest, Comparison,
                                                        Expr, XorExpr,
@@ -64,7 +64,7 @@ class PseuToPy(object):
 def main():
     pseutopy = PseuToPy()
     model = pseutopy.convert_from_string("""
-    set a to []
+    print "Hello" followed by a, b, c
     """)
     print(astor.to_source(model))
 

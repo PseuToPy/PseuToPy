@@ -71,6 +71,19 @@ class InputStmt(Statement):
                         keywords=[])
 
 
+class PrintStmt(Statement):
+    def __init__(self, parent, args):
+        super().__init__(parent)
+        self.args = args
+
+    def to_node(self):
+        args = []
+        for arg in self.args:
+            args.append(arg.to_node())
+        return ast.Call(func=ast.Name(id='print', ctx=ast.Load), args=args,
+                        keywords=[])
+
+
 class FuncCallStmt(Statement):
     def __init__(self, parent, name, args):
         super().__init__(parent)
