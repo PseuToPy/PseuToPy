@@ -70,8 +70,18 @@ class InputStmt(Statement):
         args = [self.args.to_node()]
         for value in self.values:
             args.append(value.to_node())
-        return ast.Expr(value=ast.Call(func=ast.Name(id='input', ctx=ast.Load),
-                                       args=args, keywords=[]))
+        node = ast.Call(func=ast.Name(id='input', ctx=ast.Load), args=args,
+                        keywords=[])
+        if self.cast_type == 'number':
+            node = ast.Call(func=ast.Name(id='float', ctx=ast.Load),
+                            args=[node], keywords=[])
+        elif self.cast_type == 'integer':
+            node = ast.Call(func=ast.Name(id='int', ctx=ast.Load),
+                            args=[node], keywords=[])
+        if isinstance(self.parent, ExprStmt):
+            return node
+        else:
+            return ast.Expr(value=node)
 
 
 class PrintStmt(Statement):

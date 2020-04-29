@@ -77,10 +77,8 @@ class PseuToPy(object):
 def main():
     pseutopy = PseuToPy()
     model = pseutopy.convert_from_string("""
-    define function foo with a = 1, b = 2 as parameters to do:
-    print "Hello"
-    return [a, b]
-    end
+    set a to the result of input number "Hello"
+    set b to the result of input integer "Hi"
     """)
     print(astor.to_source(model))
 
