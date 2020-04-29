@@ -97,9 +97,14 @@ class FuncCallStmt(Statement):
         args = []
         for arg in self.args:
             args.append(arg.to_node())
-        return ast.Expr(value=ast.Call(func=ast.Name(id=self.name.to_node(),
-                                                     ctx=ast.Load),
-                                       args=args, keywords=[]))
+        if isinstance(self.parent, ExprStmt):
+            return ast.Call(
+                func=ast.Name(id=self.name.to_node(), ctx=ast.Load),
+                args=args, keywords=[])
+        else:
+            return ast.Expr(value=ast.Call(
+                func=ast.Name(id=self.name.to_node(), ctx=ast.Load),
+                args=args, keywords=[]))
 
 
 class DeclareStmt(Statement):
@@ -164,19 +169,19 @@ class IfStmt(Statement):
                            orelse=self.__recursive_orelse())]
 
 
-# class WhileStmt(Statement):
-#     def __init__(self, parent, condition, body, else_body):
-#         super().__init__(parent)
-#         self.condition = condition
-#         self.body = body
-#         self.else_body = else_body
-#
-#     def to_node(self):
-#         test = self.condition.to_node()
-#         body = []
-#         for statement in self.body.statement:
-#             body.append(statement.to_node())
-#         orelse = []
-#         for statement in self.else_body.statement:
-#             orelse.append(statement.to_node())
-#         return ast.While(test=test, body=body, orelse=orelse)
+class WhileStmt(Statement):
+    def __init__(self, parent, condition, body, else_body):
+        super().__init__(parent)
+        self.condition = condition
+        self.body = body
+        self.else_body = else_body
+
+    def to_node(self):
+        test = self.condition.to_node()
+        body = []
+        for statement in self.body.statement:
+            body.append(statement.to_node())
+        orelse = []
+        for statement in self.else_body.statement:
+            orelse.append(statement.to_node())
+        return ast.While(test=test, body=body, orelse=orelse)

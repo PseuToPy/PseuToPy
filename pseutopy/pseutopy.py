@@ -7,7 +7,7 @@ from generators.expressions import Factor, UnaryOp, NotTest, BinaryOp, \
     OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, ShiftExpr, \
     ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom
 from generators.statements import Statement, ExprStmt, InputStmt, \
-    FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt
+    FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, WhileStmt
 from generators.values import Number, Name, String, NoneType
 
 
@@ -19,6 +19,7 @@ class PseuToPy(object):
                                               classes={DeclareStmt, InputStmt,
                                                        PrintStmt, DelStmt,
                                                        FuncCallStmt, IfStmt,
+                                                       WhileStmt,
                                                        BinaryOp, OrTest,
                                                        AndTest, Comparison,
                                                        Expr, XorExpr,
@@ -71,14 +72,12 @@ class PseuToPy(object):
 def main():
     pseutopy = PseuToPy()
     model = pseutopy.convert_from_string("""
-    if a is equal to b then
-    set a to 1
-    print "Hello"
-    else if a is greater than b then
-    set a to 2
-    else then:
-    set a to 3
-    set b to d
+    while True do:
+    set a to the result of call function foo
+    set b to 1
+    else do:
+    set c to the result of call function bar
+    set d to 2
     end
     """)
     print(astor.to_source(model))
