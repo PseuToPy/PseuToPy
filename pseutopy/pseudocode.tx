@@ -105,7 +105,7 @@ WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite
 ;
 ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/ 
     body=Suite 
-    ('else' /:|do((\s)*:)?/ body=Suite)?
+    ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'end'
 ;
 TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
@@ -160,8 +160,8 @@ SubscriptList: Subscript (',' Subscript)* ','?;
 Subscript: Test | Test? ':' Test? SliceOp?;
 SliceOp: ':' Test?;
 ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','?;
-TestList: 'range' '(' range_params=RangeParams ')' | args+=Test[eolterm];
-RangeParams: args=Term ((',' args=Term)?)?;
+TestList: ('range' '(' range_params=RangeParams ')') | args+=Test[eolterm];
+RangeParams: args=Expr ((',' args=Expr)*)?;
 DictOrSetMaker: (
     ((keys=Test ':' values=Test | '**' values=Expr) 
         (values=CompFor | (',' (keys=Test ':' values=Test | '**' values=Expr))*)(',')?) |
@@ -188,13 +188,13 @@ YieldArg: 'from' Test | TestListStarExpr;
 
 FuncBodySuite: (SimpleStmt | Stmt)+;
 
-Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' | 
-    'followed by' | 'call' | 'function' | 'with' | 'parameter' | 'parameters' |
-    'set' | 'to' | 'the' | 'result' | 'of' | 'declare' | 'pass' | 'break' |
-    'continue' | 'return'| 'define' | 'do' | 'end' | 'as' | 'if' | 'elif' |
-    'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 'or' | 'not' |
-    'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' | 'times' |
-    'divided' | 'by' | 'modulo' | 'power';
+Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
+    'range' | 'followed by' | 'call' | 'function' | 'with' | 'parameter' |
+    'parameters' | 'set' | 'to' | 'the' | 'result' | 'of' | 'declare' |
+    'pass' | 'break' | 'continue' | 'return'| 'define' | 'do' | 'end' | 'as' |
+    'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 
+    'or' | 'not' | 'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' |
+    'times' | 'divided' | 'by' | 'modulo' | 'power';
 SafeId: !Keyword ID;
 Name: id=SafeId;
 String: value=STRING;

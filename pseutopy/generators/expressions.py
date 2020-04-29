@@ -238,7 +238,9 @@ class TestList(object):
     def to_node(self):
         # TODO: Verify that still still works
         if self.range_params is not None:
-            range_params = self.range_params
+            range_params = []
+            for param in self.range_params.args:
+                range_params.append(param.to_node())
             node = ast.Call(func=ast.Name(id='range', ctx='Load'),
                             args=range_params, keywords=[])
             return node

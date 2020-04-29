@@ -182,6 +182,28 @@ class WhileStmt(Statement):
         for statement in self.body.statement:
             body.append(statement.to_node())
         orelse = []
-        for statement in self.else_body.statement:
-            orelse.append(statement.to_node())
+        if self.else_body is not None:
+            for statement in self.else_body.statement:
+                orelse.append(statement.to_node())
         return ast.While(test=test, body=body, orelse=orelse)
+
+
+class ForStmt(Statement):
+    def __init__(self, parent, target, iterable, body, else_body):
+        super().__init__(parent)
+        self.target = target
+        self.iterable = iterable
+        self.body = body
+        self.else_body = else_body
+
+    def to_node(self):
+        target = self.target.value[0].to_node()
+        iterable = self.iterable.to_node()
+        body = []
+        for statement in self.body.statement:
+            body.append(statement.to_node())
+        orelse = []
+        if self.else_body is not None:
+            for statement in self.else_body.statement:
+                orelse.append(statement.to_node())
+        return ast.For(target=target, iter=iterable, body=body, orelse=orelse)
