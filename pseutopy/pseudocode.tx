@@ -72,25 +72,27 @@ Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 AsyncFuncDef: 'ASYNC' FuncDef;
 FuncDef: ('define function' | 'def') name=Name 'with'? 
     ('no parameter' | params=Parameters /as parameter(s)?/?)
-    /:|to do((\s)*:)?/ ('->' Test)? body=FuncBodySuite 'end';
+    /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
 Parameters: '('? value=TypedArgsList? ')'?;
 
 TypedArgsList: (
-    (TfpDef ('=' Test)? (','  TfpDef ('=' Test)?)* ','  '/' 
-        (','(TfpDef ('=' Test)? (',' TfpDef ('=' Test)?)*
-            ((','  ('*' (TfpDef)? (','  TfpDef ('=' Test)?)* 
-            ((','  ('**' TfpDef (',')?)?)?) | '**' TfpDef (',')?))) | 
-            '*' (TfpDef)? (','  TfpDef ('=' Test)?)* ((','  ('**' TfpDef (',')?)?)?) |
-            '**' TfpDef (',')?)?)?)? |  
-    (TfpDef ('=' Test)? (',' TfpDef ('=' Test)?)* 
-        ((','  ('*' (TfpDef)? (','  TfpDef ('=' Test)?)* 
-        ((','  ('**' TfpDef (',')?))?) |
-        '**' TfpDef (',')?)?)?) | 
-        '*' (TfpDef)? (','  TfpDef ('=' Test)?)* ((','  ('**' TfpDef (',')?)?)?) |
-        '**' TfpDef (',')?)
+    (type_def=TfpDef ('=' value=Test)? (','  type_def=TfpDef ('=' value=Test)?)* ','  '/' 
+        (','(type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)*
+            ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+            ((','  ('**' type_def=TfpDef (',')?)?)?) | '**' type_def=TfpDef (',')?))) | 
+            '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','
+            ('**' type_def=TfpDef (',')?)?)?) |
+            '**' type_def=TfpDef (',')?)?)?)? |  
+    (type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)* 
+        ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+        ((','  ('**' type_def=TfpDef (',')?))?) |
+        '**' type_def=TfpDef (',')?)?)?) | 
+        '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','  ('**'
+        type_def=TfpDef (',')?)?)?) |
+        '**' type_def=TfpDef (',')?)
 );
 
-TfpDef: Name (':' Test)?;
+TfpDef: name=Name (':' value=Test)?;
 
 
 AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
@@ -186,7 +188,7 @@ CompIf: 'if' TestNoCond CompIter?;
 YieldExpr: 'yield' YieldArg?;
 YieldArg: 'from' Test | TestListStarExpr;
 
-FuncBodySuite: (SimpleStmt | Stmt)+;
+FuncBodySuite: (stmt=SimpleStmt | stmt=Stmt)+;
 
 Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
     'range' | 'followed by' | 'call' | 'function' | 'with' | 'parameter' |

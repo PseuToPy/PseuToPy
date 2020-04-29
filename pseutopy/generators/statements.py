@@ -207,3 +207,30 @@ class ForStmt(Statement):
             for statement in self.else_body.statement:
                 orelse.append(statement.to_node())
         return ast.For(target=target, iter=iterable, body=body, orelse=orelse)
+
+
+class FuncDef(Statement):
+    def __init__(self, parent, name, params, test, body):
+        super().__init__(parent)
+        self.name = name
+        self.params = params
+        self.test = test
+        self.body = body
+
+    def to_node(self):
+        name = self.name.id
+        args = self.params.to_node()
+        body = []
+        for statement in self.body.stmt:
+            body.append(statement.to_node())
+        return ast.FunctionDef(name=name, args=args, body=body,
+                               decorator_list=[])
+
+
+class ReturnStmt(Statement):
+    def __init__(self, parent, value):
+        super().__init__(parent)
+        self.value = value
+
+    def to_node(self):
+        return ast.Return(value=self.value.to_node())

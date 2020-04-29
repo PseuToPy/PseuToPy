@@ -5,9 +5,11 @@ from textx import metamodel_from_file
 
 from generators.expressions import Factor, UnaryOp, NotTest, BinaryOp, \
     OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, ShiftExpr, \
-    ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom
+    ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom, Parameters, \
+    TypedArgsList
 from generators.statements import Statement, ExprStmt, InputStmt, \
-    FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, WhileStmt, ForStmt
+    FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, WhileStmt, ForStmt, \
+    FuncDef, ReturnStmt
 from generators.values import Number, Name, String, NoneType
 
 
@@ -20,6 +22,9 @@ class PseuToPy(object):
                                                        PrintStmt, DelStmt,
                                                        FuncCallStmt, IfStmt,
                                                        WhileStmt, ForStmt,
+                                                       FuncDef, Parameters,
+                                                       TypedArgsList,
+                                                       ReturnStmt,
                                                        BinaryOp, OrTest,
                                                        AndTest, Comparison,
                                                        Expr, XorExpr,
@@ -72,22 +77,9 @@ class PseuToPy(object):
 def main():
     pseutopy = PseuToPy()
     model = pseutopy.convert_from_string("""
-    for i in range(0, 10, 1) do:
-    print a followed by b, c
-    input "Hello"
-    call function foo
-    set a to i
-    for j in a do:
-    print "test"
-    for k in [1, 2, 3] do:
-    print k
-    end
-    while True do:
+    define function foo with a = 1, b = 2 as parameters to do:
     print "Hello"
-    end
-    end
-    else do:
-    set b to 1
+    return [a, b]
     end
     """)
     print(astor.to_source(model))

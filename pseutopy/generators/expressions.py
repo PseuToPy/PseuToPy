@@ -236,7 +236,6 @@ class TestList(object):
         self.args = args
 
     def to_node(self):
-        # TODO: Verify that still still works
         if self.range_params is not None:
             range_params = []
             for param in self.range_params.args:
@@ -344,3 +343,29 @@ class TestListComp(object):
             return ast.Tuple(elts=elements, ctx=ast.Load)
         else:
             return self.values.to_node()
+
+
+class Parameters(object):
+    def __init__(self, parent, value):
+        self.parent = parent
+        self.value = value
+
+    def to_node(self):
+        return self.value.to_node()
+
+
+class TypedArgsList(object):
+    def __init__(self, parent, type_def, value):
+        self.parent = parent
+        self.type_def = type_def
+        self.value = value
+
+    def to_node(self):
+        args = []
+        for arg in self.type_def:
+            args.append(ast.arg(arg=arg.name.to_node().id, annotation=None))
+        defaults = []
+        for default in self.value:
+            defaults.append(default.to_node())
+        return ast.arguments(args=args, defaults=defaults, vararg=None,
+                             kwarg=None, kw_default=[], kwonlyargs=[])
