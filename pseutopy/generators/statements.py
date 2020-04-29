@@ -9,6 +9,9 @@ class Statement(object):
         pass
 
 
+# -----------------------------------------------------------------------------
+# Generators for simple statements
+# -----------------------------------------------------------------------------
 class ExprStmt(Statement):
     def __init__(self, parent, name, chained_value, value):
         super().__init__(parent)
@@ -119,3 +122,29 @@ class DelStmt(Statement):
             targets.append(name.to_node())
         return ast.Delete(targets=targets)
 
+
+# -----------------------------------------------------------------------------
+# Generators for Compound Statements
+# -----------------------------------------------------------------------------
+class IfStmt(Statement):
+    def __init__(self, parent, condition, body):
+        super().__init__(parent)
+        self.condition = condition
+        self.body = body
+
+    def to_node(self):
+        return self.__recursive_orelse()
+
+    def __recursive_orelse(self):
+        # This is a case of a single If statement
+        if len(self.condition) == 1 and len(self.body) == 1:
+            return ast.If(test=self.condition[0].to_node(),
+                          body=[self.body[0].to_node()], orelse=[])
+        # This is the case of a 'Else' statement
+        elif len(self.condition) == 0 and len(self.body) == 1:
+            return self.body[0].to_node()
+        # This is a case of a If statement followed by any other statement
+        else:
+            return ast.If(test=self.condition.pop(0).to_node(),
+                          body=[self.body.pop(0).to_node()],
+                          orelse=[self.__recursive_orelse()])
