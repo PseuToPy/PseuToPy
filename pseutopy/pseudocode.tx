@@ -13,36 +13,35 @@
 Module: statements*=Stmt;
 Stmt: (SimpleStmt | CompoundStmt);
 SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
-SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | ExprStmt | DelStmt | 
-    PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt | AssertStmt)
+SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
+    DelStmt | PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt |
+    AssertStmt)
 ;
 
 PrintStmt: ('print' | 'display' | 'show') 
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
-InputStmt: 'input' ('number' | 'integer')? '('?
-    (args=Atom (',' TestList)?) ')'?;
+InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
+    (args=Atom (',' values=TestList)*) ')'?;
 FuncCallStmt: 'call function' name=Name 
     ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
 
-ExprStmt: 
-    Assign | 
-    TestListStarExpr (
-        AnnAssign | AugAssign (YieldExpr | TestList) | 
-       (('=' (YieldExpr | TestListStarExpr))+)?)
+ExprStmt: ('set' '('?)? name=TestListStarExpr
+    (AnnAssign | 
+    AugAssign (YieldExpr | TestList) |
+    ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
+    ('to the result of' (value=InputStmt | value=FuncCallStmt)))
 ;
+
 AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
-TestListStarExpr: (Test | StarExpr) (',' (Test | StarExpr))* (',')?;
+TestListStarExpr: (values=Test | values=StarExpr) 
+    (',' (values=Test | values=StarExpr))* (',')?
+;
 AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
     '<<=' | '>>=' | '**==' | '//=')
 ;
-Assign: AssignStmt | DeclareStmt;
-AssignStmt : 'set' (name=Name (',' Name)*) 'to' 
-    (('the result of' (value=InputStmt | value=FuncCallStmt)) | 
-    (value=TestList (',' TestList)*)
-);
-DeclareStmt: 'declare' (name=Name (',' Name)*);
+DeclareStmt: 'declare' name=Name;
 
-DelStmt: 'del' ExprList;
+DelStmt: 'del' name=ExprList;
 PassStmt: 'pass';
 FlowStmt: BreakStmt | ContinueStmt | ReturnStmt | RaiseStmt | YieldStmt;
 BreakStmt: 'break';
@@ -73,25 +72,27 @@ Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 AsyncFuncDef: 'ASYNC' FuncDef;
 FuncDef: ('define function' | 'def') name=Name 'with'? 
     ('no parameter' | params=Parameters /as parameter(s)?/?)
-    /:|to do((\s)*:)?/ ('->' Test)? body=FuncBodySuite 'end';
+    /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
 Parameters: '('? value=TypedArgsList? ')'?;
 
 TypedArgsList: (
-    (TfpDef ('=' Test)? (','  TfpDef ('=' Test)?)* ','  '/' 
-        (','(TfpDef ('=' Test)? (',' TfpDef ('=' Test)?)*
-            ((','  ('*' (TfpDef)? (','  TfpDef ('=' Test)?)* 
-            ((','  ('**' TfpDef (',')?)?)?) | '**' TfpDef (',')?))) | 
-            '*' (TfpDef)? (','  TfpDef ('=' Test)?)* ((','  ('**' TfpDef (',')?)?)?) |
-            '**' TfpDef (',')?)?)?)? |  
-    (TfpDef ('=' Test)? (',' TfpDef ('=' Test)?)* 
-        ((','  ('*' (TfpDef)? (','  TfpDef ('=' Test)?)* 
-        ((','  ('**' TfpDef (',')?))?) |
-        '**' TfpDef (',')?)?)?) | 
-        '*' (TfpDef)? (','  TfpDef ('=' Test)?)* ((','  ('**' TfpDef (',')?)?)?) |
-        '**' TfpDef (',')?)
+    (type_def=TfpDef ('=' value=Test)? (','  type_def=TfpDef ('=' value=Test)?)* ','  '/' 
+        (','(type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)*
+            ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+            ((','  ('**' type_def=TfpDef (',')?)?)?) | '**' type_def=TfpDef (',')?))) | 
+            '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','
+            ('**' type_def=TfpDef (',')?)?)?) |
+            '**' type_def=TfpDef (',')?)?)?)? |  
+    (type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)* 
+        ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+        ((','  ('**' type_def=TfpDef (',')?))?) |
+        '**' type_def=TfpDef (',')?)?)?) | 
+        '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','  ('**'
+        type_def=TfpDef (',')?)?)?) |
+        '**' type_def=TfpDef (',')?)
 );
 
-TfpDef: Name (':' Test)?;
+TfpDef: name=Name (':' value=Test)?;
 
 
 AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
@@ -101,12 +102,12 @@ IfStmt: 'if' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite
     'end'
 ;
 WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite 
-    ('else' /:|do((\s)*:)?/ body=Suite)?
+    ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'end'
 ;
 ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/ 
     body=Suite 
-    ('else' /:|do((\s)*:)?/ body=Suite)?
+    ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'end'
 ;
 TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
@@ -117,50 +118,57 @@ TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
 WithStmt: 'with' WithItem (',' WithItem)* ':' Suite;
 WithItem: Test ('as' Expr)?;
 ExceptClause: 'except' (Test ('as' Name)?)?;
-Suite: (SimpleStmt | Stmt)+;
+Suite: (statement=SimpleStmt | statement=Stmt)+;
 
 NamedExprTest: Test (':=' Test)?;
 
 Test: OrTest ('if' OrTest 'else' OrTest)*;
 TestNoCond: OrTest;
-OrTest: left=AndTest (('or' | '||') right=AndTest)*;
-AndTest: left=NotTest (('and' | '&&') right=NotTest)*;
-NotTest: 'not' value=NotTest | value=Comparison;
+OrTest: left=AndTest ((operator='or' | operator='||') right=AndTest)*;
+AndTest: left=NotTest ((operator='and' | operator='&&') right=NotTest)*;
+NotTest: operator='not' value=NotTest | value=Comparison;
 Comparison: left=Expr (operator=CompOp right=Expr)*;
 CompOp: '<' | 'is lower than' | '>' | 'is greater than' | 
     '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
     '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
     'in' | 'not in' | 'is' | 'is not';
 StarExpr: '*' Expr;
-Expr: left=XorExpr ('|' right=XorExpr)*;
-XorExpr: left=AndExpr ('^' right=AndExpr)*;
-AndExpr: left=ShiftExpr ('&' right=ShiftExpr)*;
-ShiftExpr: left=ArithExpr (('<<' | '>>') right=ArithExpr)*;
-ArithExpr: left=Term (('+' | 'plus' | '-' | 'minus') right=Term)*;
-Term: left=Factor (('*' | 'times' | '@' | '/' | 'divided by' | '%' | 'modulo' | 
-    '//') right=Factor)*;
-Factor: ('+' | '-' | '~') value=Factor | value=Power;
-Power: base=AtomExpr (('**' | 'to the power of') exponent=Factor)?;
-AtomExpr: 'AWAIT'? Atom Trailer*;
-Atom: ('(' (YieldExpr | TestListComp)? ')' |
-    '[' TestListComp? ']' |
-    '{' DictOrSetMaker '}' |
-    Name | Number | String+ | '...' | 'None' | Boolean
+Expr: left=XorExpr (operator='|' right=XorExpr)*;
+XorExpr: left=AndExpr (operator='^' right=AndExpr)*;
+AndExpr: left=ShiftExpr (operator='&' right=ShiftExpr)*;
+ShiftExpr: left=ArithExpr ((operator='<<' | operator='>>') right=ArithExpr)*;
+ArithExpr: left=Term ((operator='+' | operator='plus' |
+    operator='-' | operator='minus') right=Term)*;
+Term: left=Factor ((operator='*' | operator='times' | operator='@' |
+    operator='/' | operator='divided by' | operator='%' | operator='modulo' |
+    operator='//') right=Factor)*;
+Factor: (operator='+' | operator='-' | operator='~')
+    value=Factor | value=Power;
+Power: left=AtomExpr ((operator='**' | operator='to the power of')
+    right=Factor)?;
+AtomExpr: 'AWAIT'? atom=Atom trailer=Trailer*;
+Atom: (is_tuple='(' (values=YieldExpr | values=TestListComp)? ')' |
+    is_list='[' values=TestListComp? ']' |
+    is_dict='{' values=DictOrSetMaker '}' |
+    name=Name | number=Number | string=String+ | '...' | none=NoneType |
+    boolean=Boolean
 );
-TestListComp: (NamedExprTest | StarExpr) 
-    (CompFor | (',' (NamedExprTest | StarExpr))* (',')?);
-Trailer: '(' ArgList? ')' | '[' SubscriptList ']' | '.' Name;
+TestListComp: (values=NamedExprTest | values=StarExpr)
+    (values=CompFor | (',' (values=NamedExprTest | values=StarExpr))* (',')?);
+Trailer: '(' tuple_values=ArgList? ')' | '[' list_values=SubscriptList ']' |
+    '.' Name;
+
 SubscriptList: Subscript (',' Subscript)* ','?;
 Subscript: Test | Test? ':' Test? SliceOp?;
 SliceOp: ':' Test?;
-ExprList: (Expr | StarExpr) (',' (Expr | StarExpr))* ','?;
-TestList: 'range' '(' params=RangeParams ')' |
-    iterable+=Test[eolterm];
-RangeParams: args=Term ((',' args=Term)?)?;
-DictOrSetMaker: ( ((Test ':' Test | '**' Expr)
-                    (CompFor | (',' (Test ':' Test | '**' Expr))* (',')?)) |
-                    ((Test | StarExpr)
-                     (CompFor | (',' (Test | StarExpr))* (',')?))
+ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','?;
+TestList: ('range' '(' range_params=RangeParams ')') | args+=Test[eolterm];
+RangeParams: args=Expr ((',' args=Expr)*)?;
+DictOrSetMaker: (
+    ((keys=Test ':' values=Test | '**' values=Expr) 
+        (values=CompFor | (',' (keys=Test ':' values=Test | '**' values=Expr))*)(',')?) |
+    ((values=Test | values=StarExpr) (values=CompFor | (',' (values=Test |
+    values=StarExpr))* (',')?))
 );
 
 ClassDef: 'class' Name ('(' ArgList? ')')? ':' Suite;
@@ -180,17 +188,18 @@ CompIf: 'if' TestNoCond CompIter?;
 YieldExpr: 'yield' YieldArg?;
 YieldArg: 'from' Test | TestListStarExpr;
 
-FuncBodySuite: (SimpleStmt | Stmt)+;
+FuncBodySuite: (stmt=SimpleStmt | stmt=Stmt)+;
 
-Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' | 
-    'followed by' | 'call' | 'function' | 'with' | 'parameter' | 'parameters' |
-    'set' | 'to' | 'the' | 'result' | 'of' | 'declare' | 'pass' | 'break' |
-    'continue' | 'return'| 'define' | 'do' | 'end' | 'as' | 'if' | 'elif' |
-    'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 'or' | 'not' |
-    'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' | 'times' |
-    'divided' | 'by' | 'modulo' | 'power';
+Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
+    'range' | 'followed by' | 'call' | 'function' | 'with' | 'parameter' |
+    'parameters' | 'set' | 'to' | 'the' | 'result' | 'of' | 'declare' |
+    'pass' | 'break' | 'continue' | 'return'| 'define' | 'do' | 'end' | 'as' |
+    'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 
+    'or' | 'not' | 'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' |
+    'times' | 'divided' | 'by' | 'modulo' | 'power';
 SafeId: !Keyword ID;
 Name: id=SafeId;
 String: value=STRING;
 Number: value=NUMBER;
 Boolean: value=BOOL;
+NoneType: value='None';
