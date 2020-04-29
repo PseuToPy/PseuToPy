@@ -100,7 +100,7 @@ IfStmt: 'if' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite
     'end'
 ;
 WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite 
-    ('else' /:|do((\s)*:)?/ body=Suite)?
+    ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'end'
 ;
 ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/ 
@@ -116,7 +116,7 @@ TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
 WithStmt: 'with' WithItem (',' WithItem)* ':' Suite;
 WithItem: Test ('as' Expr)?;
 ExceptClause: 'except' (Test ('as' Name)?)?;
-Suite: (SimpleStmt | Stmt)+;
+Suite: (statement=SimpleStmt | statement=Stmt)+;
 
 NamedExprTest: Test (':=' Test)?;
 

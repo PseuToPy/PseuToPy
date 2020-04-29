@@ -73,10 +73,12 @@ def main():
     model = pseutopy.convert_from_string("""
     if a is equal to b then
     set a to 1
+    print "Hello"
     else if a is greater than b then
     set a to 2
     else then:
     set a to 3
+    set b to d
     end
     """)
     print(astor.to_source(model))

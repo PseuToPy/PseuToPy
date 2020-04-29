@@ -70,8 +70,8 @@ class InputStmt(Statement):
         args = [self.args.to_node()]
         for value in self.values:
             args.append(value.to_node())
-        return ast.Call(func=ast.Name(id='input', ctx=ast.Load), args=args,
-                        keywords=[])
+        return ast.Expr(value=ast.Call(func=ast.Name(id='input', ctx=ast.Load),
+                                       args=args, keywords=[]))
 
 
 class PrintStmt(Statement):
@@ -83,8 +83,8 @@ class PrintStmt(Statement):
         args = []
         for arg in self.args:
             args.append(arg.to_node())
-        return ast.Call(func=ast.Name(id='print', ctx=ast.Load), args=args,
-                        keywords=[])
+        return ast.Expr(value=ast.Call(func=ast.Name(id='print', ctx=ast.Load),
+                                       args=args, keywords=[]))
 
 
 class FuncCallStmt(Statement):
@@ -97,8 +97,9 @@ class FuncCallStmt(Statement):
         args = []
         for arg in self.args:
             args.append(arg.to_node())
-        return ast.Call(func=ast.Name(id=self.name.to_node(), ctx=ast.Load),
-                        args=args, keywords=[])
+        return ast.Expr(value=ast.Call(func=ast.Name(id=self.name.to_node(),
+                                                     ctx=ast.Load),
+                                       args=args, keywords=[]))
 
 
 class DeclareStmt(Statement):
@@ -133,18 +134,49 @@ class IfStmt(Statement):
         self.body = body
 
     def to_node(self):
-        return self.__recursive_orelse()
+        # Because __recursive_orelse function returns a List of size 1,
+        # we need to retrieve the first element of the returned result
+        return self.__recursive_orelse()[0]
 
     def __recursive_orelse(self):
+        """
+        This recursive function creates a AST node for any IfStmt. To make
+        the recursion work, we must return the final AST node inside a List.
+        This is why we also retrieve the element at index 0 in the to_node()
+        function.
+        :return: A List of size 1 which contains the whole If statement
+        """
+        statements = self.body[0].statement
+        body = []
+        for statement in statements:
+            body.append(statement.to_node())
         # This is a case of a single If statement
         if len(self.condition) == 1 and len(self.body) == 1:
-            return ast.If(test=self.condition[0].to_node(),
-                          body=[self.body[0].to_node()], orelse=[])
+            return [ast.If(test=self.condition[0].to_node(), body=body,
+                           orelse=[])]
         # This is the case of a 'Else' statement
         elif len(self.condition) == 0 and len(self.body) == 1:
-            return self.body[0].to_node()
+            return body
         # This is a case of a If statement followed by any other statement
         else:
-            return ast.If(test=self.condition.pop(0).to_node(),
-                          body=[self.body.pop(0).to_node()],
-                          orelse=[self.__recursive_orelse()])
+            self.body.pop(0)
+            return [ast.If(test=self.condition.pop(0).to_node(), body=body,
+                           orelse=self.__recursive_orelse())]
+
+
+# class WhileStmt(Statement):
+#     def __init__(self, parent, condition, body, else_body):
+#         super().__init__(parent)
+#         self.condition = condition
+#         self.body = body
+#         self.else_body = else_body
+#
+#     def to_node(self):
+#         test = self.condition.to_node()
+#         body = []
+#         for statement in self.body.statement:
+#             body.append(statement.to_node())
+#         orelse = []
+#         for statement in self.else_body.statement:
+#             orelse.append(statement.to_node())
+#         return ast.While(test=test, body=body, orelse=orelse)
