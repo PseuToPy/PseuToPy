@@ -16,7 +16,7 @@ class Name(object):
         self.id = id
 
     def to_node(self):
-        return ast.Name(id="" + self.id, ctx=ast.Store())
+        return ast.Name(id="" + self.id, ctx=ast.Store)
 
 
 class String(object):
@@ -26,6 +26,15 @@ class String(object):
 
     def to_node(self):
         return ast.Str(s=self.value)
+
+
+class Boolean(object):
+    def __init__(self, parent, value):
+        self.parent = parent
+        self.value = value
+
+    def to_node(self):
+        return ast.NameConstant(value=self.value)
 
 
 class NoneType(object):

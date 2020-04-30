@@ -20,7 +20,7 @@ class OrTest(BinaryOp):
             nodes = [self.left.to_node()]
             for node in self.right:
                 nodes.append(node.to_node())
-            return ast.BoolOp(ast.Or(), nodes)
+            return ast.BoolOp(op=ast.Or(), values=nodes)
 
 
 class AndTest(BinaryOp):
@@ -66,7 +66,8 @@ class Comparison(BinaryOp):
                     comp_operator.append(ast.IsNot())
                 else:
                     raise Exception("Unrecognized argument in Comparison")
-            return ast.Compare(self.left.to_node(), comp_operator, right_nodes)
+            return ast.Compare(left=self.left.to_node(), ops=comp_operator,
+                               comparators=right_nodes)
 
 
 class Expr(BinaryOp):
@@ -158,6 +159,7 @@ class Term(BinaryOp):
                 elif self.operator[i] == '//':
                     node = ast.BinOp(node, ast.FloorDiv(),
                                      self.right[i].to_node())
+            return node
 
 
 class Power(BinaryOp):
@@ -298,12 +300,12 @@ class Atom(object):
             return self.name.to_node()
         elif self.number is not None:
             return self.number.to_node()
-        elif self.string is not None:
-            return self.string[0].to_node()
         elif self.none is not None:
             return self.none.to_node()
         elif self.boolean is not None:
             return self.boolean.to_node()
+        elif self.string is not None:
+            return self.string[0].to_node()
 
     def __create_elements(self):
         elements = []

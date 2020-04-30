@@ -10,7 +10,7 @@ from generators.expressions import Factor, UnaryOp, NotTest, BinaryOp, \
 from generators.statements import Statement, ExprStmt, InputStmt, \
     FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, WhileStmt, ForStmt, \
     FuncDef, ReturnStmt
-from generators.values import Number, Name, String, NoneType
+from generators.values import Number, Name, String, NoneType, Boolean
 
 
 class PseuToPy(object):
@@ -37,7 +37,7 @@ class PseuToPy(object):
                                                        TestList, AtomExpr,
                                                        Atom,
                                                        Number, Name, String,
-                                                       NoneType})
+                                                       NoneType, Boolean})
         self.meta_model.register_obj_processors({
             'Stmt': self.convert,
         })

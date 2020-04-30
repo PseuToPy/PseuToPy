@@ -196,7 +196,8 @@ Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
     'pass' | 'break' | 'continue' | 'return'| 'define' | 'do' | 'end' | 'as' |
     'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 
     'or' | 'not' | 'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' |
-    'times' | 'divided' | 'by' | 'modulo' | 'power';
+    'times' | 'divided' | 'by' | 'modulo' | 'power' | 'true' | 'false' | 'True'
+    | 'False';
 SafeId: !Keyword ID;
 Name: id=SafeId;
 String: value=STRING;
