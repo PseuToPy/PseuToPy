@@ -131,7 +131,7 @@ Comparison: left=Expr (operator=CompOp right=Expr)*;
 CompOp: '<' | 'is lower than' | '>' | 'is greater than' | 
     '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
     '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
-    'in' | 'not in' | 'is' | 'is not';
+    /(?:^|\W)in(?:$|\W)/ | 'not in' | /(?:^|\W)is(?:$|\W)/ | 'is not';
 StarExpr: '*' Expr;
 Expr: left=XorExpr (operator='|' right=XorExpr)*;
 XorExpr: left=AndExpr (operator='^' right=AndExpr)*;
