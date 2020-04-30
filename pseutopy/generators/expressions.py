@@ -351,7 +351,10 @@ class Parameters(object):
         self.value = value
 
     def to_node(self):
-        return self.value.to_node()
+        if self.value is not None:
+            return self.value.to_node()
+        return ast.arguments(args=[], defaults=[], kw_defaults=[], kwarg=None,
+                             kwonlyargs=[], vararg=None)
 
 
 class TypedArgsList(object):

@@ -124,7 +124,7 @@ class DeclareStmt(Statement):
 
     def to_node(self):
         return ast.Assign(targets=[self.name.to_node()],
-                          value=ast.NameConstant(value="None"))
+                          value=ast.NameConstant(value=None))
 
 
 class DelStmt(Statement):
@@ -229,7 +229,11 @@ class FuncDef(Statement):
 
     def to_node(self):
         name = self.name.id
-        args = self.params.to_node()
+        if self.params is not None:
+            args = self.params.to_node()
+        else:
+            args = ast.arguments(args=[], defaults=[], kw_defaults=[],
+                                 kwarg=None, kwonlyargs=[], vararg=None)
         body = []
         for statement in self.body.stmt:
             body.append(statement.to_node())
