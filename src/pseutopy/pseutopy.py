@@ -76,6 +76,7 @@ class PseuToPy(object):
 
 def main():
     pseutopy = PseuToPy()
+    tree = astor.code_to_ast.parse_file('sample.py')
     model = pseutopy.convert_from_string("""
     set a, b to 1 + 2 - True * a < b, 3
     set c to ()
