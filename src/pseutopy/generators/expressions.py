@@ -290,7 +290,9 @@ class Atom(object):
             elements = self.__create_elements()
             return ast.List(elts=elements, ctx=ast.Load)
         elif self.is_dict != '':
-            if self.__is_dict():
+            if self.values is None:
+                return ast.Dict(keys=[], values=[])
+            elif self.__is_dict():
                 keys, values = self.__create_keys_values()
                 return ast.Dict(keys=keys, values=values)
             else:
@@ -313,8 +315,6 @@ class Atom(object):
             return elements
         else:
             values = self.values.values
-            if len(values) == 1:
-                return values.to_node()
             for element in values:
                 elements.append(element.to_node())
             return elements
