@@ -29,7 +29,7 @@ ExprStmt: ('set' '('?)? name=TestListStarExpr
     (AnnAssign | 
     AugAssign (YieldExpr | TestList) |
     ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
-    ('to the result of' (value=InputStmt | value=FuncCallStmt)))
+    ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
 ;
 
 AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
