@@ -2,8 +2,6 @@ from tests.utils import check_ast
 
 
 class TestStatement:
-    # Tests for Statements: InputStmt, PrintStmt, FuncCallStmt, DelStmt,
-    # IfStmt, WhileStmt, ForStmt, ReturnStmt, FuncDef
     def test_input_statement(self, pseutopy):
         pseudo_str = """
         input "This is the message to display"
@@ -177,5 +175,151 @@ elif a > b:
     a = 2
 else:
     a = 3
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_while_statement(self, pseutopy):
+        pseudo_str = """
+        while a <= b do:
+        set a to 1
+        end
+
+        while a < b:
+        set a to 2
+        end
+
+        while a < b do
+        set a to 1
+        end
+        """
+        python_str = """
+while a <= b:
+    a = 1
+
+while a < b:
+    a = 2
+
+while a < b:
+    a = 1
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_for_range_statement(self, pseutopy):
+        pseudo_str = """
+        for i in range(0, 10, 1) do:
+        set a to i
+        end
+        """
+        python_str = """
+for i in range(0, 10, 1):
+    a = i
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_for_tuple_statement(self, pseutopy):
+        pseudo_str = """
+        for i in (1, 2, 5, 6):
+        set a to i
+        end
+        """
+        python_str = """
+for i in (1, 2, 5, 6):
+    a = i
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_for_list_statement(self, pseutopy):
+        pseudo_str = """
+        for i in [1, 2, 5, 6]:
+        set a to i
+        end
+        """
+        python_str = """
+for i in [1, 2, 5, 6]:
+    a = i
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_func_def_no_parameter_statement(self, pseutopy):
+        pseudo_str = """
+        define function foo with no parameter:
+        set a to 1
+        end
+        """
+        python_str = """
+def foo():
+    a = 1
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_func_def_parameter_statement(self, pseutopy):
+        pseudo_str = """
+        def foo with arg1 as parameter:
+        set a to arg1
+        end
+        """
+        python_str = """
+def foo(arg1):
+    a = arg1
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_func_def_multiple_parameters_statement(self, pseutopy):
+        pseudo_str = """
+        def foo with (arg1, arg2) as parameter:
+        set a to arg1
+        set b to arg2
+        end
+        """
+        python_str = """
+def foo(arg1, arg2):
+    a = arg1
+    b = arg2
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_func_def_multiple_parameters_statement_2(self, pseutopy):
+        pseudo_str = """
+        def foo with arg1, arg2 as parameters:
+        set a to arg1
+        set b to arg2
+        end
+        """
+        python_str = """
+def foo(arg1, arg2):
+    a = arg1
+    b = arg2
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_func_def_multiple_parameters_single_return_statement_(self,
+                                                                   pseutopy):
+        pseudo_str = """
+        def foo with arg1, arg2 as parameters:
+        set a to arg1 + arg2
+        return a
+        end
+        """
+        python_str = """
+def foo(arg1, arg2):
+    a = arg1 + arg2
+    return a
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_func_def_multiple_parameters_multiple_return_statement_(self,
+                                                                     pseutopy):
+        pseudo_str = """
+        def foo with arg1, arg2 as parameters:
+        set a to arg1
+        set b to arg2
+        return a, b
+        end
+        """
+        python_str = """
+def foo(arg1, arg2):
+    a = arg1
+    b = arg2
+    return a, b
         """
         assert check_ast(pseutopy, python_str, pseudo_str)
