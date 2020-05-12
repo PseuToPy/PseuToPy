@@ -24,6 +24,17 @@ myVar1, myVar2 = 1, 2
         """
         assert check_ast(pseutopy, python_str, pseudo_str)
 
+    def test_chained_assignment_set_unary_value(self, pseutopy):
+        pseudo_str = """
+        set myVar1, myVar2, myVar3 to (plus 1, minus 2, not False)
+        set [myVar1, myVar2, myVar3] to plus 1, minus 2, not True
+        """
+        python_str = """
+myVar1, myVar2, myVar3 = +1, -2, not False
+[myVar1, myVar2, myVar3] = +1, -2, not True
+        """
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
     def test_chained_assignment_set_identifier(self, pseutopy):
         pseudo_str = """
         set myVar1, myVar2 to a, b

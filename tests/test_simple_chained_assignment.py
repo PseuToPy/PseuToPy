@@ -2,13 +2,6 @@ from tests.utils import check_ast
 
 
 class TestSimpleChainedAssignment:
-    # Tests for Assignments (chained assignments and function assignments)
-    # Chained assignments must be tested for single and tuple assignments
-    # Chained assignments must be tested for: Identifiers, UnaryOp, Power,
-    # Term, ArithExpr, ShiftExpr, AndExpr, XorExpr, Expr, Comparison, AndTest,
-    # OrTest
-    # Function assignments must be tested for: InputStmt, PrintStmt,
-    # FuncCallStmt, TestList (which is used for range())
     def test_simple_chained_assignment_declare_stmt(self, pseutopy):
         pseudo_str = "declare myVar"
         python_str = "myVar = None"
@@ -22,6 +15,19 @@ class TestSimpleChainedAssignment:
     def test_simple_chained_assignment_set_simple_value(self, pseutopy):
         pseudo_str = "set myVar to 1"
         python_str = "myVar = 1"
+        assert check_ast(pseutopy, python_str, pseudo_str)
+
+    def test_simple_chained_assignment_set_unary_value(self, pseutopy):
+        pseudo_str = """
+        set myVar to plus 1
+        set myVar to minus 2
+        set myVar to not True
+        """
+        python_str = """
+myVar = +1
+myVar = -2
+myVar = not True
+        """
         assert check_ast(pseutopy, python_str, pseudo_str)
 
     def test_simple_chained_assignment_set_identifier(self, pseutopy):
