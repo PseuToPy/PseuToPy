@@ -128,9 +128,9 @@ OrTest: left=AndTest ((operator='or' | operator='||') right=AndTest)*;
 AndTest: left=NotTest ((operator='and' | operator='&&') right=NotTest)*;
 NotTest: operator='not' value=NotTest | value=Comparison;
 Comparison: left=Expr (operator=CompOp right=Expr)*;
-CompOp: '<' | 'is lower than' | '>' | 'is greater than' | 
+CompOp: '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
+    '<' | 'is lower than' | '>' | 'is greater than' |
     '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
-    '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
     /\bin\b/ | 'not in' | 'is not' | /\bis\b/ ;
 StarExpr: '*' Expr;
 Expr: left=XorExpr (operator='|' right=XorExpr)*;

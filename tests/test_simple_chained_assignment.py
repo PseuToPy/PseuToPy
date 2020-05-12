@@ -132,12 +132,18 @@ myVar = False or True
     def test_simple_chained_assignment_comparison(self, pseutopy):
         pseudo_str = """
         set myVar to 3 is lower than 4
+        set myVar to 3 < 4
         set myVar to 3 is lower or equal to 4
+        set myVar to 3 <= 4
         set myVar to 3 is greater than 4
+        set myVar to 3 > 4
         set myVar to 3 is greater or equal to 4
+        set myVar to 3 >= 4
         set myVar to 3 is equal to 4
+        set myVar to 3 == 4
         set myVar to 3 is different from 4
         set myVar to 3 is not equal to 4
+        set myVar to 3 != 4
         set myVar to 1 in 2
         set myVar to 1 not in 2
         set myVar to 1 is 2
@@ -145,10 +151,16 @@ myVar = False or True
         """
         py_str = """
 myVar = 3 < 4
+myVar = 3 < 4
+myVar = 3 <= 4
 myVar = 3 <= 4
 myVar = 3 > 4
+myVar = 3 > 4
+myVar = 3 >= 4
 myVar = 3 >= 4
 myVar = 3 == 4
+myVar = 3 == 4
+myVar = 3 != 4
 myVar = 3 != 4
 myVar = 3 != 4
 myVar = 1 in 2
