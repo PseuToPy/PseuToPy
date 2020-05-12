@@ -144,4 +144,18 @@ dmypy.json
 # Remove .dot and .png files generated after executing script with mode debug
 *.dot
 *.png
+
+### VirtualEnv ###
+# Virtualenv
+# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+pyvenv.cfg
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-selfcheck.json
+
 # End of https://www.gitignore.io/api/macos,python

@@ -3,21 +3,23 @@ import ast
 import astor
 from textx import metamodel_from_file
 
-from generators.expressions import Factor, UnaryOp, NotTest, BinaryOp, \
-    OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, ShiftExpr, \
-    ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom, Parameters, \
-    TypedArgsList
-from generators.statements import Statement, ExprStmt, InputStmt, \
-    FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, WhileStmt, ForStmt, \
-    FuncDef, ReturnStmt
-from generators.values import Number, Name, String, NoneType, Boolean
+from src.pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
+    BinaryOp, OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, \
+    ShiftExpr, ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom, \
+    Parameters, TypedArgsList
+from src.pseutopy.generators.statements import Statement, ExprStmt, \
+    InputStmt, FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, \
+    WhileStmt, ForStmt, FuncDef, ReturnStmt
+from src.pseutopy.generators.values import Number, Name, String, NoneType, \
+    Boolean
 
 
 class PseuToPy(object):
     def __init__(self):
         self.python_ast = ast.Module(body=[])
         self.variables = []
-        self.meta_model = metamodel_from_file('pseudocode.tx', debug=False,
+        self.meta_model = metamodel_from_file('src/pseutopy/pseudocode.tx',
+                                              debug=False,
                                               classes={DeclareStmt, InputStmt,
                                                        PrintStmt, DelStmt,
                                                        FuncCallStmt, IfStmt,

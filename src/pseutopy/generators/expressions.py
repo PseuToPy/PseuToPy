@@ -188,12 +188,12 @@ class Factor(UnaryOp):
     def to_node(self):
         value = self.value
         operator = self.operator
-        if operator == '+':
-            return ast.UnaryOp(ast.UAdd(), value)
-        elif operator == '-':
-            return ast.UnaryOp(ast.USub(), value)
+        if operator in ('+', 'plus'):
+            return ast.UnaryOp(ast.UAdd(), value.to_node())
+        elif operator in ('-', 'minus'):
+            return ast.UnaryOp(ast.USub(), value.to_node())
         elif operator == '~':
-            return ast.UnaryOp(ast.Invert(), value)
+            return ast.UnaryOp(ast.Invert(), value.to_node())
         else:
             return value.to_node()
 
@@ -203,7 +203,7 @@ class NotTest(UnaryOp):
         value = self.value
         operator = self.operator
         if operator == 'not':
-            return ast.UnaryOp(ast.Not(), value)
+            return ast.UnaryOp(ast.Not(), value.to_node())
         else:
             return value.to_node()
 
@@ -290,7 +290,9 @@ class Atom(object):
             elements = self.__create_elements()
             return ast.List(elts=elements, ctx=ast.Load)
         elif self.is_dict != '':
-            if self.__is_dict():
+            if self.values is None:
+                return ast.Dict(keys=[], values=[])
+            elif self.__is_dict():
                 keys, values = self.__create_keys_values()
                 return ast.Dict(keys=keys, values=values)
             else:
@@ -313,8 +315,6 @@ class Atom(object):
             return elements
         else:
             values = self.values.values
-            if len(values) == 1:
-                return values.to_node()
             for element in values:
                 elements.append(element.to_node())
             return elements

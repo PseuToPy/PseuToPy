@@ -131,7 +131,7 @@ Comparison: left=Expr (operator=CompOp right=Expr)*;
 CompOp: '<' | 'is lower than' | '>' | 'is greater than' | 
     '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
     '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
-    /(?:^|\W)in(?:$|\W)/ | 'not in' | /(?:^|\W)is(?:$|\W)/ | 'is not';
+    /\bin\b/ | 'not in' | 'is not' | /\bis\b/ ;
 StarExpr: '*' Expr;
 Expr: left=XorExpr (operator='|' right=XorExpr)*;
 XorExpr: left=AndExpr (operator='^' right=AndExpr)*;
@@ -142,14 +142,15 @@ ArithExpr: left=Term ((operator='+' | operator='plus' |
 Term: left=Factor ((operator='*' | operator='times' | operator='@' |
     operator='/' | operator='divided by' | operator='%' | operator='modulo' |
     operator='//') right=Factor)*;
-Factor: (operator='+' | operator='-' | operator='~')
+Factor: (operator='+' | operator='-' | operator='~' | operator='plus' |
+    operator='minus')
     value=Factor | value=Power;
 Power: left=AtomExpr ((operator='**' | operator='to the power of')
     right=Factor)?;
 AtomExpr: 'AWAIT'? atom=Atom trailer=Trailer*;
 Atom: (is_tuple='(' (values=YieldExpr | values=TestListComp)? ')' |
     is_list='[' values=TestListComp? ']' |
-    is_dict='{' values=DictOrSetMaker '}' |
+    is_dict='{' values=DictOrSetMaker? '}' |
     name=Name | number=Number | string=String+ | '...' | none=NoneType |
     boolean=Boolean
 );
