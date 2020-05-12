@@ -188,12 +188,12 @@ class Factor(UnaryOp):
     def to_node(self):
         value = self.value
         operator = self.operator
-        if operator == '+':
-            return ast.UnaryOp(ast.UAdd(), value)
-        elif operator == '-':
-            return ast.UnaryOp(ast.USub(), value)
+        if operator in ('+', 'plus'):
+            return ast.UnaryOp(ast.UAdd(), value.to_node())
+        elif operator in ('-', 'minus'):
+            return ast.UnaryOp(ast.USub(), value.to_node())
         elif operator == '~':
-            return ast.UnaryOp(ast.Invert(), value)
+            return ast.UnaryOp(ast.Invert(), value.to_node())
         else:
             return value.to_node()
 
@@ -203,7 +203,7 @@ class NotTest(UnaryOp):
         value = self.value
         operator = self.operator
         if operator == 'not':
-            return ast.UnaryOp(ast.Not(), value)
+            return ast.UnaryOp(ast.Not(), value.to_node())
         else:
             return value.to_node()
 
