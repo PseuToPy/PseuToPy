@@ -1,6 +1,6 @@
 import pytest
 
-from src.pseutopy.pseutopy import PseuToPy
+from pseutopy.pseutopy import PseuToPy
 
 
 @pytest.fixture(scope="session")

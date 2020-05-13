@@ -1,7 +1,9 @@
 import argparse
 import ast
 import astor
-import pseutopy
+
+
+from src.pseutopy.pseutopy import PseuToPy
 
 parser = argparse.ArgumentParser(description='A pseudocode to Python '
                                              'converter written in Python '
@@ -20,7 +22,7 @@ parser.add_argument('-q', '--quiet', action='store_true',
 # TODO: Modify this CLI tool to define the language of the grammar
 args = parser.parse_args()
 
-pseutopy = pseutopy.pseutopy.PseuToPy()
+pseutopy = PseuToPy()
 if not args.file:
     generated_ast = pseutopy.convert_from_string(args.input)
 else:
