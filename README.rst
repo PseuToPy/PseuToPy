@@ -48,9 +48,9 @@ You can import PseuToPy and use it within your own project.
 
    # These two lines generate the AST of the pseudocode instructions
    convert_from_string = pseutopy.convert_from_string("""
-   declare myVar
-   set myVar to 3 plus 1
-   """)
+       declare myVar
+       set myVar to 3 plus 1
+       """)
    convert_from_file = pseutopy.convert_from_file("./path/to/file")
 
    # You can then convert these AST into Python instructions with astor
@@ -66,6 +66,7 @@ Or you can use the CLI utility that ships with this project.
 .. code-block:: shell
 
    python cli.py --help
+
    # This is the output of the help flag
    usage: pseutopy.py [-h] [-f | -s] [-a] [-q] input
 
