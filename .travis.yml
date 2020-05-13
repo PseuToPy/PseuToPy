@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.5" # Minimum version because of pytest requirements
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.8-dev"
+  - "nightly"
+# Command to install dependencies
+install:
+  - pip install -r requirements.txt
+# Scripts to run tests
+script:
+  - pytest
