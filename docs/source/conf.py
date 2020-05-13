@@ -42,6 +42,9 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# Added reference to index as the master_doc to remove an issue with
+# readthedocs
+master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------
 
