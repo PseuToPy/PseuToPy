@@ -39,6 +39,49 @@ _____
 
 You can import PseuToPy and use it within your own project.
 
+.. code-block:: python
+
+   import astor
+   from pseutopy.pseutopy import PseuToPy
+
+   pseutopy = PseuToPy()
+
+   # These two lines generate the AST of the pseudocode instructions
+   convert_from_string = pseutopy.convert_from_string("""
+   declare myVar
+   set myVar to 3 plus 1
+   """)
+   convert_from_file = pseutopy.convert_from_file("./path/to/file")
+
+   # You can then convert these AST into Python instructions with astor
+   print(astor.to_source(convert_from_string))
+   print(astor.to_source(convert_from_file))
+
+   # For example, the result of print(astor.to_source(convert_from_string)) is:
+   # myVar = None
+   # myVar = 3 + 1
+
+Or you can use the CLI utility that ships with this project.
+
+.. code-block:: shell
+
+   python cli.py --help
+   # This is the output of the help flag
+   usage: pseutopy.py [-h] [-f | -s] [-a] [-q] input
+
+   A pseudocode to Python converter written in Python using textX.
+
+   positional arguments:
+   input         Pseudocode input to be converted into Python
+
+   optional arguments:
+     -h, --help    show this help message and exit
+     -f, --file    Input is now expected to be a file
+     -s, --string  Input is now expected to be a string (default)
+     -a, --ast     Prints out the generated Python AST
+     -q, --quiet   Don't print the generated Python code
+
+
 Testing
 _______
 
