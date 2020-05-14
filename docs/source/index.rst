@@ -12,5 +12,6 @@
    home
    installing
    features
+   grammar
    usage
 
