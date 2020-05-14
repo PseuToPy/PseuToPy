@@ -1,10 +1,11 @@
 |Build Status| |Documentation Status| |MIT License|
 
+****
 Home
-========
+****
 
 General description
--------------------
+###################
 
 PseuToPy is a Python library which defines a grammar for a pseudocode-based
 pseudocode. With this grammar, PseuToPy is then able to take instructions
@@ -19,7 +20,7 @@ Currently, PseuToPy only exists in English, but more languages (French, Italian,
 Spanish) will arrive soon.
 
 Installation
-------------
+############
 
 Use the package manager `pip <https://pip.pypa.io/en/stable/>`__ to install
 PseuToPy.
@@ -35,7 +36,7 @@ This will also install the following dependencies:
 - `pytest <https://docs.pytest.org/en/latest/>`__
 
 Usage
-_____
+#####
 
 You can import PseuToPy and use it within your own project.
 
@@ -84,12 +85,12 @@ Or you can use the CLI utility that ships with this project.
 
 
 Testing
-_______
+#######
 
 To run unit tests, run ``pytest`` at the root of the project.
 
 Authors and acknowledgment
-__________________________
+##########################
 
 I particularly wish to thank `@Houguiram <https://github.com/Houguiram>`__,
 `@TheOnlyMrFlow <https://github.com/TheOnlyMrFlow>`__, and
@@ -97,7 +98,7 @@ I particularly wish to thank `@Houguiram <https://github.com/Houguiram>`__,
 contributions to this project, which greatly helped me in getting to this stage.
 
 License
-_______
+#######
 
 `MIT <https://choosealicense.com/licenses/mit/>`__
 
