@@ -140,8 +140,8 @@ ShiftExpr: left=ArithExpr ((operator='<<' | operator='>>') right=ArithExpr)*;
 ArithExpr: left=Term ((operator='+' | operator='plus' |
     operator='-' | operator='minus') right=Term)*;
 Term: left=Factor ((operator='*' | operator='times' | operator='@' |
-    operator='/' | operator='divided by' | operator='%' | operator='modulo' |
-    operator='//') right=Factor)*;
+    operator='//' | operator='divided by' | operator='%' | operator='modulo' |
+    operator='/') right=Factor)*;
 Factor: (operator='+' | operator='-' | operator='~' | operator='plus' |
     operator='minus')
     value=Factor | value=Power;
