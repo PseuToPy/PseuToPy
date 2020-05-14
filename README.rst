@@ -40,7 +40,7 @@ Usage
 
 You can import PseuToPy and use it within your own project.
 
-.. code-block:: python
+.. code-block:: none
 
    import astor
    from pseutopy.pseutopy import PseuToPy
@@ -64,7 +64,7 @@ You can import PseuToPy and use it within your own project.
 
 Or you can use the CLI utility that ships with this project.
 
-.. code-block:: shell
+.. code-block:: none
 
    python cli.py --help
 
