@@ -25,7 +25,7 @@ Installation
 Use the package manager `pip <https://pip.pypa.io/en/stable/>`__ to install
 PseuToPy.
 
-.. code-block:: shell
+.. code-block:: none
 
    pip install pseutopy
 
@@ -40,7 +40,7 @@ Usage
 
 You can import PseuToPy and use it within your own project.
 
-.. code-block:: none
+.. code-block:: python
 
    import astor
    from pseutopy.pseutopy import PseuToPy
