@@ -5,7 +5,6 @@
 ************
 Installation
 ************
-<<<<<<< HEAD
 
 The easiest way to install PseuToPy is to use ``pip``:
 
