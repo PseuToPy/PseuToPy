@@ -1,1 +1,207 @@
+/**
+ * This grammar is taken from the grammar definition of Python 3.8.2, available
+ * here: https://docs.python.org/3/reference/grammar.html
+ *
+ * Some changes were made at very specific points in order to adapt this
+ * grammar to the pseudocode grammar we wish to create.
+ *
+ * A side-effect of this approach is that instructions written in Python 3.8
+ * will be accepted as valid pseudocode instructions.
+ */
 
+
+Module: statements*=Stmt;
+Stmt: (SimpleStmt | CompoundStmt);
+SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
+SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
+    DelStmt | PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt |
+    AssertStmt)
+;
+
+PrintStmt: ('print' | 'display' | 'show') 
+    '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
+InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
+    (args=Atom (',' values=TestList)*) ')'?;
+FuncCallStmt: 'call function' name=Name 
+    ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
+
+ExprStmt: ('set' '('?)? name=TestListStarExpr
+    (AnnAssign | 
+    AugAssign (YieldExpr | TestList) |
+    ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
+    ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
+;
+
+AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
+TestListStarExpr: (values=Test | values=StarExpr) 
+    (',' (values=Test | values=StarExpr))* (',')?
+;
+AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
+    '<<=' | '>>=' | '**==' | '//=')
+;
+DeclareStmt: 'declare' name=Name;
+
+DelStmt: 'del' name=ExprList;
+PassStmt: 'pass';
+FlowStmt: BreakStmt | ContinueStmt | ReturnStmt | RaiseStmt | YieldStmt;
+BreakStmt: 'break';
+ContinueStmt: 'continue';
+ReturnStmt: 'return' value=TestListStarExpr?;
+YieldStmt: YieldExpr;
+RaiseStmt: 'raise' (Test ('from' Test)?)?;
+ImportStmt: ImportName | ImportFrom;
+ImportName: 'import' DottedAsNames;
+ImportFrom: ('from' (('.' | '...')* DottedName | ('.' | '...')+)
+                'import' ('*' | '(' ImportAsNames ')' | ImportAsNames)
+);
+ImportAsName: Name ('as' Name)?;
+DottedAsName: DottedName ('as' Name)?;
+ImportAsNames: ImportAsName (',' ImportAsName)? ','?;
+DottedAsNames: DottedAsName (',' DottedAsName)?;
+DottedName: Name ('.' Name)*;
+GlobalStmt: 'declare global' Name (',' Name)*;
+NonLocalStmt: 'declare non local' Name (',' Name)*;
+AssertStmt: 'assert' Test (',' Test)?;
+
+CompoundStmt: IfStmt | WhileStmt | ForStmt | TryStmt | WithStmt | FuncDef |
+    ClassDef | Decorated | AsyncStmt;
+Decorator: '@' DottedName ('(' ArgList? ')')?;
+Decorators: Decorator+;
+Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
+
+AsyncFuncDef: 'ASYNC' FuncDef;
+FuncDef: ('define function' | 'def') name=Name 'with'? 
+    ('no parameter' | params=Parameters /as parameter(s)?/?)
+    /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
+Parameters: '('? value=TypedArgsList? ')'?;
+
+TypedArgsList: (
+    (type_def=TfpDef ('=' value=Test)? (','  type_def=TfpDef ('=' value=Test)?)* ','  '/' 
+        (','(type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)*
+            ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+            ((','  ('**' type_def=TfpDef (',')?)?)?) | '**' type_def=TfpDef (',')?))) | 
+            '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','
+            ('**' type_def=TfpDef (',')?)?)?) |
+            '**' type_def=TfpDef (',')?)?)?)? |  
+    (type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)* 
+        ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+        ((','  ('**' type_def=TfpDef (',')?))?) |
+        '**' type_def=TfpDef (',')?)?)?) | 
+        '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','  ('**'
+        type_def=TfpDef (',')?)?)?) |
+        '**' type_def=TfpDef (',')?)
+);
+
+TfpDef: name=Name (':' value=Test)?;
+
+
+AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
+IfStmt: 'if' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite 
+    (('elif' | 'else if') condition=NamedExprTest /:|then((\s)*:)?/ body=Suite)*
+    ('else' /:|then((\s)*:)?/ body=Suite)?
+    'end'
+;
+WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite 
+    ('else' /:|do((\s)*:)?/ else_body=Suite)?
+    'end'
+;
+ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/ 
+    body=Suite 
+    ('else' /:|do((\s)*:)?/ else_body=Suite)?
+    'end'
+;
+TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
+            ('else' ':' Suite)?
+            ('finally' ':' Suite) ? |
+            'finally' ':' Suite)
+);
+WithStmt: 'with' WithItem (',' WithItem)* ':' Suite;
+WithItem: Test ('as' Expr)?;
+ExceptClause: 'except' (Test ('as' Name)?)?;
+Suite: (statement=SimpleStmt | statement=Stmt)+;
+
+NamedExprTest: Test (':=' Test)?;
+
+Test: OrTest ('if' OrTest 'else' OrTest)*;
+TestNoCond: OrTest;
+OrTest: left=AndTest ((operator='or' | operator='||') right=AndTest)*;
+AndTest: left=NotTest ((operator='and' | operator='&&') right=NotTest)*;
+NotTest: operator='not' value=NotTest | value=Comparison;
+Comparison: left=Expr (operator=CompOp right=Expr)*;
+CompOp: '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
+    '<' | 'is lower than' | '>' | 'is greater than' |
+    '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
+    /\bin\b/ | 'not in' | 'is not' | /\bis\b/ ;
+StarExpr: '*' Expr;
+Expr: left=XorExpr (operator='|' right=XorExpr)*;
+XorExpr: left=AndExpr (operator='^' right=AndExpr)*;
+AndExpr: left=ShiftExpr (operator='&' right=ShiftExpr)*;
+ShiftExpr: left=ArithExpr ((operator='<<' | operator='>>') right=ArithExpr)*;
+ArithExpr: left=Term ((operator='+' | operator='plus' |
+    operator='-' | operator='minus') right=Term)*;
+Term: left=Factor ((operator='*' | operator='times' | operator='@' |
+    operator='/' | operator='divided by' | operator='%' | operator='modulo' |
+    operator='//') right=Factor)*;
+Factor: (operator='+' | operator='-' | operator='~' | operator='plus' |
+    operator='minus')
+    value=Factor | value=Power;
+Power: left=AtomExpr ((operator='**' | operator='to the power of')
+    right=Factor)?;
+AtomExpr: 'AWAIT'? atom=Atom trailer=Trailer*;
+Atom: (is_tuple='(' (values=YieldExpr | values=TestListComp)? ')' |
+    is_list='[' values=TestListComp? ']' |
+    is_dict='{' values=DictOrSetMaker? '}' |
+    name=Name | number=Number | string=String+ | '...' | none=NoneType |
+    boolean=Boolean
+);
+TestListComp: (values=NamedExprTest | values=StarExpr)
+    (values=CompFor | (',' (values=NamedExprTest | values=StarExpr))* (',')?);
+Trailer: '(' tuple_values=ArgList? ')' | '[' list_values=SubscriptList ']' |
+    '.' Name;
+
+SubscriptList: Subscript (',' Subscript)* ','?;
+Subscript: Test | Test? ':' Test? SliceOp?;
+SliceOp: ':' Test?;
+ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','?;
+TestList: ('range' '(' range_params=RangeParams ')') | args+=Test[eolterm];
+RangeParams: args=Expr ((',' args=Expr)*)?;
+DictOrSetMaker: (
+    ((keys=Test ':' values=Test | '**' values=Expr) 
+        (values=CompFor | (',' (keys=Test ':' values=Test | '**' values=Expr))*)(',')?) |
+    ((values=Test | values=StarExpr) (values=CompFor | (',' (values=Test |
+    values=StarExpr))* (',')?))
+);
+
+ClassDef: 'class' Name ('(' ArgList? ')')? ':' Suite;
+
+ArgList: Argument (',' Argument)* ','?;
+Argument: ( Test CompFor? |
+            Test ':=' Test |
+            Test '=' Test |
+            '**' Test |
+            '*' Test
+);
+CompIter: CompFor | CompIf;
+SyncCompFor: 'for' ExprList 'in' OrTest CompIter?;
+CompFor: 'ASYNC'? SyncCompFor;
+CompIf: 'if' TestNoCond CompIter?;
+
+YieldExpr: 'yield' YieldArg?;
+YieldArg: 'from' Test | TestListStarExpr;
+
+FuncBodySuite: (stmt=SimpleStmt | stmt=Stmt)+;
+
+Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
+    'range' | 'followed by' | 'call' | 'function' | 'with' | 'parameter' |
+    'parameters' | 'set' | 'to' | 'the' | 'result' | 'of' | 'declare' |
+    'pass' | 'break' | 'continue' | 'return'| 'define' | 'do' | 'end' | 'as' |
+    'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 
+    'or' | 'not' | 'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' |
+    'times' | 'divided' | 'by' | 'modulo' | 'power' | 'true' | 'false' | 'True'
+    | 'False';
+SafeId: !Keyword ID;
+Name: id=SafeId;
+String: value=STRING;
+Number: value=NUMBER;
+Boolean: value=BOOL;
+NoneType: value='None';

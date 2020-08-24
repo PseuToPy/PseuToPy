@@ -15,10 +15,11 @@ from pseutopy.generators.values import Number, Name, String, NoneType, \
 
 
 class PseuToPy(object):
-    def __init__(self):
+    def __init__(self, language):
+        self.language = language
         self.python_ast = ast.Module(body=[])
         self.variables = []
-        self.meta_model = metamodel_from_file(os.path.dirname(__file__) + "/pseudocode.tx",
+        self.meta_model = metamodel_from_file(os.path.dirname(__file__) + "/pseudocode" + self.language + ".tx",
                                               debug=False,
                                               classes={DeclareStmt, InputStmt,
                                                        PrintStmt, DelStmt,

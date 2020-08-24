@@ -13,6 +13,14 @@ parser.add_argument('input',
 input_group = parser.add_mutually_exclusive_group()
 input_group.add_argument('-f', '--file', action='store_true',
                          help="Input is now expected to be a file")
+input_group.add_argument('-f-fr', '--file_french', action='store_true',
+                         help="Input is now expected to be a file in french")
+input_group.add_argument('-f-en', '--file_english', action='store_true',
+                         help="Input is now expected to be a file in english")
+input_group.add_argument('-s-fr', '--string_french', action='store_true',
+                         help="Input is now expected to be a string in french (default)")
+input_group.add_argument('-s-en', '--string_english', action='store_true',
+                         help="Input is now expected to be a string in english (default)")
 input_group.add_argument('-s', '--string', action='store_true',
                          help="Input is now expected to be a string (default)")
 parser.add_argument('-a', '--ast', action='store_true',
@@ -22,7 +30,16 @@ parser.add_argument('-q', '--quiet', action='store_true',
 # TODO: Modify this CLI tool to define the language of the grammar
 args = parser.parse_args()
 
-pseutopy = PseuToPy()
+language = ''
+
+if args.string_french or args.file_french:
+    language = '-fr'
+elif args.string_english or args.file_english:
+    language = ''
+else:
+    language = ''
+
+pseutopy = PseuToPy(language)
 if not args.file:
     generated_ast = pseutopy.convert_from_string(args.input)
 else:
