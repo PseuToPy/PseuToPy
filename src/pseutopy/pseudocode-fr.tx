@@ -25,10 +25,10 @@ InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
 FuncCallStmt: 'call function' name=Name 
     ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
 
-ExprStmt: ('set' '('?)? name=TestListStarExpr
+ExprStmt: ('mettre' '('?)? name=TestListStarExpr
     (AnnAssign | 
     AugAssign (YieldExpr | TestList) |
-    ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
+    ((('à' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
     ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
 ;
 
@@ -39,7 +39,7 @@ TestListStarExpr: (values=Test | values=StarExpr)
 AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
     '<<=' | '>>=' | '**==' | '//=')
 ;
-DeclareStmt: 'declare' name=Name;
+DeclareStmt: 'déclarer' name=Name;
 
 DelStmt: 'del' name=ExprList;
 PassStmt: 'pass';
@@ -145,7 +145,7 @@ Term: left=Factor ((operator='*' | operator='times' | operator='@' |
 Factor: (operator='+' | operator='-' | operator='~' | operator='plus' |
     operator='minus')
     value=Factor | value=Power;
-Power: left=AtomExpr ((operator='**' | operator='to the power of')
+Power: left=AtomExpr ((operator='**' | operator='à la puissance')
     right=Factor)?;
 AtomExpr: 'AWAIT'? atom=Atom trailer=Trailer*;
 Atom: (is_tuple='(' (values=YieldExpr | values=TestListComp)? ')' |
