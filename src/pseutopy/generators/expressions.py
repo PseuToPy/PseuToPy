@@ -43,18 +43,18 @@ class Comparison(BinaryOp):
             comp_operator = []
             for i in range(len(self.right)):
                 right_nodes.append(self.right[i].to_node())
-                if self.operator[i] in ['<', 'is lower than']:
+                if self.operator[i] in ['<', 'is lower than', 'est inférieur à']:
                     comp_operator.append(ast.Lt())
-                elif self.operator[i] in ['<=', 'is lower or equal to']:
+                elif self.operator[i] in ['<=', 'is lower or equal to', 'est inférieur ou égal à']:
                     comp_operator.append(ast.LtE())
-                elif self.operator[i] in ['>', 'is greater than']:
+                elif self.operator[i] in ['>', 'is greater than', 'est supérieur à']:
                     comp_operator.append(ast.Gt())
-                elif self.operator[i] in ['>=', 'is greater or equal to']:
+                elif self.operator[i] in ['>=', 'is greater or equal to', 'est supérieur ou égal à']:
                     comp_operator.append(ast.GtE())
-                elif self.operator[i] in ['==', 'is equal to']:
+                elif self.operator[i] in ['==', 'is equal to', 'est égal à']:
                     comp_operator.append(ast.Eq())
-                elif self.operator[i] in ['!=', 'is different from',
-                                          'is not equal to']:
+                elif self.operator[i] in ['!=', 'is different from', 'est différent de',
+                                          'is not equal to', 'n\'est pas égal à']:
                     comp_operator.append(ast.NotEq())
                 elif self.operator[i] == 'in':
                     comp_operator.append(ast.In())
@@ -135,7 +135,7 @@ class ArithExpr(BinaryOp):
             for i in range(len(self.right)):
                 if self.operator[i] in ['+', 'plus']:
                     node = ast.BinOp(node, ast.Add(), self.right[i].to_node())
-                elif self.operator[i] in ['-', 'minus']:
+                elif self.operator[i] in ['-', 'minus', 'moins']:
                     node = ast.BinOp(node, ast.Sub(), self.right[i].to_node())
             return node
 
@@ -147,9 +147,9 @@ class Term(BinaryOp):
             return node
         else:
             for i in range(len(self.right)):
-                if self.operator[i] in ['*', 'times']:
+                if self.operator[i] in ['*', 'times', 'fois']:
                     node = ast.BinOp(node, ast.Mult(), self.right[i].to_node())
-                elif self.operator[i] in ['/', 'divided by']:
+                elif self.operator[i] in ['/', 'divisé par']:
                     node = ast.BinOp(node, ast.Div(), self.right[i].to_node())
                 elif self.operator[i] in ['%', 'modulo']:
                     node = ast.BinOp(node, ast.Mod(), self.right[i].to_node())
@@ -190,7 +190,7 @@ class Factor(UnaryOp):
         operator = self.operator
         if operator in ('+', 'plus'):
             return ast.UnaryOp(ast.UAdd(), value.to_node())
-        elif operator in ('-', 'minus'):
+        elif operator in ('-', 'minus', 'moins'):
             return ast.UnaryOp(ast.USub(), value.to_node())
         elif operator == '~':
             return ast.UnaryOp(ast.Invert(), value.to_node())
