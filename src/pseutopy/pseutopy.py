@@ -19,7 +19,7 @@ class PseuToPy(object):
         self.language = language
         self.python_ast = ast.Module(body=[])
         self.variables = []
-        self.meta_model = metamodel_from_file(os.path.dirname(__file__) + "/pseudocode" + self.language + ".tx",
+        self.meta_model = metamodel_from_file(os.path.dirname(__file__) + "/grammars/" + self.language + ".tx",
                                               debug=False,
                                               classes={DeclareStmt, InputStmt,
                                                        PrintStmt, DelStmt,

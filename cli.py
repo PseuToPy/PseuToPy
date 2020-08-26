@@ -30,14 +30,14 @@ parser.add_argument('-q', '--quiet', action='store_true',
 # TODO: Modify this CLI tool to define the language of the grammar
 args = parser.parse_args()
 
-language = ''
+language = 'en'
 
 if args.string_french or args.file_french:
-    language = '-fr'
+    language = 'fr'
 elif args.string_english or args.file_english:
-    language = ''
+    language = 'en'
 else:
-    language = ''
+    language = 'en'
 
 pseutopy = PseuToPy(language)
 if not args.file:
