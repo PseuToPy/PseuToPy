@@ -22,7 +22,7 @@ PrintStmt: ('print' | 'display' | 'show')
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
 InputStmt: 'donnée' (cast_type='nombre' | cast_type='entier')? '('?
     (args=Atom (',' values=TestList)*) ')'?;
-FuncCallStmt: 'call function' name=Name 
+FuncCallStmt: 'call function' name=Name
     ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
 
 ExprStmt: ('mettre' '('?)? name=TestListStarExpr
@@ -46,7 +46,7 @@ PassStmt: 'pass';
 FlowStmt: BreakStmt | ContinueStmt | ReturnStmt | RaiseStmt | YieldStmt;
 BreakStmt: 'break';
 ContinueStmt: 'continue';
-ReturnStmt: 'return' value=TestListStarExpr?;
+ReturnStmt: 'retourner' value=TestListStarExpr?;
 YieldStmt: YieldExpr;
 RaiseStmt: 'raise' (Test ('from' Test)?)?;
 ImportStmt: ImportName | ImportFrom;
@@ -70,9 +70,9 @@ Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 
 AsyncFuncDef: 'ASYNC' FuncDef;
-FuncDef: ('define function' | 'def') name=Name 'with'? 
-    ('no parameter' | params=Parameters /as parameter(s)?/?)
-    /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
+FuncDef: ('définir la fonction' | 'def') name=Name 'avec'?
+    ('aucun paramètre' | params=Parameters /comme paramètre(s)?/?)
+    /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'fin';
 Parameters: '('? value=TypedArgsList? ')'?;
 
 TypedArgsList: (
