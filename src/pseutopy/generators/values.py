@@ -14,6 +14,10 @@ class Name(object):
     def __init__(self, parent, id):
         self.parent = parent
         self.id = id
+        if self.id in ('vrai', 'Vrai', 'VRAI'):
+            self.id = "true"
+        elif self.id in ('faux', 'Faux', 'FAUX'):
+            self.id = "false"
 
     def to_node(self):
         return ast.Name(id="" + self.id, ctx=ast.Store)

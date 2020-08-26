@@ -202,7 +202,7 @@ class NotTest(UnaryOp):
     def to_node(self):
         value = self.value
         operator = self.operator
-        if operator == 'not':
+        if operator == 'non':
             return ast.UnaryOp(ast.Not(), value.to_node())
         else:
             return value.to_node()

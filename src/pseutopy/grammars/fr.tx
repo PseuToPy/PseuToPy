@@ -20,7 +20,7 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
 
 PrintStmt: ('print' | 'display' | 'show') 
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
-InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
+InputStmt: 'donnée' (cast_type='nombre' | cast_type='entier')? '('?
     (args=Atom (',' values=TestList)*) ')'?;
 FuncCallStmt: 'call function' name=Name 
     ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
@@ -29,7 +29,7 @@ ExprStmt: ('mettre' '('?)? name=TestListStarExpr
     (AnnAssign | 
     AugAssign (YieldExpr | TestList) |
     ((('à' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
-    ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
+    ('au résultat de la fonction:' (value=InputStmt | value=TestList | value=FuncCallStmt)))
 ;
 
 AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
@@ -96,19 +96,19 @@ TfpDef: name=Name (':' value=Test)?;
 
 
 AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
-IfStmt: 'if' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite 
+IfStmt: 'si' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite
     (('elif' | 'else if') condition=NamedExprTest /:|then((\s)*:)?/ body=Suite)*
     ('else' /:|then((\s)*:)?/ body=Suite)?
-    'end'
+    'fin'
 ;
-WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite 
+WhileStmt: 'tant que' condition=NamedExprTest 'faire:' body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
-    'end'
+    'fin'
 ;
-ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/ 
+ForStmt: 'pour' target=ExprList 'dans' iterable=TestList /:|do((\s)*:)?/
     body=Suite 
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
-    'end'
+    'fin'
 ;
 TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
             ('else' ':' Suite)?
@@ -124,9 +124,9 @@ NamedExprTest: Test (':=' Test)?;
 
 Test: OrTest ('if' OrTest 'else' OrTest)*;
 TestNoCond: OrTest;
-OrTest: left=AndTest ((operator='or' | operator='||') right=AndTest)*;
-AndTest: left=NotTest ((operator='and' | operator='&&') right=NotTest)*;
-NotTest: operator='not' value=NotTest | value=Comparison;
+OrTest: left=AndTest ((operator='ou' | operator='||') right=AndTest)*;
+AndTest: left=NotTest ((operator='et' | operator='&&') right=NotTest)*;
+NotTest: operator='non' value=NotTest | value=Comparison;
 Comparison: left=Expr (operator=CompOp right=Expr)*;
 CompOp: '>=' | 'est supérieur ou égal à' | '<=' | 'est inférieur ou égal à' |
     '<' | 'est inférieur à' | '>' | 'est supérieur à' |
@@ -163,7 +163,7 @@ SubscriptList: Subscript (',' Subscript)* ','?;
 Subscript: Test | Test? ':' Test? SliceOp?;
 SliceOp: ':' Test?;
 ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','?;
-TestList: ('range' '(' range_params=RangeParams ')') | args+=Test[eolterm];
+TestList: ('la gamme' '(' range_params=RangeParams ')') | args+=Test[eolterm];
 RangeParams: args=Expr ((',' args=Expr)*)?;
 DictOrSetMaker: (
     ((keys=Test ':' values=Test | '**' values=Expr) 
