@@ -56,13 +56,13 @@ class Comparison(BinaryOp):
                 elif self.operator[i] in ['!=', 'is different from', 'est différent de',
                                           'is not equal to', 'n\'est pas égal à']:
                     comp_operator.append(ast.NotEq())
-                elif self.operator[i] == 'in':
+                elif self.operator[i] in ['in', 'dans']:
                     comp_operator.append(ast.In())
-                elif self.operator[i] == 'not in':
+                elif self.operator[i] in ['not in', 'pas dans']:
                     comp_operator.append(ast.NotIn())
-                elif self.operator[i] == 'is':
+                elif self.operator[i] in ['is', 'est']:
                     comp_operator.append(ast.Is())
-                elif self.operator[i] == 'is not':
+                elif self.operator[i] in ['is not', 'n\'est pas']:
                     comp_operator.append(ast.IsNot())
                 else:
                     raise Exception("Unrecognized argument in Comparison")

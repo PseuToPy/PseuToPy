@@ -131,7 +131,7 @@ Comparison: left=Expr (operator=CompOp right=Expr)*;
 CompOp: '>=' | 'est supérieur ou égal à' | '<=' | 'est inférieur ou égal à' |
     '<' | 'est inférieur à' | '>' | 'est supérieur à' |
     '==' | 'est égal à' | '!=' | 'est différent de' | "n'est pas égal à" |
-    /\bin\b/ | 'not in' | 'is not' | /\bis\b/ ;
+    /\bin\b/ | 'dans' | 'pas dans' | 'est' | "n'est pas" | /\bis\b/ ;
 StarExpr: '*' Expr;
 Expr: left=XorExpr (operator='|' right=XorExpr)*;
 XorExpr: left=AndExpr (operator='^' right=AndExpr)*;
