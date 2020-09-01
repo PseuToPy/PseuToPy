@@ -67,11 +67,21 @@ class PseuToPy(object):
         return node
 
     def to_node(self, stmt):
-        if isinstance(stmt, Statement):
-            return stmt.to_node()
-        if stmt == 'pass':
-            return ast.Pass()
-        if stmt == 'break':
-            return ast.Break()
-        if stmt == 'continue':
-            return ast.Continue()
+        if self.language=='fr' :
+            if isinstance(stmt, Statement):
+                return stmt.to_node()
+            if stmt == 'passer':
+                return ast.Pass()
+            if stmt == 'casser':
+                return ast.Break()
+            if stmt == 'continuer':
+                return ast.Continue()
+        else :
+            if isinstance(stmt, Statement):
+                return stmt.to_node()
+            if stmt == 'pass':
+                return ast.Pass()
+            if stmt == 'break':
+                return ast.Break()
+            if stmt == 'continue':
+                return ast.Continue()

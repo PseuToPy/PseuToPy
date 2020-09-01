@@ -18,12 +18,12 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
     AssertStmt)
 ;
 
-PrintStmt: ('print' | 'display' | 'show') 
+PrintStmt: ('print' | 'afficher' | 'montrer')
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
 InputStmt: 'donnée' (cast_type='nombre' | cast_type='entier')? '('?
     (args=Atom (',' values=TestList)*) ')'?;
-FuncCallStmt: 'call function' name=Name
-    ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
+FuncCallStmt: 'appeler fonction' name=Name
+    ('avec' /paramètre(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
 
 ExprStmt: ('mettre' '('?)? name=TestListStarExpr
     (AnnAssign | 
@@ -42,10 +42,10 @@ AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
 DeclareStmt: 'déclarer' name=Name;
 
 DelStmt: 'del' name=ExprList;
-PassStmt: 'pass';
+PassStmt: 'passer';
 FlowStmt: BreakStmt | ContinueStmt | ReturnStmt | RaiseStmt | YieldStmt;
-BreakStmt: 'break';
-ContinueStmt: 'continue';
+BreakStmt: 'casser';
+ContinueStmt: 'continuer';
 ReturnStmt: 'retourner' value=TestListStarExpr?;
 YieldStmt: YieldExpr;
 RaiseStmt: 'raise' (Test ('from' Test)?)?;
