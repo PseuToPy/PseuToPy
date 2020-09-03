@@ -70,3 +70,57 @@ my_var = 2 != 3
 my_var = 2 != 3
         """
         assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_operator_is(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        mettre my_var à a est b
+        mettre my_var à a n'est pas b
+        """
+        python_str = """
+my_var = a is b
+my_var = a is not b
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_operator_in(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        mettre my_var à 3 dans my_tuple
+        mettre my_var à 3 pas dans my_list
+        """
+        python_str = """
+my_var = 3 in my_tuple
+my_var = 3 not in my_list
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_boolean_values(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        mettre my_var à vrai
+        mettre my_var à Vrai
+        mettre my_var à faux
+        mettre my_var à Faux
+        """
+        python_str = """
+my_var = true
+my_var = true
+my_var = false
+my_var = false
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_boolean_operators(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        mettre my_var à vrai et faux
+        mettre my_var à vrai ou faux
+        mettre my_var à non vrai
+        """
+        python_str = """
+my_var = true and false
+my_var = true or false
+my_var = not true
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
