@@ -240,6 +240,15 @@ class FuncDef(Statement):
         return ast.FunctionDef(name=name, args=args, body=body,
                                decorator_list=[])
 
+class Methode(Statement):
+    def __init__(self, parent, name, nMethode ,params, test, body):
+        super().__init__(parent)
+        self.name = name
+        self.nMethode = nMethode
+        self.params = params
+        self.test = test
+        self.body = body
+        ## todo ast 
 
 class ReturnStmt(Statement):
     def __init__(self, parent, value):

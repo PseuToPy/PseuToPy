@@ -64,7 +64,7 @@ NonLocalStmt: 'declare non local' Name (',' Name)*;
 AssertStmt: 'assert' Test (',' Test)?;
 
 CompoundStmt: IfStmt | WhileStmt | ForStmt | TryStmt | WithStmt | FuncDef |
-    methode | ClassDef | Decorated | AsyncStmt;
+    Methode | ClassDef | Decorated | AsyncStmt;
 Decorator: '@' DottedName ('(' ArgList? ')')?;
 Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | methode | AsyncFuncDef);
@@ -73,7 +73,7 @@ AsyncFuncDef: 'ASYNC' FuncDef;
 FuncDef: ('define function' | 'def') name=Name 'with'? 
     ('no parameter' | params=Parameters /as parameter(s)?/?)
     /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
-methode: name=Name ('call methode' | '.') name=Name 'with'?
+Methode: name=Name ('call methode' | '.') nMethode=Name 'with'?
     ('no parameter' | params=Parameters /as parameter(s)?/?) 'end';
 Parameters: '('? value=TypedArgsList? ')'?;
 
