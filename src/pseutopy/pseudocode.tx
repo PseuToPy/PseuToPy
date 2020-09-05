@@ -73,7 +73,7 @@ AsyncFuncDef: 'ASYNC' FuncDef;
 FuncDef: ('define function' | 'def') name=Name 'with'? 
     ('no parameter' | params=Parameters /as parameter(s)?/?)
     /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
-methode: name=Name ('call methode' | '.') 'with'?
+methode: name=Name ('call methode' | '.') name=Name 'with'?
     ('no parameter' | params=Parameters /as parameter(s)?/?) 'end';
 Parameters: '('? value=TypedArgsList? ')'?;
 
