@@ -9,7 +9,7 @@ from pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
     Parameters, TypedArgsList
 from pseutopy.generators.statements import Statement, ExprStmt, \
     InputStmt, FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, \
-    WhileStmt, ForStmt, FuncDef, Methode ReturnStmt
+    WhileStmt, ForStmt, FuncDef, Methode, ReturnStmt
 from pseutopy.generators.values import Number, Name, String, NoneType, \
     Boolean
 
