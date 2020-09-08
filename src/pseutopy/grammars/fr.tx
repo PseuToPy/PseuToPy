@@ -105,8 +105,7 @@ WhileStmt: 'tant que' condition=NamedExprTest 'faire:' body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'fin'
 ;
-ForStmt: 'pour' target=ExprList 'dans' iterable=TestList /:|do((\s)*:)?/
-    body=Suite 
+ForStmt: 'pour' target=ExprList 'dans' iterable=TestList /:|do((\s)*:)?/ body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'fin'
 ;

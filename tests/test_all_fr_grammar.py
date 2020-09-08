@@ -124,3 +124,142 @@ my_var = true or false
 my_var = not true
         """
         assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_input_function(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        mettre my_var au résultat de la fonction: donnée ('This is a message to prompt the input')
+        mettre my_var au résultat de la fonction: donnée "A message", "Another message"
+        mettre my_var au résultat de la fonction: donnée entier "my_var will try to be an integer"
+        mettre my_var au résultat de la fonction: donnée nombre "my_var will try to be a float"
+        """
+        python_str = """
+my_var = input('This is a message to prompt the input')
+my_var = input('A message', 'Another message')
+my_var = int(input('my_var will try to be an integer'))
+my_var = float(input('my_var will try to be a float'))
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_declare_function(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        définir la fonction foo  avec aucun paramètre:
+            mettre my_var à 1
+        fin
+        
+        définir la fonction foo avec arg1 comme paramètre:
+            mettre my_var à arg1
+        fin
+        
+        définir la fonction bar avec (arg1, arg2) comme paramètres:
+            mettre my_var1 à arg1
+            mettre my_var2 à arg2
+        fin
+        
+        définir la fonction bar avec (arg1, arg2) comme paramètres:
+            mettre my_var1 à arg1
+            mettre my_var2 à arg2
+            retourner my_var1, my_var2
+        fin
+        """
+        python_str = """
+def foo():
+    my_var = 1
+    
+def foo(arg1):
+    my_var = arg1
+    
+def bar(arg1, arg2):
+    my_var1 = arg1
+    my_var2 = arg2
+    
+def bar(arg1, arg2):
+    my_var1 = arg1
+    my_var2 = arg2
+    return my_var1, my_var2
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_call_function(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        appeler la fonction foo
+        mettre my_var au résultat de la fonction: appeler la fonction foo
+        
+        appeler la fonction bar avec 1 comme paramètre
+        mettre my_var au résultat de la fonction: appeler la fonction bar avec 1 comme paramètre
+
+        appeler la fonction bar avec (1, 2) comme paramètres
+        mettre my_var au résultat de la fonction: appeler la fonction bar avec (1, 2) comme paramètres
+        """
+        python_str = """
+foo()
+my_var = foo()
+
+bar(1)
+my_var = bar(1)
+
+bar(1, 2)
+my_var = bar(1, 2)
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+'''
+    def test_if_statements(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        si vrai ou faux:
+            mettre my_var à 'Some random value'
+        fin
+        
+        si vrai alors:
+            mettre my_var = "Some random value"
+        sinon alors
+            mettre my_var = 'Some other random value'
+        fin
+        """
+        python_str = """
+if true or false:
+    my_var = 'Some random value'
+    
+if True:
+    my_var = 'Some random value'
+else:
+    my_var = 'Some other random value'
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_for_statements(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        pour i dans la gamme(0,10,1):
+            mettre a à i
+        fin
+        
+        pour i dans (1, 2, 3, 5, 7) faire:
+            mettre a à i
+        fin
+        """
+        python_str = """
+for i in range(0, 10, 1):
+    a = i
+    
+for i in (1, 2, 3, 5, 7):
+    a = i
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+    def test_while_statements(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        tant que vrai faire:
+            mettre a à 1
+        fin
+        """
+        python_str = """
+while True:
+    a = 1
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+'''
