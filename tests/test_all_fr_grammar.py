@@ -141,6 +141,39 @@ my_var = float(input('my_var will try to be a float'))
         """
         assert check_ast(frenchPseutopy, python_str, pseudo_str)
 
+        def test_while_statements(self, pseutopy):
+            frenchPseutopy = PseuToPy("fr")
+            pseudo_str = """
+            tant que vrai faire:
+                mettre a à 1
+            fin
+            """
+            python_str = """
+while True:
+    a = 1
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
+        def test_for_statements(self, pseutopy):
+            frenchPseutopy = PseuToPy("fr")
+            pseudo_str = """
+            
+            finpour i dans la gamme(0,10,1):
+                mettre a à i
+
+            pour i dans (1, 2, 3, 5, 7) faire:
+                mettre a à i
+            fin
+            """
+            python_str = """
+for i in range(0, 10, 1):
+    a = i
+
+for i in (1, 2, 3, 5, 7):
+    a = i
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
     def test_declare_function(self, pseutopy):
         frenchPseutopy = PseuToPy("fr")
         pseudo_str = """
@@ -227,39 +260,6 @@ if True:
     my_var = 'Some random value'
 else:
     my_var = 'Some other random value'
-        """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
-
-    def test_for_statements(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
-        pseudo_str = """
-        pour i dans la gamme(0,10,1):
-            mettre a à i
-        fin
-        
-        pour i dans (1, 2, 3, 5, 7) faire:
-            mettre a à i
-        fin
-        """
-        python_str = """
-for i in range(0, 10, 1):
-    a = i
-    
-for i in (1, 2, 3, 5, 7):
-    a = i
-        """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
-
-    def test_while_statements(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
-        pseudo_str = """
-        tant que vrai faire:
-            mettre a à 1
-        fin
-        """
-        python_str = """
-while True:
-    a = 1
         """
         assert check_ast(frenchPseutopy, python_str, pseudo_str)
 '''

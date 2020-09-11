@@ -101,11 +101,11 @@ IfStmt: 'si' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite
     ('else' /:|then((\s)*:)?/ body=Suite)?
     'fin'
 ;
-WhileStmt: 'tant que' condition=NamedExprTest 'faire:' body=Suite
+WhileStmt: 'tant que' condition=NamedExprTest /:|faire((\s)*:)?/ body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'fin'
 ;
-ForStmt: 'pour' target=ExprList 'dans' iterable=TestList /:|do((\s)*:)?/ body=Suite
+ForStmt: 'pour' target=ExprList 'dans' iterable=TestList /:|faire((\s)*:)?/ body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'fin'
 ;
@@ -190,13 +190,13 @@ YieldArg: 'from' Test | TestListStarExpr;
 
 FuncBodySuite: (stmt=SimpleStmt | stmt=Stmt)+;
 
-Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
-    'range' | 'followed by' | 'call' | 'function' | 'with' | 'parameter' |
-    'parameters' | 'set' | 'to' | 'the' | 'result' | 'of' | 'declare' |
-    'pass' | 'break' | 'continue' | 'return'| 'define' | 'do' | 'end' | 'as' |
-    'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 
-    'or' | 'not' | 'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' |
-    'times' | 'divided' | 'by' | 'modulo' | 'power' | 'true' | 'false' | 'True'
+Keyword: 'donnée' | 'nombre' | 'entier' | 'print' | 'display' | 'show' |
+    'la gamme' | 'followed by' | 'appeler' | 'fonction' | 'avec' | 'paramètre' |
+    'paramètres' | 'set' | 'to' | 'the' | 'résultat' | 'de' | 'déclarer' |
+    'pass' | 'break' | 'continue' | 'retourner'| 'définir' | 'faire' | 'fin' | 'as' |
+    'si' | 'elif' | 'else' | 'pour' | 'tant que' | 'plus' | 'moins' | 'et' |
+    'ou' | 'pas' | 'inférieur' | 'supérieur' | 'égual' | 'different' | 'est' | 'dans' |
+    'fois' | 'divisé' | 'par' | 'modulo' | 'à la puissance' | 'true' | 'false' | 'True'
     | 'False';
 SafeId: !Keyword ID;
 Name: id=SafeId;
