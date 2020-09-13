@@ -18,7 +18,7 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
     AssertStmt)
 ;
 
-PrintStmt: ('print' | 'afficher' | 'montrer')
+PrintStmt: ('afficher' | 'montrer')
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
 InputStmt: 'donnée' (cast_type='nombre' | cast_type='entier')? '('?
     (args=Atom (',' values=TestList)*) ')'?;

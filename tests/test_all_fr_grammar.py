@@ -238,6 +238,22 @@ my_var = bar(1, 2)
         """
         assert check_ast(frenchPseutopy, python_str, pseudo_str)
 
+    def test_print(self, pseutopy):
+        frenchPseutopy = PseuToPy("fr")
+        pseudo_str = """
+        afficher 'hello world'
+        montrer 'hello world'
+        afficher my_var
+        montrer my_var
+        """
+        python_str = """
+        print('hello world')
+        print('hello world')
+        print(my_var)
+        print(my_var)
+        """
+        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+
 '''
     def test_if_statements(self, pseutopy):
         frenchPseutopy = PseuToPy("fr")
@@ -263,3 +279,6 @@ else:
         """
         assert check_ast(frenchPseutopy, python_str, pseudo_str)
 '''
+
+
+
