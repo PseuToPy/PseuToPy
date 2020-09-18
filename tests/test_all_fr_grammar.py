@@ -139,7 +139,7 @@ my_var = float(input('my_var will try to be a float'))
         fin
         """
         python_str = """
-while True:
+while true:
     a = 1
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
