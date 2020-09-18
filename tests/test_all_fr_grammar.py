@@ -3,8 +3,7 @@ from src.pseutopy.pseutopy import PseuToPy
 
 class TestChainedAssignment:
 
-    def test_assign_a_value_to_a_variable(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_assign_a_value_to_a_variable(self, frPseutopy):
         pseudo_str = """
         mettre my_var à 1
         mettre my_var1 à my_var2
@@ -23,11 +22,10 @@ my_list = [1, my_var, 'Hi']
 my_dict = {'key1': 1, 2: 'value'}
 my_set = {1, 2, 3}
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
 
-    def test_arithmetic_operators(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_arithmetic_operators(self, frPseutopy):
         pseudo_str = """
         mettre my_var à 1 plus 2
         mettre my_var à 1 moins 2
@@ -46,11 +44,10 @@ my_var = 2 / 3
 my_var = 2 % 3
 my_var = 2 ** 3
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
 
-    def test_comparison_operators(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_comparison_operators(self, frPseutopy):
         pseudo_str = """
         mettre my_var à 2 est inférieur ou égal à 3
         mettre my_var à 2 est inférieur à 3
@@ -69,10 +66,9 @@ my_var = 2 == 3
 my_var = 2 != 3
 my_var = 2 != 3
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_operator_is(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_operator_is(self, frPseutopy):
         pseudo_str = """
         mettre my_var à a est b
         mettre my_var à a n'est pas b
@@ -81,10 +77,9 @@ my_var = 2 != 3
 my_var = a is b
 my_var = a is not b
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_operator_in(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_operator_in(self, frPseutopy):
         pseudo_str = """
         mettre my_var à 3 dans my_tuple
         mettre my_var à 3 pas dans my_list
@@ -93,10 +88,9 @@ my_var = a is not b
 my_var = 3 in my_tuple
 my_var = 3 not in my_list
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_boolean_values(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_boolean_values(self, frPseutopy):
         pseudo_str = """
         mettre my_var à vrai
         mettre my_var à Vrai
@@ -109,10 +103,9 @@ my_var = true
 my_var = false
 my_var = false
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_boolean_operators(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_boolean_operators(self, frPseutopy):
         pseudo_str = """
         mettre my_var à vrai et faux
         mettre my_var à vrai ou faux
@@ -123,10 +116,9 @@ my_var = true and false
 my_var = true or false
 my_var = not true
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_input_function(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_input_function(self, frPseutopy):
         pseudo_str = """
         mettre my_var au résultat de la fonction: donnée ('This is a message to prompt the input')
         mettre my_var au résultat de la fonction: donnée "A message", "Another message"
@@ -139,10 +131,9 @@ my_var = input('A message', 'Another message')
 my_var = int(input('my_var will try to be an integer'))
 my_var = float(input('my_var will try to be a float'))
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_declare_function(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_declare_function(self, frPseutopy):
         pseudo_str = """
         définir la fonction foo  avec aucun paramètre:
             mettre my_var à 1
@@ -179,10 +170,10 @@ def bar(arg1, arg2):
     my_var2 = arg2
     return my_var1, my_var2
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_call_function(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+'''
+    def test_call_function(self, frPseutopy):
         pseudo_str = """
         appeler la fonction foo
         mettre my_var au résultat de la fonction: appeler la fonction foo
@@ -203,11 +194,9 @@ my_var = bar(1)
 bar(1, 2)
 my_var = bar(1, 2)
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-'''
-    def test_if_statements(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_if_statements(self, frPseutopy):
         pseudo_str = """
         si vrai ou faux:
             mettre my_var à 'Some random value'
@@ -228,10 +217,9 @@ if True:
 else:
     my_var = 'Some other random value'
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_for_statements(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_for_statements(self, frPseutopy):
         pseudo_str = """
         pour i dans la gamme(0,10,1):
             mettre a à i
@@ -248,10 +236,9 @@ for i in range(0, 10, 1):
 for i in (1, 2, 3, 5, 7):
     a = i
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_while_statements(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_while_statements(self, frPseutopy):
         pseudo_str = """
         tant que vrai faire:
             mettre a à 1
@@ -261,5 +248,5 @@ for i in (1, 2, 3, 5, 7):
 while True:
     a = 1
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 '''
