@@ -162,7 +162,6 @@ for i in (1, 2, 3, 5, 7):
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
-'''
     def test_declare_function(self, frPseutopy):
         pseudo_str = """
         définir la fonction foo  avec aucun paramètre:
@@ -202,8 +201,8 @@ def bar(arg1, arg2):
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_call_function(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+'''
+    def test_call_function(self, frPseutopy):
         pseudo_str = """
         appeler la fonction foo
         mettre my_var au résultat de la fonction: appeler la fonction foo
@@ -221,7 +220,7 @@ my_var = bar(1)
 bar(1, 2)
 my_var = bar(1, 2)
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
     def test_print(self, pseutopy):
         frenchPseutopy = PseuToPy("fr")
