@@ -142,14 +142,14 @@ my_var = float(input('my_var will try to be a float'))
 while True:
     a = 1
         """
-
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
     def test_for_statements(self, frPseutopy):
         pseudo_str = """
 
-        finpour i dans la gamme(0,10,1):
+        pour i dans la gamme(0,10,1):
             mettre a à i
+        fin
         pour i dans (1, 2, 3, 5, 7) faire:
             mettre a à i
         fin
@@ -160,9 +160,9 @@ for i in range(0, 10, 1):
 for i in (1, 2, 3, 5, 7):
     a = i
         """
-
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
+'''
     def test_declare_function(self, frPseutopy):
         pseudo_str = """
         définir la fonction foo  avec aucun paramètre:
@@ -202,7 +202,6 @@ def bar(arg1, arg2):
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
-'''
     def test_call_function(self, pseutopy):
         frenchPseutopy = PseuToPy("fr")
         pseudo_str = """
