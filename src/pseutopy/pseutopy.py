@@ -1,7 +1,9 @@
 import ast
 import os
 
-from textx import metamodel_from_file
+from inspect import getmembers
+
+from textx import metamodel_from_file, exceptions
 
 from pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
     BinaryOp, OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, \
@@ -12,6 +14,7 @@ from pseutopy.generators.statements import Statement, ExprStmt, \
     WhileStmt, ForStmt, FuncDef, ReturnStmt
 from pseutopy.generators.values import Number, Name, String, NoneType, \
     Boolean
+from src.pseutopy.exceptions import ExceptionHandler
 
 
 class PseuToPy(object):
@@ -51,7 +54,17 @@ class PseuToPy(object):
 
     def convert_from_string(self, pseudocode_string):
         self.reset_ast()
-        self.meta_model.model_from_str(pseudocode_string)
+        pseudocode_formatted = " ".join(pseudocode_string.split())
+        # HERE
+        try:
+            self.meta_model.model_from_str(pseudocode_formatted)
+            #for k, v in self.meta_model.__dict__.get('user_classes').get():
+            #    print(k)
+
+            #print(self.python_ast._fields.__str__())
+        except exceptions.TextXSyntaxError as SE:
+            handler = ExceptionHandler(pseudocode_formatted, SE, self.meta_model)
+            handler.analyze_error()
         return self.python_ast
 
     def reset_ast(self):
