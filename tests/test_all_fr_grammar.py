@@ -1,5 +1,4 @@
 from tests.utils import check_ast
-from src.pseutopy.pseutopy import PseuToPy
 
 
 class TestChainedAssignment:

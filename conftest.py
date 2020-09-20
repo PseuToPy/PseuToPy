@@ -8,5 +8,9 @@ def pseutopy():
     return PseuToPy()
 
 @pytest.fixture(scope="session")
+def enPseutopy():
+    return frPseuToPy("en")
+
+@pytest.fixture(scope="session")
 def frPseutopy():
     return frPseuToPy("fr")
