@@ -200,64 +200,81 @@ def bar(arg1, arg2):
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
-'''
-    def test_call_function(self, frPseutopy):
+    def test_call_function1(self, frPseutopy):
         pseudo_str = """
         appeler la fonction foo
         mettre my_var au résultat de la fonction: appeler la fonction foo
-
-        appeler la fonction bar avec 1 comme paramètre
-        mettre my_var au résultat de la fonction: appeler la fonction bar avec 1 comme paramètre
-        appeler la fonction bar avec (1, 2) comme paramètres
-        mettre my_var au résultat de la fonction: appeler la fonction bar avec (1, 2) comme paramètres
         """
         python_str = """
 foo()
 my_var = foo()
-bar(1)
-my_var = bar(1)
-bar(1, 2)
-my_var = bar(1, 2)
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_print(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_call_function2(self, frPseutopy):
+        pseudo_str = """
+            mettre my_var au résultat de la fonction: appeler la fonction bar avec comme paramètre 1
+            """
+        python_str = """
+my_var = bar(1)
+            """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+    def test_call_function3(self, frPseutopy):
+        pseudo_str = """
+            mettre my_var au résultat de la fonction: appeler la fonction bar avec comme paramètres (1, 2)
+            """
+        python_str = """
+my_var = bar(1, 2)
+            """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+    def test_print1(self, frPseutopy):
         pseudo_str = """
         afficher 'hello world'
-        montrer 'hello world'
-        afficher my_var
-        montrer my_var
         """
         python_str = """
-        print('hello world')
-        print('hello world')
-        print(my_var)
-        print(my_var)
+print('hello world')
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
-    def test_if_statements(self, pseutopy):
-        frenchPseutopy = PseuToPy("fr")
+    def test_print2(self, frPseutopy):
+        pseudo_str = """
+        montrer 'hello world'
+        """
+        python_str = """
+print('hello world')
+        """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+    def test_print3(self, frPseutopy):
+        pseudo_str = """
+        afficher my_var
+        """
+        python_str = """
+print(my_var)
+        """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+    def test_if_statements(self, frPseutopy):
         pseudo_str = """
         si vrai ou faux:
             mettre my_var à 'Some random value'
         fin
 
         si vrai alors:
-            mettre my_var = "Some random value"
-        sinon alors
+            mettre my_var = 'Some random value'
+        else if faux alors:
             mettre my_var = 'Some other random value'
         fin
         """
         python_str = """
 if true or false:
     my_var = 'Some random value'
-
-if True:
+    
+if true:
     my_var = 'Some random value'
-else:
+elif false:
     my_var = 'Some other random value'
         """
-        assert check_ast(frenchPseutopy, python_str, pseudo_str)
-'''
+        assert check_ast(frPseutopy, python_str, pseudo_str)
