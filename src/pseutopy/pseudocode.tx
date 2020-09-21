@@ -58,13 +58,14 @@ ImportAsName: Name ('as' Name)?;
 DottedAsName: DottedName ('as' Name)?;
 ImportAsNames: ImportAsName (',' ImportAsName)? ','?;
 DottedAsNames: DottedAsName (',' DottedAsName)?;
-DottedName: Name ('.' Name)*;
+DottedName: ('call methode' nMethode=Name 'on' name=Name | name=Name '.' nMethode=Name ) 'with'?
+    ('no parameter' | params=Parameters /as parameter(s)?/?);
 GlobalStmt: 'declare global' Name (',' Name)*;
 NonLocalStmt: 'declare non local' Name (',' Name)*;
 AssertStmt: 'assert' Test (',' Test)?;
 
 CompoundStmt: IfStmt | WhileStmt | ForStmt | TryStmt | WithStmt | FuncDef |
-    Methode | ClassDef | Decorated | AsyncStmt;
+    ClassDef | Decorated | AsyncStmt;
 Decorator: '@' DottedName ('(' ArgList? ')')?;
 Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | methode | AsyncFuncDef);
@@ -73,8 +74,6 @@ AsyncFuncDef: 'ASYNC' FuncDef;
 FuncDef: ('define function' | 'def') name=Name 'with'? 
     ('no parameter' | params=Parameters /as parameter(s)?/?)
     /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
-Methode: name=Name ('call methode' | '.') nMethode=Name 'with'?
-    ('no parameter' | params=Parameters /as parameter(s)?/?) 'end';
 Parameters: '('? value=TypedArgsList? ')'?;
 
 
