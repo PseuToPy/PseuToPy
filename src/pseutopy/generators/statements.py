@@ -72,10 +72,10 @@ class InputStmt(Statement):
             args.append(value.to_node())
         node = ast.Call(func=ast.Name(id='input', ctx=ast.Load), args=args,
                         keywords=[])
-        if self.cast_type == 'nombre':
+        if self.cast_type in ('number', 'nombre'):
             node = ast.Call(func=ast.Name(id='float', ctx=ast.Load),
                             args=[node], keywords=[])
-        elif self.cast_type == 'entier':
+        elif self.cast_type in ('integer', 'entier'):
             node = ast.Call(func=ast.Name(id='int', ctx=ast.Load),
                             args=[node], keywords=[])
         if isinstance(self.parent, ExprStmt):

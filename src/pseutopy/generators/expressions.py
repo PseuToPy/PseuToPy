@@ -149,7 +149,7 @@ class Term(BinaryOp):
             for i in range(len(self.right)):
                 if self.operator[i] in ['*', 'times', 'fois']:
                     node = ast.BinOp(node, ast.Mult(), self.right[i].to_node())
-                elif self.operator[i] in ['/', 'divisé par']:
+                elif self.operator[i] in ['/', 'divided by', 'divisé par']:
                     node = ast.BinOp(node, ast.Div(), self.right[i].to_node())
                 elif self.operator[i] in ['%', 'modulo']:
                     node = ast.BinOp(node, ast.Mod(), self.right[i].to_node())
@@ -202,7 +202,7 @@ class NotTest(UnaryOp):
     def to_node(self):
         value = self.value
         operator = self.operator
-        if operator == 'non':
+        if operator in ('not', 'non'):
             return ast.UnaryOp(ast.Not(), value.to_node())
         else:
             return value.to_node()
