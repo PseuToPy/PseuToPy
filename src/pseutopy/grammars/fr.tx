@@ -50,9 +50,9 @@ ReturnStmt: 'retourner' value=TestListStarExpr?;
 YieldStmt: YieldExpr;
 RaiseStmt: 'raise' (Test ('from' Test)?)?;
 ImportStmt: ImportName | ImportFrom;
-ImportName: 'import' DottedAsNames;
-ImportFrom: ('from' (('.' | '...')* DottedName | ('.' | '...')+)
-                'import' ('*' | '(' ImportAsNames ')' | ImportAsNames)
+ImportName: 'importer' DottedAsNames;
+ImportFrom: ('pour' (('.' | '...')* DottedName | ('.' | '...')+)
+                'importer' ('*' | '(' ImportAsNames ')' | ImportAsNames)
 );
 ImportAsName: Name ('as' Name)?;
 DottedAsName: DottedName ('as' Name)?;

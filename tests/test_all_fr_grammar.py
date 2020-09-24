@@ -256,6 +256,35 @@ print(my_var)
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
+    def test_pass(self, frPseutopy):
+        pseudo_str = """
+        passer
+        """
+        python_str = """
+pass
+        """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+    def test_break(self, frPseutopy):
+        pseudo_str = """
+        casser
+        """
+        python_str = """
+break
+        """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+    def test_continue(self, frPseutopy):
+        pseudo_str = """
+        continuer
+        """
+        python_str = """
+continue
+        """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
+
+
+
     def test_if_statements(self, frPseutopy):
         pseudo_str = """
         si vrai ou faux:
