@@ -11,18 +11,10 @@ parser = argparse.ArgumentParser(description='A pseudocode to Python '
 parser.add_argument('input',
                     help="Pseudocode input to be converted into Python")
 input_group = parser.add_mutually_exclusive_group()
-input_group.add_argument('-f', '--file', action='store_true',
-                         help="Input is now expected to be a file")
-input_group.add_argument('-f-fr', '--file_french', action='store_true',
-                         help="Input is now expected to be a file in french")
-input_group.add_argument('-f-en', '--file_english', action='store_true',
-                         help="Input is now expected to be a file in english")
-input_group.add_argument('-s-fr', '--string_french', action='store_true',
-                         help="Input is now expected to be a string in french (default)")
-input_group.add_argument('-s-en', '--string_english', action='store_true',
-                         help="Input is now expected to be a string in english (default)")
-input_group.add_argument('-s', '--string', action='store_true',
-                         help="Input is now expected to be a string (default)")
+parser.add_argument('-s-language:', '-string-language:', '-string-lg:', '-s-lg:', action='store', dest='string',
+                    help='Input is now expected to be a string (default)')
+parser.add_argument('-f-language:', '-file-language:', '-file-lg:', '-f-lg:', action='store', dest='file',
+                    help='Input is now expected to be a string (default)')
 parser.add_argument('-a', '--ast', action='store_true',
                     help="Prints out the generated Python AST")
 parser.add_argument('-q', '--quiet', action='store_true',
@@ -30,19 +22,11 @@ parser.add_argument('-q', '--quiet', action='store_true',
 # TODO: Modify this CLI tool to define the language of the grammar
 args = parser.parse_args()
 
-language = 'en'
-
-if args.string_french or args.file_french:
-    language = 'fr'
-elif args.string_english or args.file_english:
-    language = 'en'
-else:
-    language = 'en'
-
-pseutopy = PseuToPy(language)
 if not args.file:
+    pseutopy = PseuToPy(args.string)
     generated_ast = pseutopy.convert_from_string(args.input)
 else:
+    pseutopy = PseuToPy(args.file)
     generated_ast = pseutopy.convert_from_file(args.input)
 
 generated_code = astor.to_source(generated_ast)
