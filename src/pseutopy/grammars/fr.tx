@@ -193,7 +193,7 @@ FuncBodySuite: (stmt=SimpleStmt | stmt=Stmt)+;
 Keyword: 'donnée' | 'nombre' | 'entier' | 'afficher' | 'montrer' |
     'la gamme' | 'followed by' | 'appeler' | 'fonction' | 'avec' | 'paramètre' |
     'paramètres' | 'set' | 'to' | 'la' | 'résultat' | 'de' | 'déclarer' |
-    'pass' | 'break' | 'continue' | 'retourner'| 'définir' | 'faire' | 'fin' | 'as' |
+    'passer' | 'casser' | 'continuer' | 'retourner'| 'définir' | 'faire' | 'fin' | 'as' |
     'si' | 'sinon' | 'autrement' | 'pour' | 'tant que' | 'plus' | 'moins' | 'et' |
     'ou' | 'pas' | 'inférieur' | 'supérieur' | 'égual' | 'different' | 'est' | 'dans' |
     'fois' | 'divisé' | 'par' | 'modulo' | 'à la puissance' | 'true' | 'false' | 'True'
