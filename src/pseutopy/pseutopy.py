@@ -24,7 +24,7 @@ class PseuToPy(object):
                                                        PrintStmt, DelStmt,
                                                        FuncCallStmt, IfStmt,
                                                        WhileStmt, ForStmt,
-                                                       FuncDef, Methode,
+                                                       FuncDef, DottedName,
                                                        Parameters,
                                                        TypedArgsList,
                                                        ReturnStmt,
