@@ -68,7 +68,7 @@ CompoundStmt: IfStmt | WhileStmt | ForStmt | TryStmt | WithStmt | FuncDef |
     ClassDef | Decorated | AsyncStmt;
 Decorator: '@' DottedName ('(' ArgList? ')')?;
 Decorators: Decorator+;
-Decorated: Decorators (ClassDef | FuncDef | methode | AsyncFuncDef);
+Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 
 AsyncFuncDef: 'ASYNC' FuncDef;
 FuncDef: ('define function' | 'def') name=Name 'with'? 
