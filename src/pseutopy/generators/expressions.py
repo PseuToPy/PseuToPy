@@ -376,8 +376,8 @@ class TypedArgsList(object):
                              kwarg=None, kw_default=[], kwonlyargs=[])
 
 
-class Methode(object):
-    def __init__(self, parent, name, nMethode ,params):
+class DottedName(object):
+    def __init__(self, parent, name, nMethode, params):
         super().__init__(parent)
         self.name = name
         self.nMethode = nMethode
