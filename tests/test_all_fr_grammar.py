@@ -284,6 +284,14 @@ continue
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
 
+    def test_return(self, frPseutopy):
+        pseudo_str = """
+        retourner my_var
+        """
+        python_str = """
+return(my_var)
+        """
+        assert check_ast(frPseutopy, python_str, pseudo_str)
 
     def test_if_statements(self, frPseutopy):
         pseudo_str = """
