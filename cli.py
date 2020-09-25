@@ -14,7 +14,7 @@ input_group = parser.add_mutually_exclusive_group()
 parser.add_argument('-s-language:', '-string-language:', '-string-lg:', '-s-lg:', action='store', dest='string',
                     help='Input is now expected to be a string (default)')
 parser.add_argument('-f-language:', '-file-language:', '-file-lg:', '-f-lg:', action='store', dest='file',
-                    help='Input is now expected to be a string (default)')
+                    help='Input is now expected to be a file (default)')
 parser.add_argument('-a', '--ast', action='store_true',
                     help="Prints out the generated Python AST")
 parser.add_argument('-q', '--quiet', action='store_true',

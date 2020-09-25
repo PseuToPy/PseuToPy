@@ -97,7 +97,7 @@ TfpDef: name=Name (':' value=Test)?;
 
 AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
 IfStmt: 'si' condition=NamedExprTest /:|alors((\s)*:)?/ body=Suite
-    (('elif' | 'else if') condition=NamedExprTest /:|alors((\s)*:)?/ body=Suite)*
+    (('sinon' | 'else if') condition=NamedExprTest /:|alors((\s)*:)?/ body=Suite)*
     ('else' /:|then((\s)*:)?/ body=Suite)?
     'fin'
 ;
