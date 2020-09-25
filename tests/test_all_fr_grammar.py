@@ -135,19 +135,24 @@ my_var = float(input('my_var will try to be a float'))
         pseudo_str = """
         tant que vrai faire:
             mettre a à 1
+        autrement:
+            mettre a à 2
         fin
         """
         python_str = """
 while true:
     a = 1
+else:
+    a = 2
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
     def test_for_statements(self, frPseutopy):
         pseudo_str = """
-
         pour i dans la gamme(0,10,1):
             mettre a à i
+        autrement:
+            mettre a à 2
         fin
         pour i dans (1, 2, 3, 5, 7) faire:
             mettre a à i
@@ -156,6 +161,8 @@ while true:
         python_str = """
 for i in range(0, 10, 1):
     a = i
+else:
+    a = 2
 for i in (1, 2, 3, 5, 7):
     a = i
         """
@@ -301,7 +308,9 @@ return(my_var)
 
         si vrai alors:
             mettre my_var = 'Some random value'
-        else if faux alors:
+        sinon si faux alors:
+            mettre my_var = 'Some other random value'
+        autrement:
             mettre my_var = 'Some other random value'
         fin
         """
@@ -312,6 +321,8 @@ if true or false:
 if true:
     my_var = 'Some random value'
 elif false:
+    my_var = 'Some other random value'
+else:
     my_var = 'Some other random value'
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)

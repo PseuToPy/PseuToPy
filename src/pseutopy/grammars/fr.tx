@@ -97,16 +97,16 @@ TfpDef: name=Name (':' value=Test)?;
 
 AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
 IfStmt: 'si' condition=NamedExprTest /:|alors((\s)*:)?/ body=Suite
-    (('sinon' | 'else if') condition=NamedExprTest /:|alors((\s)*:)?/ body=Suite)*
-    ('else' /:|then((\s)*:)?/ body=Suite)?
+    ('sinon si' condition=NamedExprTest /:|alors((\s)*:)?/ body=Suite)*
+    ('autrement' /:|alors((\s)*:)?/ body=Suite)?
     'fin'
 ;
 WhileStmt: 'tant que' condition=NamedExprTest /:|faire((\s)*:)?/ body=Suite
-    ('else' /:|do((\s)*:)?/ else_body=Suite)?
+    ('autrement' /:|faire((\s)*:)?/ else_body=Suite)?
     'fin'
 ;
 ForStmt: 'pour' target=ExprList 'dans' iterable=TestList /:|faire((\s)*:)?/ body=Suite
-    ('else' /:|do((\s)*:)?/ else_body=Suite)?
+    ('autrement' /:|faire((\s)*:)?/ else_body=Suite)?
     'fin'
 ;
 TryStmt: ('try' ':' Suite ((ExceptClause ':' Suite)+
@@ -194,7 +194,7 @@ Keyword: 'donnée' | 'nombre' | 'entier' | 'afficher' | 'montrer' |
     'la gamme' | 'followed by' | 'appeler' | 'fonction' | 'avec' | 'paramètre' |
     'paramètres' | 'set' | 'to' | 'la' | 'résultat' | 'de' | 'déclarer' |
     'passer' | 'casser' | 'continuer' | 'retourner'| 'définir' | 'faire' | 'fin' | 'as' |
-    'si' | 'sinon' | 'autrement' | 'pour' | 'tant que' | 'plus' | 'moins' | 'et' |
+    'sinon si' | 'si' | 'alors' | 'autrement' | 'pour' | 'tant que' | 'plus' | 'moins' | 'et' |
     'ou' | 'pas' | 'inférieur' | 'supérieur' | 'égual' | 'different' | 'est' | 'dans' |
     'fois' | 'divisé' | 'par' | 'modulo' | 'à la puissance' | 'true' | 'false' | 'True'
     | 'False';
