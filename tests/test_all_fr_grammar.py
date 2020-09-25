@@ -239,18 +239,22 @@ my_var = bar(1, 2)
     def test_print1(self, frPseutopy):
         pseudo_str = """
         afficher 'hello world'
+        afficher 'hello world' suivi de var3
         """
         python_str = """
 print('hello world')
+print('hello world', var3)
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 
     def test_print2(self, frPseutopy):
         pseudo_str = """
         montrer 'hello world'
+        montrer 'hello world' suivi de var3
         """
         python_str = """
 print('hello world')
+print('hello world', var3)
         """
         assert check_ast(frPseutopy, python_str, pseudo_str)
 

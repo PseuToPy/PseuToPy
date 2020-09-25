@@ -19,7 +19,7 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
 ;
 
 PrintStmt: ('afficher' | 'montrer')
-    '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
+    '('? (args=TestList ((',' | 'suivi de') args=TestList)*) ')'?;
 InputStmt: 'donnée' (cast_type='nombre' | cast_type='entier')? '('?
     (args=Atom (',' values=TestList)*) ')'?;
 FuncCallStmt: 'appeler la fonction' name=Name
@@ -191,7 +191,7 @@ YieldArg: 'from' Test | TestListStarExpr;
 FuncBodySuite: (stmt=SimpleStmt | stmt=Stmt)+;
 
 Keyword: 'donnée' | 'nombre' | 'entier' | 'afficher' | 'montrer' |
-    'la gamme' | 'followed by' | 'appeler' | 'fonction' | 'avec' | 'paramètre' |
+    'la gamme' | 'suivi de' | 'appeler' | 'fonction' | 'avec' | 'paramètre' |
     'paramètres' | 'set' | 'to' | 'la' | 'résultat' | 'de' | 'déclarer' |
     'passer' | 'casser' | 'continuer' | 'retourner'| 'définir' | 'faire' | 'fin' | 'as' |
     'sinon si' | 'si' | 'alors' | 'autrement' | 'pour' | 'tant que' | 'plus' | 'moins' | 'et' |
