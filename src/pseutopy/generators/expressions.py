@@ -383,16 +383,12 @@ class DottedName(object):
         self.nMethode = nMethode
         self.params = params
 
-     def to_node(self):
+    def to_node(self):
         name = self.name.id
         if self.params is not None:
             args = self.params.to_node()
         else:
             args = ast.arguments(args=[], defaults=[], kw_defaults=[],
                                  kwarg=None, kwonlyargs=[], vararg=None)
-        return ast.FunctionDef(name=name, args=args,
-                               decorator_list=[])
         return ast.Expr(value=ast.Call(func=ast.Name(id=nMethode, ctx=ast.Load),
                                        args=args, value=name,keywords=[]))
-
-
