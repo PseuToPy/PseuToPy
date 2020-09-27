@@ -137,9 +137,9 @@ myVar1, myVar2 = 3 < 4, 3 <= 4
     def test_chained_assignment_DottedName(self, pseutopy):
         pseudo_str = """
         call methode append on list with 2 as parameter
-        call methode append on list with no parameter
+        call methode append on list
         list.append with 2 as parameter
-        list.append with no parameter
+        list.append
         """
         python_str = """
 list.append(2)

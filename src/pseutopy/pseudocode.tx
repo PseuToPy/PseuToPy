@@ -14,7 +14,7 @@ Module: statements*=Stmt;
 Stmt: (SimpleStmt | CompoundStmt);
 SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
 SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
-    DelStmt | PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt |
+    DelStmt | PassStmt | FlowStmt | ImportStmt | DottedName | GlobalStmt | NonLocalStmt |
     AssertStmt)
 ;
 
@@ -58,8 +58,8 @@ ImportAsName: Name ('as' Name)?;
 DottedAsName: DottedName ('as' Name)?;
 ImportAsNames: ImportAsName (',' ImportAsName)? ','?;
 DottedAsNames: DottedAsName (',' DottedAsName)?;
-DottedName: ('call methode' nMethode=Name 'on' name=Name | name=Name '.' nMethode=Name ) 'with'?
-    ('no parameter' | params=Parameters /as parameter(s)?/?);
+DottedName: ('call method' nMethod=NMethod 'on' name=Name | name=Name'.'nMethod=NMethod)
+    ('with' '('? (args=TestList (',' args=TestList)?) /as parameter(s)?/ ')'?)?;
 GlobalStmt: 'declare global' Name (',' Name)*;
 NonLocalStmt: 'declare non local' Name (',' Name)*;
 AssertStmt: 'assert' Test (',' Test)?;
@@ -203,6 +203,7 @@ Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
     | 'False';
 SafeId: !Keyword ID;
 Name: id=SafeId;
+NMethod: id=SafeId;
 String: value=STRING;
 Number: value=NUMBER;
 Boolean: value=BOOL;

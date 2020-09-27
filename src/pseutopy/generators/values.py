@@ -44,3 +44,4 @@ class NoneType(object):
 
     def to_node(self):
         return ast.NameConstant(value=None)
+
