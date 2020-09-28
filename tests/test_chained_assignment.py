@@ -133,18 +133,3 @@ myVar1, myVar2 = 3 < 4, 3 <= 4
 [myVar1, myVar2] = 3 > 4, 3 >= 4
         """
         assert check_ast(pseutopy, python_str, pseudo_str)
-
-    def test_chained_assignment_DottedName(self, pseutopy):
-        pseudo_str = """
-        call methode append on list with 2 as parameter
-        call methode append on list
-        list.append with 2 as parameter
-        list.append
-        """
-        python_str = """
-list.append(2)
-list.append()
-list.append(2)
-list.append()
-        """
-        assert check_ast(pseutopy, python_str, pseudo_str)
