@@ -247,3 +247,23 @@ class ReturnStmt(Statement):
 
     def to_node(self):
         return ast.Return(value=self.value.to_node())
+
+class DottedName(Statement):
+    def __init__(self, parent, name, nMethod, args):
+        super().__init__(parent)
+        self.name = name
+        self.nMethod = nMethod
+        self.args = args
+
+    def to_node(self):
+        name = self.name.id
+        nMethod = self.nMethod.id
+        args = []
+        if self.args is not None:
+            for arg in self.args:
+                args.append(arg.to_node())
+        else:
+            args = ast.arguments(args=[], defaults=[], kw_defaults=[],
+                                 kwarg=None, kwonlyargs=[], vararg=None)
+        return ast.Expr(value=ast.Call(func=ast.Attribute(attr=nMethod, ctx=ast.Load, value=ast.Name(id=name, ctx=ast.Load)),
+                                       args=args, keywords=[]))
