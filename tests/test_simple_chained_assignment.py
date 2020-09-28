@@ -171,8 +171,8 @@ myVar = 1 is not 2
         assert check_ast(pseutopy, py_str, pseudo_str)
     def test_chained_assignment_DottedName(self, pseutopy):
         pseudo_str = """
-        call methode append on list with 2 as parameter
-        call methode append on list
+        call method append on list with 2 as parameter
+        call method append on list
         list.append with 2 as parameter
         list.append
         """
