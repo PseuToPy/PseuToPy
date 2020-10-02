@@ -3,7 +3,8 @@ import os
 
 from inspect import getmembers
 
-from textx import metamodel_from_file, exceptions
+from textx import metamodel_from_file
+from textx import exceptions
 
 from pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
     BinaryOp, OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, \
@@ -58,13 +59,14 @@ class PseuToPy(object):
         # HERE
         try:
             self.meta_model.model_from_str(pseudocode_formatted)
-            #for k, v in self.meta_model.__dict__.get('user_classes').get():
-            #    print(k)
-
-            #print(self.python_ast._fields.__str__())
         except exceptions.TextXSyntaxError as SE:
             handler = ExceptionHandler(pseudocode_formatted, SE, self.meta_model)
-            handler.analyze_error()
+            for tab in handler.tokenized_request:
+                 for word in tab:
+                     print(word.word)
+                     print(word.type)
+            # print(SE)
+            # print(handler.analyze_error())
         return self.python_ast
 
     def reset_ast(self):

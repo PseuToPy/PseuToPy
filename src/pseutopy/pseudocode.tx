@@ -18,25 +18,25 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
     AssertStmt)
 ;
 
-PrintStmt: ('print' | 'display' | 'show') 
+PrintStmt: ('print' | 'display' | 'show')
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
 InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
     (args=Atom (',' values=TestList)*) ')'?;
-FuncCallStmt: 'call function' name=Name 
+FuncCallStmt: 'call function' name=Name
     ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
 
 ExprStmt: ('set' '('?)? name=TestListStarExpr
-    (AnnAssign | 
+    (AnnAssign |
     AugAssign (YieldExpr | TestList) |
     ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
     ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
 ;
 
 AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
-TestListStarExpr: (values=Test | values=StarExpr) 
+TestListStarExpr: (values=Test | values=StarExpr)
     (',' (values=Test | values=StarExpr))* (',')?
 ;
-AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
+AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
     '<<=' | '>>=' | '**==' | '//=')
 ;
 DeclareStmt: 'declare' name=Name;
@@ -70,23 +70,23 @@ Decorators: Decorator+;
 Decorated: Decorators (ClassDef | FuncDef | AsyncFuncDef);
 
 AsyncFuncDef: 'ASYNC' FuncDef;
-FuncDef: ('define function' | 'def') name=Name 'with'? 
+FuncDef: ('define function' | 'def') name=Name 'with'?
     ('no parameter' | params=Parameters /as parameter(s)?/?)
     /:|to do((\s)*:)?/ ('->' test=Test)? body=FuncBodySuite 'end';
 Parameters: '('? value=TypedArgsList? ')'?;
 
 TypedArgsList: (
-    (type_def=TfpDef ('=' value=Test)? (','  type_def=TfpDef ('=' value=Test)?)* ','  '/' 
+    (type_def=TfpDef ('=' value=Test)? (','  type_def=TfpDef ('=' value=Test)?)* ','  '/'
         (','(type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)*
-            ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
-            ((','  ('**' type_def=TfpDef (',')?)?)?) | '**' type_def=TfpDef (',')?))) | 
+            ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)*
+            ((','  ('**' type_def=TfpDef (',')?)?)?) | '**' type_def=TfpDef (',')?))) |
             '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','
             ('**' type_def=TfpDef (',')?)?)?) |
-            '**' type_def=TfpDef (',')?)?)?)? |  
-    (type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)* 
-        ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* 
+            '**' type_def=TfpDef (',')?)?)?)? |
+    (type_def=TfpDef ('=' value=Test)? (',' type_def=TfpDef ('=' value=Test)?)*
+        ((','  ('*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)*
         ((','  ('**' type_def=TfpDef (',')?))?) |
-        '**' type_def=TfpDef (',')?)?)?) | 
+        '**' type_def=TfpDef (',')?)?)?) |
         '*' (type_def=TfpDef)? (','  type_def=TfpDef ('=' value=Test)?)* ((','  ('**'
         type_def=TfpDef (',')?)?)?) |
         '**' type_def=TfpDef (',')?)
@@ -96,17 +96,17 @@ TfpDef: name=Name (':' value=Test)?;
 
 
 AsyncStmt: 'ASYNC' (FuncDef | WithStmt | ForStmt);
-IfStmt: 'if' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite 
+IfStmt: 'if' condition=NamedExprTest /:|then((\s)*:)?/ body=Suite
     (('elif' | 'else if') condition=NamedExprTest /:|then((\s)*:)?/ body=Suite)*
     ('else' /:|then((\s)*:)?/ body=Suite)?
     'end'
 ;
-WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite 
+WhileStmt: 'while' condition=NamedExprTest /:|do((\s)*:)?/ body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'end'
 ;
-ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/ 
-    body=Suite 
+ForStmt: 'for' target=ExprList 'in' iterable=TestList /:|do((\s)*:)?/
+    body=Suite
     ('else' /:|do((\s)*:)?/ else_body=Suite)?
     'end'
 ;
@@ -166,7 +166,7 @@ ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','
 TestList: ('range' '(' range_params=RangeParams ')') | args+=Test[eolterm];
 RangeParams: args=Expr ((',' args=Expr)*)?;
 DictOrSetMaker: (
-    ((keys=Test ':' values=Test | '**' values=Expr) 
+    ((keys=Test ':' values=Test | '**' values=Expr)
         (values=CompFor | (',' (keys=Test ':' values=Test | '**' values=Expr))*)(',')?) |
     ((values=Test | values=StarExpr) (values=CompFor | (',' (values=Test |
     values=StarExpr))* (',')?))
@@ -195,7 +195,7 @@ Keyword: 'input' | 'number' | 'integer' | 'print' | 'display' | 'show' |
     'range' | 'followed by' | 'call' | 'function' | 'with' | 'parameter' |
     'parameters' | 'set' | 'to' | 'the' | 'result' | 'of' | 'declare' |
     'pass' | 'break' | 'continue' | 'return'| 'define' | 'do' | 'end' | 'as' |
-    'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' | 
+    'if' | 'elif' | 'else' | 'for' | 'while' | 'plus' | 'minus' | 'and' |
     'or' | 'not' | 'lower' | 'greater' | 'equal' | 'different' | 'is' | 'in' |
     'times' | 'divided' | 'by' | 'modulo' | 'power' | 'true' | 'false' | 'True'
     | 'False';
