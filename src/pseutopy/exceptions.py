@@ -3,9 +3,39 @@ import re
 
 
 class ExceptionHandler:
+    """
+        -- GLOBAL --
+        This class' goal is to bring details on the error made from the user.
+        It should be able to recognize typo made from the user, missing arguments, wrong syntaxes, etc...
+
+        -- OPERATION --
+        This class must be called in pseutopy.py while trying to build the str. If the build fails, it should
+        create an ExceptionHandler object which will analyze the root of the error.
+        Calling this class requires 3 arguments:
+            - the request called
+            - the Textx.SyntaxError
+            - the PseuToPy.meta_model
+
+        -- INIT --
+        1. Format the request to get rid of excessive white spaces. A request can be converted even if there are 2
+        consecutive white spaces for example.
+        2. self.statements parameter stores the keyword for each statements using __getstatements(meta_mode) which return
+        a dict with the key as the statement type and the value as an array of keywords.
+        3. self.tokenized_request stores each word composing the request in a matrix by using
+        __tokenize_request(formated_request) private method.
+        4. self.exception stores the SyntaxError produced from Textx. There are some valuable information to get.
+        Need to analyze deeper.
+        5. self.failed_part stores the 2 indexes of the word surrounding the located error from the Textx exception.
+
+        -- WIP --
+        analyze_error() function should return the identified error and the expected output within a message. Right now,
+        It only "detect" one case which is when the request has 2 consecutive Variables. However, the identifying part
+        need to be improved and more cases should be added.
+    """
     def __init__(self, request, SE, meta_model):
+        formated_request = " ".join(request.split())
         self.statements = self.__getstatements(meta_model)
-        self.tokenized_request = self.__tokenize_request(request)
+        self.tokenized_request = self.__tokenize_request(formated_request)
         self.exception = SE
         self.failed_part = self.locate_failed_part()
 
@@ -19,7 +49,7 @@ class ExceptionHandler:
         with open(os.path.dirname(__file__) + "/pseudocode.tx", 'r') as f:
             grammar = ""
             for test in f.readlines():
-                # \n is accounted for 2 characters with textx, only counted as 1 with Python
+                # \n is accounted for 2 characters with textx, only counted as 1 with Python 3.8
                 # Replacing \n by 2 characters solve the count issues
                 # Look for cleaner solution later
                 grammar += test.replace("\n", "  ")
@@ -94,16 +124,16 @@ class ExceptionHandler:
             WIP
         :return:
         """
-        firstworderror = self.tokenized_request[0][self.failed_part[0]]
-        lastworderror = self.tokenized_request[0][self.failed_part[1]]
-        print(firstworderror, lastworderror)
+        first_word_error = self.tokenized_request[0][self.failed_part[0]]
+        last_word_error = self.tokenized_request[0][self.failed_part[1]]
+        print(first_word_error, last_word_error)
         if self.failed_part == (0, 0):
             # The error is obviously the only word on the line, see what to do in this case later
             pass
         else:
-            if firstworderror.type == lastworderror.type == "Variable":
-                return "Syntax error: Missing argument between \'" + firstworderror.word \
-                    + "\' and \'" + lastworderror.word + "\'."
+            if first_word_error.type == last_word_error.type == "Variable":
+                return "Syntax error: Missing argument between \'" + first_word_error.word \
+                    + "\' and \'" + last_word_error.word + "\'."
 
 
 class _WordInRequest:

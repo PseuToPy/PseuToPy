@@ -1,8 +1,6 @@
 import ast
 import os
 
-from inspect import getmembers
-
 from textx import metamodel_from_file
 from textx import exceptions
 
@@ -55,18 +53,11 @@ class PseuToPy(object):
 
     def convert_from_string(self, pseudocode_string):
         self.reset_ast()
-        pseudocode_formatted = " ".join(pseudocode_string.split())
-        # HERE
         try:
-            self.meta_model.model_from_str(pseudocode_formatted)
+            self.meta_model.model_from_str(pseudocode_string)
         except exceptions.TextXSyntaxError as SE:
-            handler = ExceptionHandler(pseudocode_formatted, SE, self.meta_model)
-            for tab in handler.tokenized_request:
-                 for word in tab:
-                     print(word.word)
-                     print(word.type)
-            # print(SE)
-            # print(handler.analyze_error())
+            handler = ExceptionHandler(pseudocode_string, SE, self.meta_model)
+            print(handler.analyze_error())
         return self.python_ast
 
     def reset_ast(self):
