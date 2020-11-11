@@ -346,6 +346,23 @@ class TestListComp(object):
         else:
             return self.values.to_node()
 
+class Trailer(object):
+    def __init__(self, parent, tuple_values, list_values, name):
+        self.parent = parent
+        self.tuple_values = tuple_values
+        self.list_values = list_values
+        self.name = name
+
+    def to_node(self):
+        if self.tuple_values != '':
+            elements = self.__create_elements()
+            return ast.Tuple(elts=elements, ctx=ast.Load)
+        elif self.list_values != '':
+            elements = self.__create_elements()
+            return ast.List(elts=elements, ctx=ast.Load)
+        elif self.name is not None:
+            return self.name.to_node()
+
 
 class Parameters(object):
     def __init__(self, parent, value):
