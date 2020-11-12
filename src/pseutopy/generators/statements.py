@@ -59,6 +59,47 @@ class ExprStmt(Statement):
         return targets
 
 
+class AugAssignStmt(Statement):
+    def __init__(self, parent, name, operator, value):
+        super().__init__(parent)
+        self.name = name
+        self.operator = operator
+        self.value = value
+
+    def to_node(self):
+        op = None
+        if self.operator == "+=":
+            op = ast.Add()
+        elif self.operator == "-=":
+            op = ast.Sub()
+        elif self.operator == "*=":
+            op = ast.Mult()
+        elif self.operator == "@=":
+            op = ast.MatMult()
+        elif self.operator == "/=":
+            op = ast.Div()
+        elif self.operator == "%=":
+            op = ast.Mod()
+        elif self.operator == "&=":
+            op = ast.BitAnd()
+        elif self.operator == "|=":
+            op = ast.BitOr()
+        elif self.operator == "^=":
+            op = ast.BitXor()
+        elif self.operator == "<<=":
+            op = ast.LShift()
+        elif self.operator == ">>=":
+            op = ast.RShift()
+        elif self.operator == "**=":
+            op = ast.Pow()
+        elif self.operator == "//=":
+            op = ast.FloorDiv()
+
+        return ast.AugAssign(target=ast.Name(id=self.name.to_node(), ctx=ast.Store),
+                             op=op,
+                             value=self.value.to_node())
+
+
 class InputStmt(Statement):
     def __init__(self, parent, cast_type, args, values):
         super().__init__(parent)

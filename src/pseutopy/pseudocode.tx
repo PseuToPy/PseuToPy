@@ -15,7 +15,7 @@ Stmt: (SimpleStmt | CompoundStmt);
 SimpleStmt: SmallStmt (';' SmallStmt)* (';')?;
 SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
     DelStmt | PassStmt | FlowStmt | ImportStmt | GlobalStmt | NonLocalStmt |
-    AssertStmt)
+    AssertStmt | AugAssignStmt)
 ;
 
 PrintStmt: ('print' | 'display' | 'show') 
@@ -27,18 +27,22 @@ FuncCallStmt: 'call function' name=Name
 
 ExprStmt: ('set' '('?)? name=TestListStarExpr
     (AnnAssign | 
-    AugAssign (YieldExpr | TestList) |
     ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
     ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
 ;
 
 AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
+
 TestListStarExpr: (values=Test | values=StarExpr) 
     (',' (values=Test | values=StarExpr))* (',')?
 ;
-AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | 
-    '<<=' | '>>=' | '**==' | '//=')
+
+AugAssignStmt: name=TestListStarExpr operator = AugAssign (value=YieldExpr|value=TestList)
 ;
+AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
+    '<<=' | '>>=' | '**=' | '//=')
+;
+
 DeclareStmt: 'declare' name=Name;
 
 DelStmt: 'del' name=ExprList;
