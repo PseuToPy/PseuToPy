@@ -262,10 +262,20 @@ class AtomExpr(object):
         self.trailer = trailer
 
     def to_node(self):
+
         atom = self.atom
-        # We are not dealing with Trailers yet, so we comment out the next line
-        # trailer = self.trailer
-        return atom.to_node()
+        trailer = self.trailer
+        # todo voir si il faut ajouté la syntaxe "AWAIT" et si oui comment
+        if trailer != None:
+            if len(self.trailer) == 1:
+                return atom.to_node() + trailer.to_node() #todo vérifier si c'est bien un "+" pour la syntaxe #todo voir comment la syntaxe "*" est implémenté
+            if len(self.trailer) > 1:
+                node = []
+                for i in range(len(self.trailer)):
+                    node.append(self.trailer[i].to_node())
+                return node
+        else:
+            return atom.to_node()
 
 
 class Atom(object):

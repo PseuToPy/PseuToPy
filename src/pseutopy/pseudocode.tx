@@ -157,7 +157,7 @@ Atom: (is_tuple='(' (values=YieldExpr | values=TestListComp)? ')' |
 TestListComp: (values=NamedExprTest | values=StarExpr)
     (values=CompFor | (',' (values=NamedExprTest | values=StarExpr))* (',')?);
 Trailer: '(' tuple_values=ArgList? ')' | '[' list_values=SubscriptList ']' |
-    '.' Name;
+    '.' name=Name;
 
 SubscriptList: Subscript (',' Subscript)* ','?;
 Subscript: Test | Test? ':' Test? SliceOp?;
