@@ -37,7 +37,7 @@ TestListStarExpr: (values=Test | values=StarExpr)
     (',' (values=Test | values=StarExpr))* (',')?
 ;
 
-AugAssignStmt: name=TestListStarExpr operator = AugAssign (value=YieldExpr|value=TestList)
+AugAssignStmt: name=TestListStarExpr operator = AugAssign (value=YieldExpr|value=TestListStarExpr)
 ;
 AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
     '<<=' | '>>=' | '**=' | '//=')
