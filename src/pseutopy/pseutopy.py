@@ -3,14 +3,14 @@ import os
 
 from textx import metamodel_from_file
 
-from pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
+from src.pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
     BinaryOp, OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, \
     ShiftExpr, ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom, \
     Parameters, TypedArgsList
-from pseutopy.generators.statements import Statement, ExprStmt, \
+from src.pseutopy.generators.statements import Statement, ExprStmt, \
     InputStmt, FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, \
     WhileStmt, ForStmt, FuncDef, ReturnStmt
-from pseutopy.generators.values import Number, Name, String, NoneType, \
+from src.pseutopy.generators.values import Number, Name, String, NoneType, \
     Boolean
 
 
