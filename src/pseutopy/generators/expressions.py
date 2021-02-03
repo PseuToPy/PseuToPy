@@ -231,28 +231,31 @@ class TestListStarExpr(object):
             return self.values[0].to_node()
 
 
-class TestList(object):
-    def __init__(self, parent, range_params, args):
+class Range(object):
+    def __init__(self, parent, range_params):
         self.parent = parent
         self.range_params = range_params
-        self.args = args
 
     def to_node(self):
-        if self.range_params is not None:
-            range_params = []
-            for param in self.range_params.args:
-                range_params.append(param.to_node())
-            node = ast.Call(func=ast.Name(id='range', ctx='Load'),
-                            args=range_params, keywords=[])
-            return node
-        else:
-            if len(self.args) == 1:
-                return self.args[0].to_node()
-            else:
-                node = []
-                for arg in self.args:
-                    node.append(arg.to_node())
-                return node
+        range_params = []
+        for param in self.range_params.values:
+            range_params.append(param.to_node())
+        node = ast.Call(func=ast.Name(id='range', ctx='Load'),
+                        args=range_params, keywords=[])
+        return node
+
+
+class TestList(object):
+    def __init__(self, parent, args):
+        self.parent = parent
+        self.args = args
+        print(args)
+
+    def to_node(self):
+        node = []
+        for arg in self.args:
+            node.append(arg.to_node())
+        return node
 
 
 class AtomExpr(object):

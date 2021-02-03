@@ -6,7 +6,7 @@ from textx import metamodel_from_file
 from pseutopy.generators.expressions import Factor, UnaryOp, NotTest, \
     BinaryOp, OrTest, AndTest, Comparison, TestList, Expr, XorExpr, AndExpr, \
     ShiftExpr, ArithExpr, Term, Power, TestListStarExpr, AtomExpr, Atom, \
-    Parameters, TypedArgsList
+    Parameters, TypedArgsList, Range
 from pseutopy.generators.statements import Statement, ExprStmt, \
     InputStmt, FuncCallStmt, DeclareStmt, PrintStmt, DelStmt, IfStmt, \
     WhileStmt, ForStmt, FuncDef, ReturnStmt, AugAssignStmt
@@ -40,7 +40,7 @@ class PseuToPy(object):
                                                        TestList, AtomExpr,
                                                        Atom,
                                                        Number, Name, String,
-                                                       NoneType, Boolean})
+                                                       NoneType, Boolean, Range})
         self.meta_model.register_obj_processors({
             'Stmt': self.convert,
         })

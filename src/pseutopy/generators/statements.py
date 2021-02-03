@@ -95,22 +95,26 @@ class AugAssignStmt(Statement):
         elif self.operator == "//=":
             op = ast.FloorDiv()
 
+        val = []
+        value = self.value.to_node()
+        if len(value) == 1:
+            val = value[0]
+        else:
+            val = ast.Tuple(value)
+
         return ast.AugAssign(target=ast.Name(id=self.name.to_node(), ctx=ast.Store),
                              op=op,
-                             value=self.value.to_node())
+                             value=val)
 
 
 class InputStmt(Statement):
-    def __init__(self, parent, cast_type, args, values):
+    def __init__(self, parent, cast_type, args):
         super().__init__(parent)
         self.cast_type = cast_type
         self.args = args
-        self.values = values
 
     def to_node(self):
-        args = [self.args.to_node()]
-        for value in self.values:
-            args.append(value.to_node())
+        args = self.args.to_node()
         node = ast.Call(func=ast.Name(id='input', ctx=ast.Load), args=args,
                         keywords=[])
         if self.cast_type == 'number':
@@ -133,7 +137,8 @@ class PrintStmt(Statement):
     def to_node(self):
         args = []
         for arg in self.args:
-            args.append(arg.to_node())
+            args += arg.to_node()
+
         return ast.Expr(value=ast.Call(func=ast.Name(id='print', ctx=ast.Load),
                                        args=args, keywords=[]))
 
@@ -145,9 +150,10 @@ class FuncCallStmt(Statement):
         self.args = args
 
     def to_node(self):
-        args = []
-        for arg in self.args:
-            args.append(arg.to_node())
+        if self.args:
+            args = self.args.to_node()
+        else:
+            args = []
         if isinstance(self.parent, ExprStmt):
             return ast.Call(
                 func=ast.Name(id=self.name.to_node(), ctx=ast.Load),
@@ -249,15 +255,23 @@ class ForStmt(Statement):
 
     def to_node(self):
         target = self.target.value[0].to_node()
+
+        itera = []
         iterable = self.iterable.to_node()
+        if len(iterable) == 1:
+            itera = iterable[0]
+        else:
+            itera = ast.Tuple(iterable)
+
         body = []
         for statement in self.body.statement:
             body.append(statement.to_node())
+
         orelse = []
         if self.else_body is not None:
             for statement in self.else_body.statement:
                 orelse.append(statement.to_node())
-        return ast.For(target=target, iter=iterable, body=body, orelse=orelse)
+        return ast.For(target=target, iter=itera, body=body, orelse=orelse)
 
 
 class FuncDef(Statement):

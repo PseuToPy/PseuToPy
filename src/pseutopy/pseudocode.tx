@@ -21,14 +21,14 @@ SmallStmt: (PrintStmt | InputStmt | FuncCallStmt | DeclareStmt | ExprStmt |
 PrintStmt: ('print' | 'display' | 'show') 
     '('? (args=TestList ((',' | 'followed by') args=TestList)*) ')'?;
 InputStmt: 'input' (cast_type='number' | cast_type='integer')? '('?
-    (args=Atom (',' values=TestList)*) ')'?;
-FuncCallStmt: 'call function' name=Name 
-    ('with' /parameter(s)?/ '('? (args=TestList (',' args=TestList)?) ')'?)?;
+    (args=TestList ?) ')'?;
+FuncCallStmt: ('call function' name=Name 
+    ('with' /parameter(s)?/ '('?(args=TestList)?')'?)? | Range);
 
 ExprStmt: ('set' '('?)? name=TestListStarExpr
     (AnnAssign | 
     ((('to' | '=') (chained_value=YieldExpr | chained_value=TestListStarExpr))+)? |
-    ('to the result of' (value=InputStmt | value=TestList | value=FuncCallStmt)))
+    ('to the result of' (value=InputStmt | value=Range | value=FuncCallStmt)))
 ;
 
 AnnAssign: ':' Test ('=' (value=YieldExpr | value=TestListStarExpr))?;
@@ -37,7 +37,7 @@ TestListStarExpr: (values=Test | values=StarExpr)
     (',' (values=Test | values=StarExpr))* (',')?
 ;
 
-AugAssignStmt: name=TestListStarExpr operator = AugAssign (value=YieldExpr|value=TestListStarExpr)
+AugAssignStmt: name=TestListStarExpr operator = AugAssign (value=YieldExpr|value=TestList)
 ;
 AugAssign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
     '<<=' | '>>=' | '**=' | '//=')
@@ -137,7 +137,8 @@ CompOp: '>=' | 'is greater or equal to' | '<=' | 'is lower or equal to' |
     '==' | 'is equal to' | '!=' | 'is different from' | 'is not equal to' |
     /\bin\b/ | 'not in' | 'is not' | /\bis\b/ ;
 StarExpr: '*' Expr;
-Expr: left=XorExpr (operator='|' right=XorExpr)*;
+Expr: (left=XorExpr (operator='|' right=XorExpr)*)
+    | ('(' left=XorExpr (operator='|' right=XorExpr)* ')');
 XorExpr: left=AndExpr (operator='^' right=AndExpr)*;
 AndExpr: left=ShiftExpr (operator='&' right=ShiftExpr)*;
 ShiftExpr: left=ArithExpr ((operator='<<' | operator='>>') right=ArithExpr)*;
@@ -151,12 +152,13 @@ Factor: (operator='+' | operator='-' | operator='~' | operator='plus' |
     value=Factor | value=Power;
 Power: left=AtomExpr ((operator='**' | operator='to the power of')
     right=Factor)?;
-AtomExpr: 'AWAIT'? atom=Atom trailer=Trailer*;
+AtomExpr: 'AWAIT'? (atom=Atom|atom=Range) trailer=Trailer*;
 Atom: (is_tuple='(' (values=YieldExpr | values=TestListComp)? ')' |
     is_list='[' values=TestListComp? ']' |
     is_dict='{' values=DictOrSetMaker? '}' |
     name=Name | number=Number | string=String+ | '...' | none=NoneType |
     boolean=Boolean
+    
 );
 TestListComp: (values=NamedExprTest | values=StarExpr)
     (values=CompFor | (',' (values=NamedExprTest | values=StarExpr))* (',')?);
@@ -167,8 +169,8 @@ SubscriptList: Subscript (',' Subscript)* ','?;
 Subscript: Test | Test? ':' Test? SliceOp?;
 SliceOp: ':' Test?;
 ExprList: (value=Expr | value=StarExpr) (',' (value=Expr | value=StarExpr))* ','?;
-TestList: ('range' '(' range_params=RangeParams ')') | args+=Test[eolterm];
-RangeParams: args=Expr ((',' args=Expr)*)?;
+Range: 'range' '(' range_params=TestListStarExpr ')';
+TestList: args=Test (',' args=Test)* (',')?;
 DictOrSetMaker: (
     ((keys=Test ':' values=Test | '**' values=Expr) 
         (values=CompFor | (',' (keys=Test ':' values=Test | '**' values=Expr))*)(',')?) |
