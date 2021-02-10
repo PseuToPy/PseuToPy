@@ -18,7 +18,7 @@ class PseuToPy(object):
     def __init__(self):
         self.python_ast = ast.Module(body=[])
         self.variables = []
-        self.meta_model = metamodel_from_file(os.path.dirname(__file__) + "/pseudocode.tx",
+        self.meta_model = metamodel_from_file(os.path.dirname(__file__) + "/grammars/pseudocode.tx",
                                               debug=False,
                                               classes={DeclareStmt, InputStmt,
                                                        PrintStmt, DelStmt,
