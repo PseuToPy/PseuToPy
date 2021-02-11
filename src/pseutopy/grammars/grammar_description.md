@@ -17,30 +17,40 @@ A copy of the Python 3.9.1 full grammar specification is available in this proje
 https://docs.python.org/3/reference/grammar.html, you will simply end up on the grammar specification of the
 latest stable release. Hence the need to actually keep a version of it somewhere.
 
+
 **Disclaimer**: The grammar that we wish to implement _probably_ will not work for a REPL-type of use-case. As
 a consequence, we will consider REPL-type instructions to be out of the scope of this project.
 
 ### Syntax and symbols used in the Python 3.9.1 full grammar specification
 
-| Symbol | Description                                                                      |
-|--------|----------------------------------------------------------------------------------|
-| '...'  | Matches the string within the quotes.                                            |
-| \|     | Defines a ordered sequence of choices.                                           |
-| ?      | Defines an optional rule that will not fail if not respected.                    |
-| +      | Defines a rule that can be present one or several times.                         |
-| *      | Defines a rules that can be present zero or several times.                       |
-| [   ]  | According to Wikipedia, this defines an optional rule.                           |
-| .      | It seems that it is used in conjunction of two rules, one of them being optional |
-| ~      | Defines a sequence where, if a ~ b, a must be true in order to evaluate b.       |
-| !      | Negative lookahead that succeeds if what comes after the symbol is not matched.  |
-| &      | Positive lookahead that succeeds if what comes after the symbol is matched.      |
+A comprehensive list is given [here](https://www.python.org/dev/peps/pep-0617/#grammar-expressions). The table
+below is just a summary of what is written in this link (for the lazy ones).
 
-This table might not be completely accurate. For example, why do we use both `[]` and `?` if they both mean
-that a rule is optional? Surely, there is an explanation to that.
+| Symbol      | Description                                                    |
+|-------------|----------------------------------------------------------------|
+| e1 e2       | Matches e1, then matches e2.                                   |
+| e1 \| e2    | Matches e1 or r2.                                              |
+| ( e )       | Matches e.                                                     |
+| [ e ] or e? | Optionally matches e.                                          |
+| e*          | Matches zero or more occurrences of e.                         |
+| e+          | Matches one or more occurrences of e.                          |
+| s.e+        | Matches one or more occurrences of e separated by s.           |
+| &e          | Succeeds if e can be parsed, without consuming any input.      |
+| !e          | Fails if e can be parsed, without consuming any input.         |
+| ~           | Commits to the current alternative, even if it fails to parse. |
 
-## Statements and Expressions
+Note:
 
-In Python (and in other programming languages), there is a distinction between _statements_ and _expressions_.
+- `s.e+` is identical to `(e (s e)*)`.
+- `[ e ]` and `e?` are both used in the grammar, but have the same meaning.
+- We are given the following example to illustrate `~`: `rule_name: '(' ~ some_rule ')' | some_alt`. This rule
+  means that if a left parenthesis is parsed, then `some_alt` will not be considered even if `some_rule` or
+  `)` fail to be parsed. **I actually don't know if there is a similar mechanism in textX**, but what I know
+  is that this symbol does not exist in textX.
+
+## Expressions and statements
+
+In Python (and in other programming languages), there is a distinction between _expressions_ and _statements_.
 The following paragraphs will be used to describe briefly expressions and statements based on the Python
 documentation.
 
@@ -100,3 +110,33 @@ Compound statements comprise control structures (`if`, `for`, and `while`), func
 and other instructions such as the `try` or `with` statements. The key point here is that compound statements
 have a `suite` which consists in a list of statements that are all indented.
 
+## Expressions
+
+### Atoms
+
+The Python 3.9.1 full grammar specification is given below:
+
+```
+atom:
+    | NAME
+    | 'True' 
+    | 'False' 
+    | 'None' 
+    | '__peg_parser__' 
+    | strings
+    | NUMBER
+    | (tuple | group | genexp)
+    | (list | listcomp)
+    | (dict | set | dictcomp | setcomp)
+    | '...' 
+```
+
+This means that the `atom` rule will look for valid matches in the following order:
+
+1. An identifier, which needs to be defined so that it does not collide with the language safe words;
+2. `True` and `False`, which are also represented in textX by the built-in type `BOOL`;
+3. `None`;
+4. `__peg_parser__`
+
+
+## Statements
