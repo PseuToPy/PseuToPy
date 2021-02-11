@@ -136,7 +136,14 @@ This means that the `atom` rule will look for valid matches in the following ord
 1. An identifier, which needs to be defined so that it does not collide with the language safe words;
 2. `True` and `False`, which are also represented in textX by the built-in type `BOOL`;
 3. `None`;
-4. `__peg_parser__`
-
+4. `__peg_parser__`: I don't really know why this is an `atom`, but it leads to this very useful [PEP
+   documentation](https://www.python.org/dev/peps/pep-0617/);
+5. `strings`, which are string literals also represented in textX by the built-in type `STRING`;
+6. `NUMBER`, which represent bytes literals, also represented in textX by the built-in type `NUMBER` which
+   converts into an `INT` or a `STRICTFLOAT` depending on what is parsed;
+7. `(tuple | group | genexp)`, which represent tuples or tuples by comprehension;
+8. `(list | listcomp)`, which represents a list or a list by comprehension;
+9. `(dict | set | distcomp | setcomp)`, which represents a dictionary or a set, and eventually by
+   comprehension.
 
 ## Statements
