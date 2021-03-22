@@ -130,7 +130,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=["pseutopy", "pseutopy.generators"],  # Required
+    packages=["pseutopy"],  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -147,7 +147,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'astor>=0.8.0',
-        'textX>=2.0.1'],  # Optional
+        'lark-parser>=0.11.2'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
