@@ -27,12 +27,13 @@ if not args.file:
     generated_ast = pseutopy.convert_from_string(args.input)
 else:
     generated_ast = pseutopy.convert_from_file(args.input)
+print(generated_ast)
 
-generated_code = astor.to_source(generated_ast)
+# generated_code = astor.to_source(generated_ast)
 
-if args.ast:
-    print(ast.dump(generated_ast))
-if not args.quiet:
-    print(generated_code)
+# if args.ast:
+#     print(ast.dump(generated_ast))
+# if not args.quiet:
+#     print(generated_code)
 # if args.exec:
 #     exec(generated_code)
