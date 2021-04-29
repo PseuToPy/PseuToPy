@@ -105,24 +105,27 @@ star_expr: "*" expr
 ?shift_expr: arith_expr (_shift_op arith_expr)*
 ?arith_expr: term (_add_op term)*
 ?term: factor (_mul_op factor)*
-// ?factor: _factor_op factor | power
-?factor: factor_op factor | power
-// !_factor_op: "plus" | "+"
-//            | "minus" | "-"
-//            | "~"
-
-factor_op: plus_op | minus_op | "~"
+?factor: _factor_op factor | power
+_factor_op: plus_op | minus_op | "~"
 plus_op: ("+" | "plus") -> plus
 minus_op : ("-" | "minus") -> minus
-
-!_add_op: "+"
-        | "-"
+_add_op: arith_add_op | arith_minus_op
+arith_add_op: ("plus" | "+") -> arith_plus
+arith_minus_op: ("minus" | "-") -> arith_minus
 !_shift_op: "<<" | ">>"
-!_mul_op: "*" | "times"
+// !_mul_op: "*" | "times"
+//         | "@"
+//         | "/" | "divided" "by"
+//         | "%" | "modulo"
+//         | "//"
+_mul_op: mult_op
         | "@"
-        | "/" | "divided" "by"
-        | "%" | "modulo"
+        | div_op
+        | mod_op
         | "//"
+mult_op: ("*" | "times") -> mult
+div_op: ("/" | "divided" "by") -> div
+mod_op: ("%" | "modulo") -> mod
 // <> isn't actually a valid comparison operator in Python. It's here for the
 // sake of a __future__ import described in PEP 401 (which really works :-)
 _comp_op: less_than_op
