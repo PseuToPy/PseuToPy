@@ -80,7 +80,8 @@ assert_stmt: "assert" test ["," test]
 
 compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt | funcdef | classdef | decorated | async_stmt
 async_stmt: "async" (funcdef | with_stmt | for_stmt)
-if_stmt: "if" test (":" | "then" | "then:") suite ("elif" test (":" | "then" | "then:") suite)* ["else" (":" | "then" | "then:") suite]
+if_stmt: "if" test (":" | "then" | "then:") suite (elif_stmt test (":" | "then" | "then:") suite)* ["else" (":" | "then" | "then:") suite]
+elif_stmt : ("elif" | "else" "if") -> elseif
 while_stmt: "while" test (":" | "do" | "do:") suite ["else" (":" | "do" | "do:") suite]
 for_stmt: "for" exprlist "in" testlist (":" | "do" | "do:") suite ["else" (":" | "do" | "do:") suite]
 try_stmt: ("try" ":" suite ((except_clause ":" suite)+ ["else" ":" suite] ["finally" ":" suite] | "finally" ":" suite))
