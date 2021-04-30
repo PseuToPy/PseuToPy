@@ -7,8 +7,6 @@ on:)
 ?factor: factor_op factor | power
 """
 
-from src.pseutopy.pseutopy import PseuToPy
-
 
 def test_addition(pseutopy):
     python_code = ['a + b', '1 + 2', 'a + 1.2', '"Hello" + "world"', 'True + False']
@@ -45,6 +43,7 @@ def test_modulo(pseutopy):
 
 
 def test_longer_arith_expr(pseutopy):
-    python_code = 'a + (2 - 3) * 1.2 / 3 % a ** 2'
-    pseutopy_code = 'a plus (2 minus 3) times 1.2 divided by 3 modulo a to the power of 2'
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    python_code = ['a + (2 - 3) * 1.2 / 3 % a ** 2', 'True * True + (1.2 / 2) - 4 ** (2+3)']
+    pseutopy_code = ['a plus (2 minus 3) times 1.2 divided by 3 modulo a to the power of 2', 'true times true plus (1.2 divided by 2) minus 4 to the power of (2 plus 3)']
+    for i in range(len(python_code)):
+        assert pseutopy.convert_from_string(python_code[i]) == pseutopy.convert_from_string(pseutopy_code[i])
