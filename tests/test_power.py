@@ -6,7 +6,6 @@ based on):
 ?factor: _factor_op factor | power
 ?await_expr: AWAIT? atom_expr
 """
-from src.pseutopy.pseutopy import PseuToPy
 
 
 def test_power_1(pseutopy):

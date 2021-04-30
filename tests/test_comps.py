@@ -24,7 +24,6 @@ is_op: ("is") -> is
 is_not_op: ("is" "not") -> is_not
 """
 
-from src.pseutopy.pseutopy import PseuToPy
 
 def test_is_lower_than(pseutopy):
     python_code = ['1 < 2', '2 < 1', '1**2 < 1 + 2*3']

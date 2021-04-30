@@ -13,7 +13,6 @@ Current state of the `atom` rule:
      | ("True" | "true")    -> const_true
      | ("False" | "false")    -> const_false
 """
-from src.pseutopy.pseutopy import PseuToPy
 
 
 def test_name(pseutopy):
