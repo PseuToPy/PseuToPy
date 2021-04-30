@@ -19,5 +19,5 @@ jobs:
     - name: Install dependencies
       run: |
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
-    - run: pytest
+    - run: pytest -vv
         
