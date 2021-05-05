@@ -9,8 +9,8 @@ def test_if_simple(pseutopy):
     template = '''
 if True{} a = 2
     '''
-    python_code = template.format((':'))
-    pseutopy_code = [template.format((':')), template.format((' then')), template.format((' then:'))]
+    python_code = template.format(':')
+    pseutopy_code = [template.format(':'), template.format(' then'), template.format(' then:')]
     for i in range(len(pseutopy_code)):
         assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
 
@@ -19,8 +19,8 @@ def test_if_simple_2(pseutopy):
 if True{}
     a = 2
     '''
-    python_code = template.format((':'))
-    pseutopy_code = [template.format((':')), template.format((' then')), template.format((' then:'))]
+    python_code = template.format(':')
+    pseutopy_code = [template.format(':'), template.format(' then'), template.format(' then:')]
     for i in range(len(pseutopy_code)):
         assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
 
