@@ -1,6 +1,6 @@
-déclarer my_var à Vrai
-déclarer my_var à faux
-déclarer my_var à vide
+déclarer my_var à True
+déclarer my_var à false
+déclarer my_var à none
 déclarer my_var à a n'est pas b
 déclarer my_var à a est b
 déclarer my_var à 3 pas dans my_list
@@ -17,7 +17,7 @@ déclarer my_var à 3 divisé par 2
 déclarer my_var à 3 fois 2
 déclarer my_var à 3 moins 2
 déclarer my_var à 3 plus 2
-déclarer my_var à non vrai
+déclarer my_var à non True
 déclarer my_var à a et b
 déclarer my_var à a ou b
 

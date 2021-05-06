@@ -167,9 +167,9 @@ AWAIT: "await"
      | number | string+
      | "(" test ")"
      | "..." -> ellipsis
-     | ("Vide" | "vide")    -> const_none
-     | ("Vrai" | "vrai")    -> const_true
-     | ("Faux" | "faux")    -> const_false
+     | ("None" | "none")    -> const_none
+     | ("True" | "true")    -> const_true
+     | ("False" | "false")    -> const_false
 
 ?testlist_comp: test | tuplelist_comp
 tuplelist_comp: (test|star_expr) (comp_for | ("," (test|star_expr))+ [","] | ",")
