@@ -12,9 +12,9 @@ class PseuToPy():
     Main module interface to PseuToPy. This module takes strings of pseudocode instructions and transpiles
     them into valid Python 3.8 instructions.
     """
-    def __init__(self):
+    def __init__(self, lang="en"):
         self.kwargs = dict(rel_to=__file__, postlex=PythonIndenter(), start='file_input')
-        self.parser = Lark.open('grammars/en.lark', parser="lalr", **self.kwargs)
+        self.parser = Lark.open('grammars/' + lang + '.lark', parser="lalr", **self.kwargs)
 
     def convert_from_file(self, file_name):
         tree = self.parser.parse(self.__read(file_name) + '\n')
