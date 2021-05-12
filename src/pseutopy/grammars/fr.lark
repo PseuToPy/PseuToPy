@@ -54,7 +54,7 @@ annassign: testlist_star_expr ":" test ["=" test]
 // !augassign: ("+=" | "-=" | "*=" | "@=" | "/=" | "%=" | "&=" | "|=" | "^=" | "<<=" | ">>=" | "**=" | "//=")
 !augassign: (testlist_star_expr ("+=" | "-=" | "*=" | "@=" | "/=" | "%=" | "&=" | "|=" | "^=" | "<<=" | ">>=" | "**=" | "//=") (yield_expr | testlist))
 ?assign: (testlist_star_expr ("=" (yield_expr|testlist_star_expr))*)
-         | (("mettre" | "set" ) testlist_star_expr (("à" | "to") (yield_expr | testlist_star_expr))*)
+         | ("mettre" testlist_star_expr ("à" (yield_expr | testlist_star_expr))*)
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
 del_stmt: "del" exprlist
 pass_stmt: "pass"
