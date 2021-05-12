@@ -21,7 +21,7 @@ decorators: decorator+
 decorated: decorators (classdef | funcdef | async_funcdef)
 
 async_funcdef: "async" funcdef
-funcdef: ("def" | "define" "function" | "définir" | "définir" "la" "fonction") NAME "(" parameters? ")" ["->" test] (":" | "to do" | "to do:" | "qui fait" | "qui fait:") suite
+funcdef: ("def" | "définir" "la" "fonction") NAME "(" parameters? ")" ["->" test] (":" | "qui fait" | "qui fait:") suite
 
 parameters: paramvalue ("," paramvalue)* ["," SLASH] ["," [starparams | kwparams]]
           | starparams
@@ -54,7 +54,7 @@ annassign: testlist_star_expr ":" test ["=" test]
 // !augassign: ("+=" | "-=" | "*=" | "@=" | "/=" | "%=" | "&=" | "|=" | "^=" | "<<=" | ">>=" | "**=" | "//=")
 !augassign: (testlist_star_expr ("+=" | "-=" | "*=" | "@=" | "/=" | "%=" | "&=" | "|=" | "^=" | "<<=" | ">>=" | "**=" | "//=") (yield_expr | testlist))
 ?assign: (testlist_star_expr ("=" (yield_expr|testlist_star_expr))*)
-         | (("déclarer" | "set" ) testlist_star_expr (("à" | "to") (yield_expr | testlist_star_expr))*)
+         | (("mettre" | "set" ) testlist_star_expr (("à" | "to") (yield_expr | testlist_star_expr))*)
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
 del_stmt: "del" exprlist
 pass_stmt: "pass"
@@ -80,23 +80,23 @@ assert_stmt: "assert" test ["," test]
 
 compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt | funcdef | classdef | decorated | async_stmt
 async_stmt: "async" (funcdef | with_stmt | for_stmt)
-if_stmt: ("si" | "if") test (":" | "alors" | "alors:" | "then" | "then:") suite (elif_stmt test (":" | "alors" | "alors:") suite)* ["sinon" (":" | "alors" | "alors:") suite]
-elif_stmt : ("elif" | "else" "if" | "sinon" "si") -> elseif
-while_stmt: ("tant" "que" | "while") test (":" | "faire" | "faire:" | "do" | "do:") suite [("sinon" | "else") (":" | "faire" | "faire:" | "do" | "do:") suite]
-for_stmt: ("pour" | "for") exprlist ("dans" | "in") testlist (":" | "faire" | "faire:" | "do" | "do:") suite [("sinon" | "else") (":" | "faire" | "faire:" | "do" | "do:") suite]
-try_stmt: (("essayer" ":" | "try" ":") suite ((except_clause ":" suite)+ [("sinon" ":" | "else" ":") suite] [("finalement" ":" | "finally" ":") suite] | ("finalement" ":" | "finally" ":") suite))
-with_stmt: ("avec" | "with") with_item ("," with_item)*  ":" suite
-with_item: test [("comme" | "as") expr]
+if_stmt: ("if" | "si") test (":" | "alors" | "alors:") suite (elif_stmt test (":" | "alors" | "alors:") suite)* ["sinon" (":" | "alors" | "alors:") suite]
+elif_stmt : ("elif" | "sinon" "si") -> elseif
+while_stmt: ("while" | "tant" "que") test (":" | "faire" | "faire:") suite [("else" | "sinon") (":" | "faire" | "faire:") suite]
+for_stmt: ("for" | "pour") exprlist ("in" | "dans") testlist (":" | "faire" | "faire:") suite [("else" | "sinon") (":" | "faire" | "faire:") suite]
+try_stmt: ("try" ":" suite ((except_clause ":" suite)+ ["else" ":" suite] ["finally" ":" suite] | "finally" ":" suite))
+with_stmt: ("with") with_item ("," with_item)*  ":" suite
+with_item: test ["as" expr]
 // NB compile.c makes sure that the default except clause is last
-except_clause: ("excepter" | "except") [test [("comme" | "as") NAME]]
+except_clause: "except" [test ["as" NAME]]
 suite: simple_stmt | _NEWLINE _INDENT stmt+ _DEDENT
-?test: or_test (("si" | "if") or_test ("sinon" | "else") test)? | lambdef
+?test: or_test (("if" | "si") or_test ("else" | "sinon") test)? | lambdef
 ?test_nocond: or_test | lambdef_nocond
 lambdef: "lambda" [varargslist] ":" test
 lambdef_nocond: "lambda" [varargslist] ":" test_nocond
-?or_test: and_test (("ou" | "or") and_test)*
-?and_test: not_test (("et" | "and") not_test)*
-?not_test: ("non" | "no") not_test -> not
+?or_test: and_test (("or" | "ou") and_test)*
+?and_test: not_test (("and" | "et") not_test)*
+?not_test: ("not" | "non") not_test -> not
          | comparison
 ?comparison: expr (_comp_op expr)*
 star_expr: "*" expr
@@ -109,10 +109,10 @@ star_expr: "*" expr
 ?factor: _factor_op factor | power
 _factor_op: plus_op | minus_op | "~"
 plus_op: ("+" | "plus") -> plus
-minus_op : ("-" | "moins" | "minus") -> minus
+minus_op : ("-" | "moins") -> minus
 _add_op: arith_add_op | arith_minus_op
 arith_add_op: ("plus" | "+") -> arith_plus
-arith_minus_op: ("moins" | "minus" | "-") -> arith_minus
+arith_minus_op: ("moins" | "-") -> arith_minus
 !_shift_op: "<<" | ">>"
 // !_mul_op: "*" | "times"
 //         | "@"
@@ -124,8 +124,8 @@ _mul_op: mult_op
         | div_op
         | mod_op
         | "//"
-mult_op: ("*" | "fois" | "times") -> mult
-div_op: ("/" | "divisé" "par" | "divided" "by") -> div
+mult_op: ("*" | "fois") -> mult
+div_op: ("/" | "divisé" "par") -> div
 mod_op: ("%" | "modulo") -> mod
 // <> isn't actually a valid comparison operator in Python. It's here for the
 // sake of a __future__ import described in PEP 401 (which really works :-)
@@ -140,12 +140,12 @@ _comp_op: less_than_op
         | not_in_op
         | is_op
         | is_not_op
-less_than_op: ("<" | "est" "inférieur" "à" | "is" "lower" "than") -> less_than
-more_than_op: (">" | "est" "supérieur" "à" | "is" "greater" "than") -> more_than
-equal_to_op: ("==" | "est" "égal" "à" | "is" "equal" "to") -> equal_to
-less_or_equal_to_op: ("<=" | "est" "inférieur" "ou" "égal" "à" | "is" "lower" "or" "equal" "to") -> less_or_equal_to
-more_or_equal_to_op: (">=" | "est" "supérieur" "ou" "égal" "à" | "is" "greater" "or" "equal" "to") -> more_or_equal_to
-is_not_equal_to_op: ("!=" | "n'est" "pas" "égal" "à" | "est" "différent" "de" | "is" "not" "equal" "to" | "is" "different" "from") -> is_not_equal_to
+less_than_op: ("<" | "est" "inférieur" "à") -> less_than
+more_than_op: (">" | "est" "supérieur" "à") -> more_than
+equal_to_op: ("==" | "est" "égal" "à") -> equal_to
+less_or_equal_to_op: ("<=" | "est" "inférieur" "ou" "égal" "à") -> less_or_equal_to
+more_or_equal_to_op: (">=" | "est" "supérieur" "ou" "égal" "à") -> more_or_equal_to
+is_not_equal_to_op: ("!=" | "n'est" "pas" "égal" "à" | "est" "différent" "de") -> is_not_equal_to
 in_op: ("dans" | "in") -> in
 not_in_op: ("pas" "dans" | "not" "in") -> not_in
 is_op: ("est" | "is") -> is
@@ -168,9 +168,9 @@ AWAIT: "await"
      | number | string+
      | "(" test ")"
      | "..." -> ellipsis
-     | ("None" | "none" | "Vide" | "vide")    -> const_none
-     | ("True" | "true" | "Vrai" | "vrai")    -> const_true
-     | ("False" | "false" | "Faux" | "faux")    -> const_false
+     | ("None" | "Vide" | "vide")    -> const_none
+     | ("True" | "Vrai" | "vrai")    -> const_true
+     | ("False" | "Faux" | "faux")    -> const_false
 
 ?testlist_comp: test | tuplelist_comp
 tuplelist_comp: (test|star_expr) (comp_for | ("," (test|star_expr))+ [","] | ",")
