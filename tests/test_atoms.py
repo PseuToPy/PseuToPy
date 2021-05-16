@@ -58,24 +58,45 @@ def test_const_false(pseutopy):
 
 
 def test_tuple(pseutopy):
-    # TODO: Modify the atom rule to provide a PseuToPy variant for tuples
-    pass
+    python_code = 'tasks = ("do", "the", test, 5)'
+    pseutopy_code = 'tasks = ("do", "the", test, 5)'
+    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
 
 
 def test_list(pseutopy):
-    # TODO: Modify the atom rule to provide a PseuToPy variant for lists
-    pass
+    python_code = 'tasks = ["do", "the", test, 5]'
+    pseutopy_code = 'tasks = ["do", "the", test, 5]'
+    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+
 
 
 def test_set(pseutopy):
-    # TODO: Modify the atom rule to provide a PseuToPy variant for sets
-    pass
+    python_code = 'primes = {1, 3, b, 7, "11"}'
+    pseutopy_code = 'primes = {1, 3, b, 7, "11"}'
+    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
 
 
 def test_dict(pseutopy):
-    # TODO: Modify the atom rule to provide a PseuToPy variant for dictionaries
-    pass
+    template = '''
+mydict = {
+    "brand": "Ford",
+    "model": "Mustang",
+    "year": 1954,
+    0 : "Yes"
+}
+    '''
+    python_code = template
+    pseutopy_code = template
+    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
 
+def test_atom_expr(pseutopy):
+    template = '''
+expression{}
+    '''
+    python_code = [template.format('()'), template.format('.getName()'), template.format(('.property'))]
+    pseutopy_code = [template.format('()'), template.format('.getName()'), template.format(('.property'))]
+    for py_code, ptp_code in zip(python_code,pseutopy_code):
+        assert pseutopy.convert_from_string(py_code) == pseutopy.convert_from_string(ptp_code)
 
 def test_test(pseutopy):
     """There is no need to test this rule, as it depends on the `test` rule that we will

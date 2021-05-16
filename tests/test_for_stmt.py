@@ -8,8 +8,8 @@ def test_for_1(pseutopy):
     template = '''
 for n in range(2, max){} print(n, 'is a prime number')
     '''
-    python_code = template.format((':'))
-    pseutopy_code = [template.format((':')), template.format((' do')), template.format((' do:'))]
+    python_code = template.format(':')
+    pseutopy_code = [template.format(':'), template.format(' do'), template.format(' do:')]
     for i in range(len(pseutopy_code)):
         assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
 
@@ -36,8 +36,8 @@ def test_for_3(pseutopy):
 for n in tab{} 
     print(n, 'is a prime number')
     '''
-    python_code = template.format((':'))
-    pseutopy_code = [template.format((':')), template.format((' do')), template.format((' do:'))]
+    python_code = template.format(':')
+    pseutopy_code = [template.format(':'), template.format(' do'), template.format(' do:')]
     for i in range(len(pseutopy_code)):
         assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
 
