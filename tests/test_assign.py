@@ -21,5 +21,7 @@ def test_assign_with_variable(pseutopy):
     assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
 
 def test_assign_function(pseutopy):
-    # TODO: Complete this when function calls are defined
-    pass
+    python_code = ['a = foo()', 'a = b.bar()']
+    pseutopy_code = ['set a to foo()', 'set a to b.bar()']
+    for python, pseudocode in zip(python_code, pseutopy_code):
+        assert pseutopy.convert_from_string(python) == pseutopy.convert_from_string(pseudocode)
