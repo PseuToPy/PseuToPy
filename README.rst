@@ -88,6 +88,8 @@ Testing
 #######
 
 To run unit tests, run ``pytest`` at the root of the project.
+Make sure test files are inside ``tests`` folder and file's name begin by 'test_'
+Test function must begin by 'test_' too.
 
 Authors and acknowledgment
 ##########################
