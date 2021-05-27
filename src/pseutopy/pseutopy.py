@@ -9,11 +9,12 @@ from lark import Lark, exceptions
 import astor
 
 
-class PseuToPy():
+class PseuToPy:
     """
     Main module interface to PseuToPy. This module takes strings of pseudocode instructions and transpiles
     them into valid Python 3.8 instructions.
     """
+
     def __init__(self, lang="en"):
         self.kwargs = dict(rel_to=__file__, postlex=PythonIndenter(), start='file_input')
         self.parser = Lark.open('grammars/' + lang + '.lark', parser="lalr", **self.kwargs)
@@ -46,7 +47,6 @@ class PseuToPy():
         except exceptions.UnexpectedToken:
             return "An error occured: Unable to parse the input. Please check that your input is correct."
 
-    
     def __read(self, file_name, *args):
         kwargs = {'encoding': 'utf-8'}
         with open(file_name, *args, **kwargs) as f:
@@ -54,3 +54,9 @@ class PseuToPy():
 
     def __construct_python(self, tree):
         return astor.to_source(parse_ast_to_python(tree))
+
+
+if __name__ == "__main__":
+    pseutopy = PseuToPy()
+    result = pseutopy.convert_from_string("a = 1, 2")
+    print(result)
