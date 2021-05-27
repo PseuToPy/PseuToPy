@@ -36,6 +36,12 @@ class PseuToPy():
 
     def convert_to_ast(self, instructions):
         try:
+            return self.parser.parse(instructions + '\n')
+        except exceptions.UnexpectedToken:
+            return "An error occured: Unable to parse the input. Please check that your input is correct."
+
+    def convert_to_pretty_ast(self, instructions):
+        try:
             return self.parser.parse(instructions + '\n').pretty()
         except exceptions.UnexpectedToken:
             return "An error occured: Unable to parse the input. Please check that your input is correct."
