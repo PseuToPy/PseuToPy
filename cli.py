@@ -14,7 +14,7 @@ input_group.add_argument('-f', '--file', action='store_true',
 input_group.add_argument('-s', '--string', action='store_true',
                          help="Input is now expected to be a string (default)")
 parser.add_argument('-a', '--ast', action='store_true',
-                    help="Prints out the generated Python AST")
+                    help="Prints out the generated Lark AST")
 parser.add_argument('-q', '--quiet', action='store_true',
                     help="Don't print the generated Python code")
 args = parser.parse_args()
@@ -28,11 +28,18 @@ else:
     pseutopy = PseuToPy()
 
 try:
+    return_value = None
     if not args.file:
-        generated_ast = pseutopy.convert_from_string(args.input)
+        if args.ast:
+            return_value = pseutopy.convert_to_ast(args.input)
+        else:
+            return_value = pseutopy.convert_from_string(args.input)
     else:
-        generated_ast = pseutopy.convert_from_file(args.input)
-    print(generated_ast)
+        if args.ast:
+            return_value = pseutopy.convert_to_ast(args.input)
+        else:
+            return_value = pseutopy.convert_from_file(args.input)
+    print(return_value)
 except NameError:
     print("An error occured: Invalid language name passed to the module.")
 
