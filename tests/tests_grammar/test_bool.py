@@ -15,7 +15,7 @@ def test_or_with_expr_expr(pseutopy):
     """
     python_code = "True or False"
     pseutopy_code = "true or false"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 
 def test_or_with_and_expr(pseutopy):
@@ -24,7 +24,7 @@ def test_or_with_and_expr(pseutopy):
     """
     python_code = "True and True or 1 == 0"
     pseutopy_code = "true and true or 1 is equal to 0"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 
 def test_or_with_expr_and(pseutopy):
@@ -33,7 +33,7 @@ def test_or_with_expr_and(pseutopy):
     """
     python_code = "1 < 2 or True and False"
     pseutopy_code = "1 is lower than 2 or true and false"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 
 def test_or_with_and_and(pseutopy):
@@ -43,7 +43,7 @@ def test_or_with_and_and(pseutopy):
     python_code = ["True and False or True and True", "True and False or True and False or True and False"]
     pseutopy_code = ["true and false or true and true", "true and false or true and false or true and false"]
     for python, pseuto in zip(python_code, pseutopy_code):
-        assert pseutopy.convert_from_string(python) == pseutopy.convert_from_string(pseuto)
+        assert pseutopy.convert_to_ast(python) == pseutopy.convert_to_ast(pseuto)
 
 
 def test_and_with_expr_expr(pseutopy):
@@ -52,7 +52,7 @@ def test_and_with_expr_expr(pseutopy):
     """
     python_code = "True and False"
     pseutopy_code = "true and false"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 def test_and_with_not_expr(pseutopy):
     """
@@ -60,7 +60,7 @@ def test_and_with_not_expr(pseutopy):
     """
     python_code = "not True and 1 == 0"
     pseutopy_code = "not true and 1 is equal to 0"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 
 def test_and_with_expr_not(pseutopy):
@@ -69,7 +69,7 @@ def test_and_with_expr_not(pseutopy):
     """
     python_code = "1 < 2 and not False"
     pseutopy_code = "1 is lower than 2 and not false"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 
 def test_and_with_and_and(pseutopy):
@@ -79,7 +79,7 @@ def test_and_with_and_and(pseutopy):
     python_code = ["not True and False and not True", "not True and not False and not 1 < 2"]
     pseutopy_code = ["not true and false and not true", "not true and not false and not 1 is lower than 2"]
     for python, pseuto in zip(python_code, pseutopy_code):
-        assert pseutopy.convert_from_string(python) == pseutopy.convert_from_string(pseuto)
+        assert pseutopy.convert_to_ast(python) == pseutopy.convert_to_ast(pseuto)
 
 
 def test_not_simple(pseutopy):
@@ -89,7 +89,7 @@ def test_not_simple(pseutopy):
     """
     python_code = "not 1 < 2"
     pseutopy_code = "not 1 is lower than 2"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)
 
 
 def test_not_multiple(pseutopy):
@@ -99,4 +99,4 @@ def test_not_multiple(pseutopy):
     """
     python_code = "not not not not not (1 < 2 or False)"
     pseutopy_code = "not not not not not (1 is lower than 2 or false)"
-    assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code)
+    assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code)

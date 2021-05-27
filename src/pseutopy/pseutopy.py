@@ -4,7 +4,9 @@ PseuToPy parser that transforms pseudocode instructions into valid Python 3.8 in
 from io import open
 
 from src.pseutopy.grammar_parser import PythonIndenter
+from src.pseutopy.builder.ast_parser import parse_ast_to_python
 from lark import Lark, exceptions
+import astor
 
 
 class PseuToPy():
@@ -18,9 +20,8 @@ class PseuToPy():
 
     def convert_from_file(self, file_name):
         try:
-            tree = self.parser.parse(self.__read(file_name) + '\n')
-            python_code = self.__construct_python(tree)
-            return python_code
+            lark_ast = self.parser.parse(self.__read(file_name) + '\n')
+            return self.__construct_python(lark_ast)
         except exceptions.UnexpectedToken:
             return "An error occured: Unable to parse the input. Please check that your input is correct."
         except FileNotFoundError:
@@ -28,16 +29,22 @@ class PseuToPy():
 
     def convert_from_string(self, instructions):
         try:
-            tree = self.parser.parse(instructions + '\n')
-            python_code = self.__construct_python(tree)
-            return python_code
+            lark_ast = self.parser.parse(instructions + '\n')
+            return self.__construct_python(lark_ast)
         except exceptions.UnexpectedToken:
             return "An error occured: Unable to parse the input. Please check that your input is correct."
 
+    def convert_to_ast(self, instructions):
+        try:
+            return self.parser.parse(instructions + '\n').pretty()
+        except exceptions.UnexpectedToken:
+            return "An error occured: Unable to parse the input. Please check that your input is correct."
+
+    
     def __read(self, file_name, *args):
         kwargs = {'encoding': 'utf-8'}
         with open(file_name, *args, **kwargs) as f:
             return f.read()
 
     def __construct_python(self, tree):
-        return tree.pretty()
+        return astor.to_source(parse_ast_to_python(tree))

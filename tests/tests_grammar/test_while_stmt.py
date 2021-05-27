@@ -13,7 +13,7 @@ while a%2 == 0{}
     python_code = template.format(':')
     pseutopy_code = [template.format(':'), template.format(' do'), template.format(' do:')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_while_else(pseutopy):
     template = '''
@@ -33,4 +33,4 @@ else{}
         template.format(':', ' do:'), template.format(' do', ':'), template.format(' do:', ' do:'),
         template.format(' do', ' do:')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])

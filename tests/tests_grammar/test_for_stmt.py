@@ -11,7 +11,7 @@ for n in range(2, max){} print(n, 'is a prime number')
     python_code = template.format(':')
     pseutopy_code = [template.format(':'), template.format(' do'), template.format(' do:')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_for_2(pseutopy):
     template = '''
@@ -29,7 +29,7 @@ for n in range(2, max){}
         template.format(' do:', ':', ':'), template.format(' do', ':', ' do:'), 
         template.format(':', ' do:', ' do')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_for_3(pseutopy):
     template = '''
@@ -39,7 +39,7 @@ for n in tab{}
     python_code = template.format(':')
     pseutopy_code = [template.format(':'), template.format(' do'), template.format(' do:')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_for_4(pseutopy):
     template = '''
@@ -52,4 +52,4 @@ for n in (1,3,5,a){}
         template.format(' do:', ':', ':'), template.format(' do', ':', ' do:'), 
         template.format(':', ' do:', ' do')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
