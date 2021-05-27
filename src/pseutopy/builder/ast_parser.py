@@ -9,6 +9,24 @@ import ast
 from lark.tree import Tree
 
 
+class ConstTrue:
+    @staticmethod
+    def to_node(token):
+        return ast.Constant(value=True)
+
+
+class ConstFalse:
+    @staticmethod
+    def to_node(token):
+        return ast.Constant(value=False)
+
+
+class ConstNone:
+    @staticmethod
+    def to_node(token):
+        return ast.Constant(value=None)
+
+
 class Decimal:
     @staticmethod
     def to_node(token):
@@ -82,6 +100,9 @@ def read_node(node):
     index: Either 'data' or 'value'
     """
     mapping = {
+        'const_true': ConstTrue,
+        'const_false': ConstFalse,
+        'const_none': ConstNone,
         'DEC_NUMBER': Decimal,
         'FLOAT_NUMBER': Float,
         'STRING': String,
