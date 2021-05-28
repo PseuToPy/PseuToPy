@@ -86,6 +86,23 @@ class Assign:
         return ast.Assign(targets=targets, value=value)
 
 
+class StringToken:
+    @staticmethod
+    def to_node(token):
+        return read_node(token[0].type).to_node(token[0])
+
+
+# class ArithExpr:
+#     @staticmethod
+#     def to_node(children):
+#         print(children)
+#
+#
+# class ArithPlus:
+#     @staticmethod
+#     def to_node(token):
+#         return ast.Add
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -110,6 +127,9 @@ def read_node(node):
         'number': Number,
         'var': Var,
         'testlist_star_expr': TestlistStarExpr,
-        'assign': Assign
+        'assign': Assign,
+        'string': StringToken,
+        # 'arith_expr': ArithExpr,
+        # 'arith_plus': ArithPlus
     }
     return mapping[node]

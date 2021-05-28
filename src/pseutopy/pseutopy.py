@@ -58,5 +58,5 @@ class PseuToPy:
 
 if __name__ == "__main__":
     pseutopy = PseuToPy()
-    result = pseutopy.convert_from_string("a = 1, 2")
+    result = pseutopy.convert_from_string("a = 'True'")
     print(result)
