@@ -53,7 +53,10 @@ class PseuToPy:
             return f.read()
 
     def __construct_python(self, tree):
-        return astor.to_source(parse_ast_to_python(tree))
+        result = astor.to_source(parse_ast_to_python(tree))
+        result = result.replace("\'\"", "\"")
+        result = result.replace("\"\'", "\"")
+        return result
 
 
 if __name__ == "__main__":
