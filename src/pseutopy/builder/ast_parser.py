@@ -39,7 +39,7 @@ class Float:
         return ast.Constant(value=float(token.value))
 
 
-class String:
+class StringToken:
     @staticmethod
     def to_node(token):
         return ast.Constant(value=token.value)
@@ -86,10 +86,23 @@ class Assign:
         return ast.Assign(targets=targets, value=value)
 
 
-class StringToken:
+class String:
     @staticmethod
     def to_node(token):
         return read_node(token[0].type).to_node(token[0])
+
+class Set:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+class SetComp:
+    @staticmethod
+    def to_node(children):
+        list_children = []
+        for child in children:
+            list_children.append(read_node(child.children[0].type).to_node(child.children[0]))
+        return ast.Set(elts=list_children)
 
 
 # class ArithExpr:
@@ -122,13 +135,15 @@ def read_node(node):
         'const_none': ConstNone,
         'DEC_NUMBER': Decimal,
         'FLOAT_NUMBER': Float,
-        'STRING': String,
+        'STRING': StringToken,
         'NAME': Name,
         'number': Number,
         'var': Var,
         'testlist_star_expr': TestlistStarExpr,
         'assign': Assign,
-        'string': StringToken,
+        'string': String,
+        'set': Set,
+        'set_comp': SetComp,
         # 'arith_expr': ArithExpr,
         # 'arith_plus': ArithPlus
     }

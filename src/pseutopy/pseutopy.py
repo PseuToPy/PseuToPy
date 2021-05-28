@@ -58,5 +58,5 @@ class PseuToPy:
 
 if __name__ == "__main__":
     pseutopy = PseuToPy()
-    result = pseutopy.convert_from_string("a = 'True'")
+    result = pseutopy.convert_from_string('primes = {1, 3, b, 7, "11"}')
     print(result)

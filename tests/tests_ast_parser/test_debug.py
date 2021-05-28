@@ -3,4 +3,4 @@
 """
 
 def test_debug(pseutopy):
-    return pseutopy.convert_from_string("a = 2")
+    assert pseutopy.convert_from_string('primes = {1, 3, b, 7, "11"}') == 'primes = {1, 3, b, 7, "11"}' + '\n'
