@@ -130,13 +130,13 @@ def read_node(node):
     index: Either 'data' or 'value'
     """
     mapping = {
-        'const_true': ConstTrue,
-        'const_false': ConstFalse,
-        'const_none': ConstNone,
         'DEC_NUMBER': Decimal,
         'FLOAT_NUMBER': Float,
         'STRING': StringToken,
         'NAME': Name,
+        'const_true': ConstTrue,
+        'const_false': ConstFalse,
+        'const_none': ConstNone,
         'number': Number,
         'var': Var,
         'testlist_star_expr': TestlistStarExpr,
