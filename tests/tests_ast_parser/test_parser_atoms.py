@@ -55,3 +55,9 @@ def test_name(pseutopy):
      python_code = "my_var = a"
      for i in pseudo_code:
           assert pseutopy.convert_from_string(i) == python_code + '\n'
+
+def test_set(pseutopy):
+     pseudo_code = ['primes = {1, 3, b, 7, "11"}', "primes = {1, 3, b, 7, '11'}"]
+     python_code = 'primes = {1, 3, b, 7, "11"}'
+     for i in pseudo_code:
+          assert pseutopy.convert_from_string(i) == python_code + '\n'

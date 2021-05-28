@@ -9,23 +9,9 @@ import ast
 from lark.tree import Tree
 
 
-class ConstTrue:
-    @staticmethod
-    def to_node(token):
-        return ast.Constant(value=True)
-
-
-class ConstFalse:
-    @staticmethod
-    def to_node(token):
-        return ast.Constant(value=False)
-
-
-class ConstNone:
-    @staticmethod
-    def to_node(token):
-        return ast.Constant(value=None)
-
+#####################
+##  Token classes  ##
+#####################
 
 class Decimal:
     @staticmethod
@@ -51,6 +37,10 @@ class Name:
         return ast.Name(id=token.value, ctx=ast.Store())
 
 
+####################
+##  Tree classes  ##
+####################
+
 class Number:
     @staticmethod
     def to_node(token):
@@ -61,6 +51,67 @@ class Var:
     @staticmethod
     def to_node(token):
         return read_node(token[0].type).to_node(token[0])
+
+
+class String:
+    @staticmethod
+    def to_node(token):
+        return read_node(token[0].type).to_node(token[0])
+
+
+####################
+##  Atom classes  ##
+####################
+
+class ConstTrue:
+    @staticmethod
+    def to_node(token):
+        return ast.Constant(value=True)
+
+
+class ConstFalse:
+    @staticmethod
+    def to_node(token):
+        return ast.Constant(value=False)
+
+
+class ConstNone:
+    @staticmethod
+    def to_node(token):
+        return ast.Constant(value=None)
+
+
+class Set:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+
+class SetComp:
+    @staticmethod
+    def to_node(children):
+        elts = [read_node(child.children[0].type).to_node(child.children[0]) for child in children]
+        return ast.Set(elts=elts)
+
+
+##########################
+##  Expression classes  ##
+##########################
+
+class Assign:
+    @staticmethod
+    def to_node(children):
+        """
+        Assign rule can match multiple things:
+        - a = 1
+        - a, b = 1, 2
+        :param children: The list that belongs to the Assign Tree
+        :return: The ast.Assign node to be inserted into the ast.Module
+        """
+        left, right = children
+        targets = [read_node(left.data).to_node(left.children)]
+        value = read_node(right.data).to_node(right.children)
+        return ast.Assign(targets=targets, value=value)
 
 
 class TestlistStarExpr:
@@ -95,41 +146,6 @@ class ArithMinus:
         return ast.Sub()
 
 
-class Assign:
-    @staticmethod
-    def to_node(children):
-        """
-        Assign rule can match multiple things:
-        - a = 1
-        - a, b = 1, 2
-        :param children: The list that belongs to the Assign Tree
-        :return: The ast.Assign node to be inserted into the ast.Module
-        """
-        left, right = children
-        targets = [read_node(left.data).to_node(left.children)]
-        value = read_node(right.data).to_node(right.children)
-        return ast.Assign(targets=targets, value=value)
-
-
-class String:
-    @staticmethod
-    def to_node(token):
-        return read_node(token[0].type).to_node(token[0])
-
-class Set:
-    @staticmethod
-    def to_node(tree):
-        return read_node(tree[0].data).to_node(tree[0].children)
-
-class SetComp:
-    @staticmethod
-    def to_node(children):
-        list_children = []
-        for child in children:
-            list_children.append(read_node(child.children[0].type).to_node(child.children[0]))
-        return ast.Set(elts=list_children)
-
-
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -144,22 +160,28 @@ def read_node(node):
     index: Either 'data' or 'value'
     """
     mapping = {
+        # Token
         'DEC_NUMBER': Decimal,
         'FLOAT_NUMBER': Float,
         'STRING': StringToken,
         'NAME': Name,
+        #Token classes
+        'number': Number,
+        'var': Var,
+        'string': String,
+        # Atom classes
         'const_true': ConstTrue,
         'const_false': ConstFalse,
         'const_none': ConstNone,
-        'number': Number,
-        'var': Var,
-        'testlist_star_expr': TestlistStarExpr,
-        'assign': Assign,
-        'string': String,
         'set': Set,
         'set_comp': SetComp,
+        # Expression classes
+        'assign': Assign,
+        'testlist_star_expr': TestlistStarExpr,
         'arith_expr': ArithExpr,
         'arith_plus': ArithPlus,
-        'arith_minus': ArithMinus
+        'arith_minus': ArithMinus,
+        # Statement classes
+        
     }
     return mapping[node]
