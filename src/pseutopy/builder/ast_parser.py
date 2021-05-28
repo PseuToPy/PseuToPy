@@ -70,6 +70,31 @@ class TestlistStarExpr:
         return ast.Tuple(elts=elts)
 
 
+class ArithExpr:
+    @staticmethod
+    def to_node(tree):
+        if len(tree) == 3:
+            left, op, right = [read_node(child.data).to_node(child.children) for child in tree]
+            return ast.BinOp(left=left, op=op, right=right)
+        else:
+            right = read_node(tree[-1].data).to_node(tree[-1].children)
+            op = read_node(tree[-2].data).to_node(tree[-2].children)
+            left = read_node('arith_expr').to_node(tree[:-2])
+            return ast.BinOp(left=left, op=op, right=right)
+
+
+class ArithPlus:
+    @staticmethod
+    def to_node(tree):
+        return ast.Add()
+
+
+class ArithMinus:
+    @staticmethod
+    def to_node(tree):
+        return ast.Sub()
+
+
 class Assign:
     @staticmethod
     def to_node(children):
@@ -105,17 +130,6 @@ class SetComp:
         return ast.Set(elts=list_children)
 
 
-# class ArithExpr:
-#     @staticmethod
-#     def to_node(children):
-#         print(children)
-#
-#
-# class ArithPlus:
-#     @staticmethod
-#     def to_node(token):
-#         return ast.Add
-
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -144,7 +158,8 @@ def read_node(node):
         'string': String,
         'set': Set,
         'set_comp': SetComp,
-        # 'arith_expr': ArithExpr,
-        # 'arith_plus': ArithPlus
+        'arith_expr': ArithExpr,
+        'arith_plus': ArithPlus,
+        'arith_minus': ArithMinus
     }
     return mapping[node]
