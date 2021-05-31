@@ -121,7 +121,7 @@ class TestlistStarExpr:
         return ast.Tuple(elts=elts)
 
 
-class ArithExpr:
+class BinOp:
     @staticmethod
     def to_node(tree):
         if len(tree) == 3:
@@ -144,6 +144,37 @@ class ArithMinus:
     @staticmethod
     def to_node(tree):
         return ast.Sub()
+
+
+class Mult:
+    @staticmethod
+    def to_node(tree):
+        return ast.Mult()
+
+
+class Div:
+    @staticmethod
+    def to_node(tree):
+        return ast.Div()
+
+
+class Mod:
+    @staticmethod
+    def to_node(tree):
+        return ast.Mod()
+
+
+class FloorDiv:
+    @staticmethod
+    def to_node(tree):
+        return ast.FloorDiv()
+
+
+class Power:
+    @staticmethod
+    def to_node(tree):
+        left, right = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.BinOp(left=left, op=ast.Pow(), right=right)
 
 
 def parse_ast_to_python(tree):
@@ -178,9 +209,15 @@ def read_node(node):
         # Expression classes
         'assign': Assign,
         'testlist_star_expr': TestlistStarExpr,
-        'arith_expr': ArithExpr,
+        'arith_expr': BinOp,
         'arith_plus': ArithPlus,
         'arith_minus': ArithMinus,
+        'term': BinOp,
+        'mult': Mult,
+        'div': Div,
+        'mod': Mod,
+        'floor_div': FloorDiv,
+        'power': Power
         # Statement classes
         
     }
