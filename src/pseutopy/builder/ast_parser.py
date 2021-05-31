@@ -300,6 +300,51 @@ class IsNot:
         return ast.IsNot()
 
 
+##########################
+##  Statements classes  ##
+##########################
+
+
+class CompoundStmt:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+
+class IfStmt:
+    @staticmethod
+    def to_node(tree):
+        """
+        If statements are created recursively with 'elif' and 'else' statements being inserted in their respective
+        outer 'if/elif' statements.
+
+        Because the way Lark generates the IfStmt tree (which is not a tree but a flat list with 'else_if' rules,
+        we use a single class to manage both these cases. As a consequence, this adds some complexity to this method
+        when generating the `orelse` attribute of the `ast.If` node.
+        :param tree:
+        :return:
+        """
+        is_else_if = False
+        if tree[0].data == 'elseif':
+            tree.pop(0)
+            is_else_if = True
+        test = read_node(tree[0].data).to_node(tree[0].children)
+        body = read_node(tree[1].data).to_node(tree[1].children)
+        if len(tree) == 2:      # There is no elif/else statement
+            orelse = []
+        elif len(tree) == 3:    # There is a final `else` statement
+            orelse = read_node(tree[2].data).to_node(tree[2].children)
+        else:                   # There is a `elif` statement
+            orelse = read_node(tree[2].data).to_node(tree[2:])
+        return [ast.If(test=test, body=body, orelse=orelse)] if is_else_if else ast.If(test=test, body=body, orelse=orelse)
+
+
+class Suite:
+    @staticmethod
+    def to_node(tree):
+        return [read_node(child.data).to_node(child.children) for child in tree]
+
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -358,8 +403,11 @@ def read_node(node):
         'in': In,
         'not_in': NotIn,
         'is': Is,
-        'is_not': IsNot
+        'is_not': IsNot,
         # Statement classes
-        
+        'compound_stmt': CompoundStmt,
+        'if_stmt': IfStmt,
+        'suite': Suite,
+        'elseif': IfStmt
     }
     return mapping[node]
