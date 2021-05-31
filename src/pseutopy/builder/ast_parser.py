@@ -231,6 +231,75 @@ class UnarySub:
         return ast.USub()
 
 
+class Comparison:
+    @staticmethod
+    def to_node(tree):
+        left = read_node(tree[0].data).to_node(tree[0].children)
+        ops = [read_node(child.data).to_node(child.children) for index, child in enumerate(tree[1:]) if index % 2 == 0]
+        comparators = [read_node(child.data).to_node(child.children) for index, child in enumerate(tree[1:]) if index % 2 == 1]
+        return ast.Compare(left=left, ops=ops, comparators=comparators)
+
+
+class LessThan:
+    @staticmethod
+    def to_node(tree):
+        return ast.Lt()
+
+
+class LessOrEqualTo:
+    @staticmethod
+    def to_node(tree):
+        return ast.LtE()
+
+
+class MoreThan:
+    @staticmethod
+    def to_node(tree):
+        return ast.Gt()
+
+
+class MoreOrEqualTo:
+    @staticmethod
+    def to_node(tree):
+        return ast.GtE()
+
+
+class EqualTo:
+    @staticmethod
+    def to_node(tree):
+        return ast.Eq()
+
+
+class IsNotEqualTo:
+    @staticmethod
+    def to_node(tree):
+        return ast.NotEq()
+
+
+class In:
+    @staticmethod
+    def to_node(tree):
+        return ast.In()
+
+
+class NotIn:
+    @staticmethod
+    def to_node(tree):
+        return ast.NotIn()
+
+
+class Is:
+    @staticmethod
+    def to_node(tree):
+        return ast.Is()
+
+
+class IsNot:
+    @staticmethod
+    def to_node(tree):
+        return ast.IsNot()
+
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -278,7 +347,18 @@ def read_node(node):
         'not': Not,
         'factor': Factor,
         'plus': UnaryAdd,
-        'minus': UnarySub
+        'minus': UnarySub,
+        'comparison': Comparison,
+        'less_than': LessThan,
+        'less_or_equal_to': LessOrEqualTo,
+        'more_than': MoreThan,
+        'more_or_equal_to': MoreOrEqualTo,
+        'equal_to': EqualTo,
+        'is_not_equal_to': IsNotEqualTo,
+        'in': In,
+        'not_in': NotIn,
+        'is': Is,
+        'is_not': IsNot
         # Statement classes
         
     }
