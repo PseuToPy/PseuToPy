@@ -68,3 +68,13 @@ def test_dict(pseutopy):
     python_code = 'dict = {1: "11", "1": 11, 2: a, "s": {1, 2, "3"}}'
     assert pseutopy.convert_from_string(pseudo_code) == python_code + '\n'
 
+def test_list(pseutopy):
+    pseudo_code = 'list = [1, 2, "test", a, false]'
+    python_code = 'list = [1, 2, "test", a, False]'
+    assert pseutopy.convert_from_string(pseudo_code) == python_code + '\n'
+
+
+def test_dict(pseutopy):
+    pseudo_code = 'tuple = (1, true, "test", a)'
+    python_code = 'tuple = (1, True, "test", a)'
+    assert pseutopy.convert_from_string(pseudo_code) == python_code + '\n'

@@ -105,6 +105,30 @@ class DictComp:
         values = [read_node(child.children[1].data).to_node(child.children[1].children) for child in keysValues]
         return ast.Dict(keys=keys, values=values)
 
+
+class List:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children, 'list')
+
+
+class Tuple:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children, 'tuple')
+
+
+class TupleListComp:
+    @staticmethod
+    def to_node(children, type):
+        if type == 'tuple':
+            elts = [read_node(child.data).to_node(child.children) for child in children]
+            return ast.Expression(body=ast.Tuple(elts=elts))
+        else: 
+            elts = [read_node(child.data).to_node(child.children) for child in children]
+            return ast.List(elts=elts)
+
+
 ##########################
 ##  Expression classes  ##
 ##########################
@@ -383,6 +407,9 @@ def read_node(node):
         'set_comp': SetComp,
         'dict': Dict,
         'dict_comp': DictComp,
+        'list': List,
+        'tuple': Tuple,
+        'tuplelist_comp': TupleListComp,
         # Expression classes
         'assign': Assign,
         'testlist_star_expr': TestlistStarExpr,
