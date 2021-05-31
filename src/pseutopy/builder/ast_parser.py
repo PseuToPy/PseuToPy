@@ -345,6 +345,14 @@ class Suite:
         return [read_node(child.data).to_node(child.children) for child in tree]
 
 
+class WhileStmt:
+    @staticmethod
+    def to_node(tree):
+        test = read_node(tree[0].data).to_node(tree[0].children)
+        body = read_node(tree[1].data).to_node(tree[1].children)
+        orelse = read_node(tree[2].data).to_node(tree[2].children) if len(tree) > 2 else []
+        return ast.While(test=test, body=body, orelse=orelse)
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -408,6 +416,7 @@ def read_node(node):
         'compound_stmt': CompoundStmt,
         'if_stmt': IfStmt,
         'suite': Suite,
-        'elseif': IfStmt
+        'elseif': IfStmt,
+        'while_stmt': WhileStmt
     }
     return mapping[node]
