@@ -6,8 +6,6 @@ To organize this module a little bit, we will try to:
 - Keep expression classes before statement classes
 """
 import ast
-from lark.tree import Tree
-
 
 #####################
 ##  Token classes  ##
@@ -16,19 +14,19 @@ from lark.tree import Tree
 class Decimal:
     @staticmethod
     def to_node(token):
-        return ast.Constant(value=int(token.value))
+        return ast.Constant(value=int(token.value), kind=None)
 
 
 class Float:
     @staticmethod
     def to_node(token):
-        return ast.Constant(value=float(token.value))
+        return ast.Constant(value=float(token.value), kind=None)
 
 
 class StringToken:
     @staticmethod
     def to_node(token):
-        return ast.Constant(value=token.value)
+        return ast.Constant(value=token.value, kind=None)
 
 
 class Name:
@@ -66,19 +64,19 @@ class String:
 class ConstTrue:
     @staticmethod
     def to_node(token):
-        return ast.Constant(value=True)
+        return ast.Constant(value=True, kind=None)
 
 
 class ConstFalse:
     @staticmethod
     def to_node(token):
-        return ast.Constant(value=False)
+        return ast.Constant(value=False, kind=None)
 
 
 class ConstNone:
     @staticmethod
     def to_node(token):
-        return ast.Constant(value=None)
+        return ast.Constant(value=None, kind=None)
 
 
 class Set:
@@ -93,6 +91,19 @@ class SetComp:
         elts = [read_node(child.children[0].type).to_node(child.children[0]) for child in children]
         return ast.Set(elts=elts)
 
+
+class Dict:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+
+class DictComp:
+    @staticmethod
+    def to_node(keysValues):
+        keys = [read_node(child.children[0].data).to_node(child.children[0].children) for child in keysValues]
+        values = [read_node(child.children[1].data).to_node(child.children[1].children) for child in keysValues]
+        return ast.Dict(keys=keys, values=values)
 
 ##########################
 ##  Expression classes  ##
@@ -224,8 +235,7 @@ def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
     for child in tree.children:
-        if child.__class__ is Tree:
-            ast_module.body.append(read_node(child.data).to_node(child.children))
+        ast_module.body.append(read_node(child.data).to_node(child.children))
     return ast_module
 
 
@@ -249,6 +259,8 @@ def read_node(node):
         'const_none': ConstNone,
         'set': Set,
         'set_comp': SetComp,
+        'dict': Dict,
+        'dict_comp': DictComp,
         # Expression classes
         'assign': Assign,
         'testlist_star_expr': TestlistStarExpr,

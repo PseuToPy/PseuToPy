@@ -62,3 +62,9 @@ def test_set(pseutopy):
     python_code = 'primes = {1, 3, b, 7, "11"}'
     for i in pseudo_code:
         assert pseutopy.convert_from_string(i) == python_code + '\n'
+
+def test_dict(pseutopy):
+    pseudo_code = 'dict = {1: "11", "1": 11, 2: a, "s": {1, 2, "3"}}'
+    python_code = 'dict = {1: "11", "1": 11, 2: a, "s": {1, 2, "3"}}'
+    assert pseutopy.convert_from_string(pseudo_code) == python_code + '\n'
+

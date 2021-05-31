@@ -7,7 +7,7 @@ from src.pseutopy.grammar_parser import PythonIndenter
 from src.pseutopy.builder.ast_parser import parse_ast_to_python
 from lark import Lark, exceptions
 import astor
-
+import re
 
 class PseuToPy:
     """
@@ -54,12 +54,13 @@ class PseuToPy:
 
     def __construct_python(self, tree):
         result = astor.to_source(parse_ast_to_python(tree))
+        return self.__clean_python_result(result)
+
+    def __clean_python_result(self, result):
         result = result.replace("\'\"", "\"")
         result = result.replace("\"\'", "\"")
+        pattern = re.compile(r'\((\d+)\):')
+        template = """({}):"""
+        for match in re.findall(pattern, result):
+            result = result.replace(template.format(match), match+":")
         return result
-
-
-if __name__ == "__main__":
-    pseutopy = PseuToPy()
-    result = pseutopy.convert_from_string('primes = {1, 3, b, 7, "11"}')
-    print(result)
