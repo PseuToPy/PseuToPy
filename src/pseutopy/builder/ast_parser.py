@@ -7,6 +7,7 @@ To organize this module a little bit, we will try to:
 """
 import ast
 
+
 #####################
 ##  Token classes  ##
 #####################
@@ -133,21 +134,6 @@ class TupleListComp:
 ##  Expression classes  ##
 ##########################
 
-class Assign:
-    @staticmethod
-    def to_node(children):
-        """
-        Assign rule can match multiple things:
-        - a = 1
-        - a, b = 1, 2
-        :param children: The list that belongs to the Assign Tree
-        :return: The ast.Assign node to be inserted into the ast.Module
-        """
-        left, right = children
-        targets = [read_node(left.data).to_node(left.children)]
-        value = read_node(right.data).to_node(right.children)
-        return ast.Assign(targets=targets, value=value)
-
 
 class TestlistStarExpr:
     @staticmethod
@@ -210,6 +196,12 @@ class Power:
     def to_node(tree):
         left, right = [read_node(child.data).to_node(child.children) for child in tree]
         return ast.BinOp(left=left, op=ast.Pow(), right=right)
+
+
+class Pow:
+    @staticmethod
+    def to_node(tree):
+        return ast.Pow()
 
 
 class And:
@@ -329,6 +321,73 @@ class IsNot:
 ##########################
 
 
+class Assign:
+    @staticmethod
+    def to_node(children):
+        """
+        Assign rule can match multiple things:
+        - a = 1
+        - a, b = 1, 2
+        :param children: The list that belongs to the Assign Tree
+        :return: The ast.Assign node to be inserted into the ast.Module
+        """
+        left, right = children
+        targets = [read_node(left.data).to_node(left.children)]
+        value = read_node(right.data).to_node(right.children)
+        return ast.Assign(targets=targets, value=value)
+
+
+class AugAssign:
+    @staticmethod
+    def to_node(tree):
+        target = read_node(tree[0].data).to_node(tree[0].children)
+        op = read_node(tree[1].value).to_node(tree[1])
+        value = read_node(tree[2].data).to_node(tree[2].children)
+        return ast.AugAssign(target=target, op=op, value=value)
+
+
+class MatMult:
+    @staticmethod
+    def to_node(tree):
+        return ast.MatMult()
+
+
+class BitAnd:
+    @staticmethod
+    def to_node(tree):
+        return ast.BitAnd()
+
+
+class BitOr:
+    @staticmethod
+    def to_node(tree):
+        return ast.BitOr()
+
+
+class BitXor:
+    @staticmethod
+    def to_node(tree):
+        return ast.BitXor()
+
+
+class LeftShift:
+    @staticmethod
+    def to_node(tree):
+        return ast.LShift()
+
+
+class RightShift:
+    @staticmethod
+    def to_node(tree):
+        return ast.RShift()
+
+
+class TestList:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+
 class CompoundStmt:
     @staticmethod
     def to_node(tree):
@@ -377,6 +436,7 @@ class WhileStmt:
         orelse = read_node(tree[2].data).to_node(tree[2].children) if len(tree) > 2 else []
         return ast.While(test=test, body=body, orelse=orelse)
 
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -411,7 +471,6 @@ def read_node(node):
         'tuple': Tuple,
         'tuplelist_comp': TupleListComp,
         # Expression classes
-        'assign': Assign,
         'testlist_star_expr': TestlistStarExpr,
         'arith_expr': BinOp,
         'arith_plus': ArithPlus,
@@ -440,6 +499,22 @@ def read_node(node):
         'is': Is,
         'is_not': IsNot,
         # Statement classes
+        'assign': Assign,
+        'augassign': AugAssign,
+        '+=': ArithPlus,
+        '-=': ArithMinus,
+        '*=': Mult,
+        '@=': MatMult,
+        '/=': Div,
+        '%=': Mod,
+        '&=': BitAnd,
+        '|=': BitOr,
+        '^=': BitXor,
+        '<<=': LeftShift,
+        '>>=': RightShift,
+        '**=': Pow,
+        '//=': FloorDiv,
+        'testlist': TestList,
         'compound_stmt': CompoundStmt,
         'if_stmt': IfStmt,
         'suite': Suite,
