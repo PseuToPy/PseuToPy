@@ -201,6 +201,25 @@ class Not:
         return ast.UnaryOp(op=op, operand=operand)
 
 
+class Factor:
+    @staticmethod
+    def to_node(tree):
+        op, operand = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.UnaryOp(op=op, operand=operand)
+
+
+class UnaryAdd:
+    @staticmethod
+    def to_node(tree):
+        return ast.UAdd()
+
+
+class UnarySub:
+    @staticmethod
+    def to_node(tree):
+        return ast.USub()
+
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -244,7 +263,10 @@ def read_node(node):
         'power': Power,
         'and_test': And,
         'or_test': Or,
-        'not': Not
+        'not': Not,
+        'factor': Factor,
+        'plus': UnaryAdd,
+        'minus': UnarySub
         # Statement classes
         
     }
