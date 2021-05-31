@@ -177,6 +177,30 @@ class Power:
         return ast.BinOp(left=left, op=ast.Pow(), right=right)
 
 
+class And:
+    @staticmethod
+    def to_node(tree):
+        op = ast.And()
+        values = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.BoolOp(op=op, values=values)
+
+
+class Or:
+    @staticmethod
+    def to_node(tree):
+        op = ast.Or()
+        values = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.BoolOp(op=op, values=values)
+
+
+class Not:
+    @staticmethod
+    def to_node(tree):
+        op = ast.Not()
+        operand = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.UnaryOp(op=op, operand=operand)
+
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -217,7 +241,10 @@ def read_node(node):
         'div': Div,
         'mod': Mod,
         'floor_div': FloorDiv,
-        'power': Power
+        'power': Power,
+        'and_test': And,
+        'or_test': Or,
+        'not': Not
         # Statement classes
         
     }
