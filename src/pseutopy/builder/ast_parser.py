@@ -458,11 +458,29 @@ class Argument:
     def to_node(tree):
         args, keywords = [], []
         for child in tree:
-            if child.data == "argvalue":
+            if child.data == 'argvalue' or child.data == 'kwargs':
                 keywords.append(read_node(child.data).to_node(child.children))
+            elif child.data == 'starargs':
+                args.append(read_node(child.data).to_node(child.children))
+                if len(child.children) > 1:
+                    keywords.append(read_node(child.children[1].data).to_node(child.children[1].children))
             else:
                 args.append(read_node(child.data).to_node(child.children))
         return args, keywords
+
+
+class StarArg:
+    @staticmethod
+    def to_node(tree):
+        value = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.Starred(value=value)
+
+
+class KeywordArg:
+    @staticmethod
+    def to_node(tree):
+        value = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.keyword(arg=None, value=value)
 
 
 class ArgValue:
@@ -558,6 +576,8 @@ def read_node(node):
         'funccall': FuncCall,
         'getattr': GetAttribute,
         'arguments': Argument,
+        'starargs': StarArg,
+        'kwargs':  KeywordArg,
         'argvalue': ArgValue
     }
     return mapping[node]

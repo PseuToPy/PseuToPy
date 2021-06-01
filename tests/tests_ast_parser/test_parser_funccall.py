@@ -29,3 +29,10 @@ def test_func_call_mixed(pseutopy):
     pseutopy_code = ["a.foo()", "a.foo(a.bar)", "a.foo(a.bar(), b.foo(1), 1, c=True)"]
     for python, pseudocode in zip(python_code, pseutopy_code):
         assert pseutopy.convert_from_string(pseudocode) == python + "\n"
+
+
+def test_func_call_args_kwargs(pseutopy):
+    python_code = ["foo(a)", "foo(*args)", "foo(**kwargs)", "foo(a, *args)", "foo(a, **kwargs)", "foo(*args, **kwargs)", "foo(a, *args, **kwargs)"]
+    pseutopy_code = ["foo(a)", "foo(*args)", "foo(**kwargs)", "foo(a, *args)", "foo(a, **kwargs)", "foo(*args, **kwargs)", "foo(a, *args, **kwargs)"]
+    for python, pseudocode in zip(python_code, pseutopy_code):
+        assert pseutopy.convert_from_string(pseudocode) == python + "\n"
