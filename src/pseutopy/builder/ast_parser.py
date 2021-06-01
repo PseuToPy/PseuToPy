@@ -431,7 +431,7 @@ class IfStmt:
 class Suite:
     @staticmethod
     def to_node(tree):
-        return [read_node(child.data).to_node(child.children) for child in tree]
+        return [ast.Expr(value=read_node(child.data).to_node(child.children)) for child in tree]
 
 
 class WhileStmt:

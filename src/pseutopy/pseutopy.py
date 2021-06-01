@@ -64,3 +64,24 @@ class PseuToPy:
         for match in re.findall(pattern, result):
             result = result.replace(template.format(match), match+":")
         return result
+
+if __name__ == '__main__':
+    ptp = PseuToPy()
+    tmp = """
+for i in [1, 2, 3]:
+    print(i)
+    print(i)
+else: print("test")
+    """
+    tmp2 = """
+while 1 is lower than 2 do:
+    set a to 2
+    b = 3
+    print((a % 2) - b)
+else do:
+    b = 2
+    set a to 3
+    print(a + b)
+"""
+    tree = ptp.convert_from_string(tmp2)
+    print(tree)
