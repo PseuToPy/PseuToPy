@@ -437,6 +437,41 @@ class WhileStmt:
         return ast.While(test=test, body=body, orelse=orelse)
 
 
+class FuncCall:
+    @staticmethod
+    def to_node(tree):
+        func = read_node(tree[0].data).to_node(tree[0].children)
+        args, keywords = (read_node(tree[1].data).to_node(tree[1].children)) if len(tree) > 1 else ([], [])
+        return ast.Call(func=func, args=args, keywords=keywords)
+
+
+class GetAttribute:
+    @staticmethod
+    def to_node(tree):
+        value = read_node(tree[0].data).to_node(tree[0].children)
+        attr = read_node(tree[1].type).to_node(tree[1])
+        return ast.Attribute(value=value, attr=attr)
+
+
+class Argument:
+    @staticmethod
+    def to_node(tree):
+        args, keywords = [], []
+        for child in tree:
+            if child.data == "argvalue":
+                keywords.append(read_node(child.data).to_node(child.children))
+            else:
+                args.append(read_node(child.data).to_node(child.children))
+        return args, keywords
+
+
+class ArgValue:
+    @staticmethod
+    def to_node(tree):
+        arg, value = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.keyword(arg=arg, value=value)
+
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -519,6 +554,10 @@ def read_node(node):
         'if_stmt': IfStmt,
         'suite': Suite,
         'elseif': IfStmt,
-        'while_stmt': WhileStmt
+        'while_stmt': WhileStmt,
+        'funccall': FuncCall,
+        'getattr': GetAttribute,
+        'arguments': Argument,
+        'argvalue': ArgValue
     }
     return mapping[node]
