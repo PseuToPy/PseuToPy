@@ -316,6 +316,12 @@ class IsNot:
         return ast.IsNot()
 
 
+class ListExpr:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+
 ##########################
 ##  Statements classes  ##
 ##########################
@@ -490,6 +496,16 @@ class ArgValue:
         return ast.keyword(arg=arg, value=value)
 
 
+class ForStmt:
+    @staticmethod
+    def to_node(tree):
+        target = read_node(tree[0].data).to_node(tree[0].children)
+        iterrable = read_node(tree[1].data).to_node(tree[1].children)
+        body = read_node(tree[2].data).to_node(tree[2].children)
+        orelse = read_node(tree[3].data).to_node(tree[3].children) if len(tree) > 3 else []
+        return ast.For(target=target, iter=iterrable, body=body, orelse=orelse)
+
+
 def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
@@ -551,6 +567,7 @@ def read_node(node):
         'not_in': NotIn,
         'is': Is,
         'is_not': IsNot,
+        'exprlist': ListExpr,
         # Statement classes
         'assign': Assign,
         'augassign': AugAssign,
@@ -578,6 +595,7 @@ def read_node(node):
         'arguments': Argument,
         'starargs': StarArg,
         'kwargs':  KeywordArg,
-        'argvalue': ArgValue
+        'argvalue': ArgValue,
+        'for_stmt': ForStmt,
     }
     return mapping[node]
