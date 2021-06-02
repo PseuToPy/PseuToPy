@@ -7,10 +7,11 @@ To organize this module a little bit, we will try to:
 """
 import ast
 
-
 #####################
 ##  Token classes  ##
 #####################
+import lark
+
 
 class Decimal:
     @staticmethod
@@ -125,7 +126,7 @@ class TupleListComp:
         if type == 'tuple':
             elts = [read_node(child.data).to_node(child.children) for child in children]
             return ast.Expression(body=ast.Tuple(elts=elts))
-        else: 
+        else:
             elts = [read_node(child.data).to_node(child.children) for child in children]
             return ast.List(elts=elts)
 
@@ -252,7 +253,8 @@ class Comparison:
     def to_node(tree):
         left = read_node(tree[0].data).to_node(tree[0].children)
         ops = [read_node(child.data).to_node(child.children) for index, child in enumerate(tree[1:]) if index % 2 == 0]
-        comparators = [read_node(child.data).to_node(child.children) for index, child in enumerate(tree[1:]) if index % 2 == 1]
+        comparators = [read_node(child.data).to_node(child.children) for index, child in enumerate(tree[1:]) if
+                       index % 2 == 1]
         return ast.Compare(left=left, ops=ops, comparators=comparators)
 
 
@@ -419,13 +421,14 @@ class IfStmt:
             is_else_if = True
         test = read_node(tree[0].data).to_node(tree[0].children)
         body = read_node(tree[1].data).to_node(tree[1].children)
-        if len(tree) == 2:      # There is no elif/else statement
+        if len(tree) == 2:  # There is no elif/else statement
             orelse = []
-        elif len(tree) == 3:    # There is a final `else` statement
+        elif len(tree) == 3:  # There is a final `else` statement
             orelse = read_node(tree[2].data).to_node(tree[2].children)
-        else:                   # There is a `elif` statement
+        else:  # There is a `elif` statement
             orelse = read_node(tree[2].data).to_node(tree[2:])
-        return [ast.If(test=test, body=body, orelse=orelse)] if is_else_if else ast.If(test=test, body=body, orelse=orelse)
+        return [ast.If(test=test, body=body, orelse=orelse)] if is_else_if else ast.If(test=test, body=body,
+                                                                                       orelse=orelse)
 
 
 class Suite:
@@ -441,6 +444,94 @@ class WhileStmt:
         body = read_node(tree[1].data).to_node(tree[1].children)
         orelse = read_node(tree[2].data).to_node(tree[2].children) if len(tree) > 2 else []
         return ast.While(test=test, body=body, orelse=orelse)
+
+
+class FuncDef:
+    @staticmethod
+    def to_node(tree):
+        name = str(tree[0])
+        args, body = None, []
+        for child in tree[1:]:
+            if child.data == "parameters":
+                args = read_node(tree[1].data).to_node(tree[1].children)
+            else:
+                body = [ast.Expr(value=read_node(element.data).to_node(element.children)) if element.data == "funccall"
+                        else read_node(element.data).to_node(element.children)
+                        for element in child.children]
+        if not args:
+            args = ast.arguments(posonlyargs=[], args=[], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+        return ast.FunctionDef(name=name, args=args, body=body, decorator_list=[], returns=None)
+
+
+class Parameter:
+    @staticmethod
+    def to_node(tree):
+        args, defaults, varargs, kwargs = [], [], None, None
+        for child in tree:
+            if isinstance(child, lark.Token):
+                args.append(ast.arg(arg=str(child), annotation=None))
+            else:
+                if child.data == 'paramvalue':
+                    arg, default = (read_node(child.data).to_node(child.children))
+                    args.append(arg)
+                    defaults.append(default)
+                elif child.data == 'starparams':
+                    varargs, kwargs = (read_node(child.data).to_node(child.children))
+                elif child.data == 'kwparams':
+                    kwargs = read_node(child.data).to_node(child.children)
+        return ast.arguments(posonlyargs=[], args=args, vararg=varargs, kwonlyargs=[], kw_defaults=[], kwarg=kwargs,
+                             defaults=defaults)
+
+
+class ParamValue:
+    @staticmethod
+    def to_node(tree):
+        arg = read_node(tree[0].type).to_node(tree[0])
+        default = read_node(tree[1].data).to_node(tree[1].children)
+        return arg, default
+
+
+class StarParam:
+    @staticmethod
+    def to_node(tree):
+        args, kwargs = None, None
+        for child in tree:
+            if isinstance(child, lark.Token):
+                args = ast.arg(arg=str(child), annotation=None)
+            else:
+                kwargs = read_node(child.data).to_node(child.children)
+        return args, kwargs
+
+
+class KwParam:
+    @staticmethod
+    def to_node(tree):
+        return ast.arg(arg=str(tree[0]), annotation=None)
+
+
+class ReturnStmt:
+    @staticmethod
+    def to_node(tree):
+        value = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.Return(value=value)
+
+
+class PassStmt:
+    @staticmethod
+    def to_node(tree):
+        return ast.Pass()
+
+
+class ContinueStmt:
+    @staticmethod
+    def to_node(tree):
+        return ast.Continue()
+
+
+class BreakStmt:
+    @staticmethod
+    def to_node(tree):
+        return ast.Break()
 
 
 class FuncCall:
@@ -524,7 +615,7 @@ def read_node(node):
         'FLOAT_NUMBER': Float,
         'STRING': StringToken,
         'NAME': Name,
-        #Token classes
+        # Token classes
         'number': Number,
         'var': Var,
         'string': String,
@@ -590,11 +681,20 @@ def read_node(node):
         'suite': Suite,
         'elseif': IfStmt,
         'while_stmt': WhileStmt,
+        'funcdef': FuncDef,
+        'parameters': Parameter,
+        'paramvalue': ParamValue,
+        'starparams': StarParam,
+        'kwparams': KwParam,
+        'pass_stmt': PassStmt,
+        'continue_stmt': ContinueStmt,
+        'break_stmt': BreakStmt,
+        'return_stmt': ReturnStmt,
         'funccall': FuncCall,
         'getattr': GetAttribute,
         'arguments': Argument,
         'starargs': StarArg,
-        'kwargs':  KeywordArg,
+        'kwargs': KeywordArg,
         'argvalue': ArgValue,
         'for_stmt': ForStmt,
     }
