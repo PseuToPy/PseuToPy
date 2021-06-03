@@ -177,7 +177,10 @@ AWAIT: "await"
 tuplelist_comp: (test|star_expr) (comp_for | ("," (test|star_expr))+ [","] | ",")
 ?subscriptlist: subscript
               | subscript (("," subscript)+ [","] | ",") -> subscript_tuple
-subscript: test | ([test] ":" [test] [sliceop]) -> slice
+subscript: test
+         | (":" test [sliceop]) -> upper_slice
+         | (test ":" [sliceop]) -> lower_slice
+         | (test ":" test [sliceop]) -> slice
 sliceop: ":" [test]
 exprlist: (expr|star_expr)
         | (expr|star_expr) (("," (expr|star_expr))+ [","]|",") -> exprlist_tuple

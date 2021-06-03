@@ -335,13 +335,28 @@ class Subscript:
     @staticmethod
     def to_node(tree):
         lower = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.Index(value=lower)
+
+
+class LowerSlice:
+    @staticmethod
+    def to_node(tree):
+        lower = read_node(tree[0].data).to_node(tree[0].children)
         return ast.Slice(lower=lower, upper=None, step=None)
+
+
+class UpperSlice:
+    @staticmethod
+    def to_node(tree):
+        upper = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.Slice(lower=None, upper=upper, step=None)
 
 
 class Slice:
     @staticmethod
     def to_node(tree):
-        lower, upper = [read_node(child.data).to_node(child.children) for child in tree[:2]]
+        lower = read_node(tree[0].data).to_node(tree[0].children)
+        upper = None if len(tree) < 2 else read_node(tree[1].data).to_node(tree[1].children)
         step = None if len(tree) < 3 else read_node(tree[2].data).to_node(tree[2].children)
         return ast.Slice(lower=lower, upper=upper, step=step)
 
@@ -689,6 +704,8 @@ def read_node(node):
         'exprlist': ListExpr,
         'getitem': GetItem,
         'subscript': Subscript,
+        'lower_slice': LowerSlice,
+        'upper_slice': UpperSlice,
         'slice': Slice,
         'sliceop': SliceOp,
         # Statement classes

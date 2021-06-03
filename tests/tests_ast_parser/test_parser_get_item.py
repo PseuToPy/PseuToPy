@@ -7,7 +7,10 @@
           | atom
 
 
-    subscript: test | ([test] ":" [test] [sliceop]) -> slice
+    subscript: test
+             | (":" test [sliceop]) -> upper_slice
+             | (test ":" [sliceop]) -> lower_slice
+             | (test ":" test [sliceop]) -> slice
     sliceop: ":" [test]
 """
 
@@ -29,5 +32,19 @@ def test_slice_without_step(pseutopy):
 def test_slice_with_step(pseutopy):
     python_code = ["a[1:10:1]", "a[b:10:2]"]
     pseutopy_code = ["a[1:10:1]", "a[b:10:2]"]
+    for python, pseudocode in zip(python_code, pseutopy_code):
+        assert pseutopy.convert_from_string(pseudocode) == python + "\n"
+
+
+def test_slice_lower_only(pseutopy):
+    python_code = ["a[1:]", "a[b:]"]
+    pseutopy_code = ["a[1:]", "a[b:]"]
+    for python, pseudocode in zip(python_code, pseutopy_code):
+        assert pseutopy.convert_from_string(pseudocode) == python + "\n"
+
+
+def test_slice_upper_only(pseutopy):
+    python_code = ["a[:-1]", "a[:b]"]
+    pseutopy_code = ["a[:-1]", "a[:b]"]
     for python, pseudocode in zip(python_code, pseutopy_code):
         assert pseutopy.convert_from_string(pseudocode) == python + "\n"
