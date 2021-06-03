@@ -644,7 +644,10 @@ def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
     for child in tree.children:
-        ast_module.body.append(read_node(child.data).to_node(child.children))
+        if child.data == 'funccall':
+            ast_module.body.append(ast.Expr(value=read_node(child.data).to_node(child.children)))
+        else:
+            ast_module.body.append(read_node(child.data).to_node(child.children))
     return ast_module
 
 
