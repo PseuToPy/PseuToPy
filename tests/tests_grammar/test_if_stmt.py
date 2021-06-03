@@ -1,8 +1,8 @@
 """
-Current state of if rule: 
+    Current state of if/elif/else rule: 
 
-if_stmt: "if" test (":" | "then" | "then:") suite (elif_stmt test (":" | "then" | "then:") suite)* ["else" (":" | "then" | "then:") suite]
-elif_stmt : ("elif" | "else" "if") -> elseif
+    if_stmt: "if" test (":" | "then" | "then:") suite (elif_stmt test (":" | "then" | "then:") suite)* ["else" (":" | "then" | "then:") suite]
+    elif_stmt : ("elif" | "else" "if") -> elseif
 """
 
 def test_if_simple(pseutopy):
@@ -12,7 +12,7 @@ if True{} a = 2
     python_code = template.format(':')
     pseutopy_code = [template.format(':'), template.format(' then'), template.format(' then:')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_if_simple_2(pseutopy):
     template = '''
@@ -22,7 +22,7 @@ if True{}
     python_code = template.format(':')
     pseutopy_code = [template.format(':'), template.format(' then'), template.format(' then:')]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_if_else_simple(pseutopy):
     template = '''
@@ -34,7 +34,7 @@ else{} b = 2
         template.format(" then:", " then:"), template.format(":", " then:"), 
         template.format(" then", ":")]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_if_else_simple_2(pseutopy):
     template = '''
@@ -47,7 +47,7 @@ else{} b = 2
         template.format(" then:", " then:"), template.format(":", " then:"), 
         template.format(" then", ":")]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_if_else_simple_3(pseutopy):
     template = '''
@@ -61,7 +61,7 @@ else{}
         template.format(" then:", " then:"), template.format(":", " then:"), 
         template.format(" then", ":")]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_elif_simple(pseutopy):
     template = '''
@@ -76,7 +76,7 @@ else{}
     pseutopy_code = [template.format(":", "elif", ":", ":"), template.format(":", "else if", ":", ":"), 
         template.format(":", "elif", " then:", ":"), template.format(":", "else if", " then", ":")]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_elif_simple_2(pseutopy):
     template = '''
@@ -88,7 +88,7 @@ else{} b = a - b**-3
     pseutopy_code = [template.format(":", "elif", ":", ":"), template.format(":", "else if", ":", ":"), 
         template.format(":", "elif", " then:", ":"), template.format(":", "else if", " then", ":")]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
 
 def test_if_stmt(pseutopy):
     template = '''
@@ -102,4 +102,4 @@ if range(a) >= len(b) {}
     pseutopy_code = [template.format(":", "elif", ":", "elif", ":"), template.format(" then", "elif", " then:", "else if", ":"),
     template.format(":", "else if", ":", "else if", " then:"), template.format(" then:", "else if", " then", "elif", ":")]
     for i in range(len(pseutopy_code)):
-        assert pseutopy.convert_from_string(python_code) == pseutopy.convert_from_string(pseutopy_code[i])
+        assert pseutopy.convert_to_ast(python_code) == pseutopy.convert_to_ast(pseutopy_code[i])
