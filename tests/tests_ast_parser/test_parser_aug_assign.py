@@ -1,6 +1,6 @@
 """
-Tests on augassign rule
-Note that some of these rules do not have any PseuToPy equivalent yet.
+    Tests on augassign rule
+    Note that some of these rules do not have any PseuToPy equivalent yet.
 """
 
 

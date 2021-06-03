@@ -1,8 +1,8 @@
 """
-Current state of funcdef rule:
+    Current state of funcdef rule:
 
-async_funcdef: "async" funcdef
-funcdef: ("def" | "define" "function") NAME "(" parameters? ")" ["->" test] (":" | "to do" | "to do:") suite
+    async_funcdef: "async" funcdef
+    funcdef: ("def" | "define" "function") NAME "(" parameters? ")" ["->" test] (":" | "to do" | "to do:") suite
 """
 
 

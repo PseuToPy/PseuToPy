@@ -1,5 +1,10 @@
 """
-funccall and getattr
+    Current state of funccall and getattr rule:
+
+    ?atom_expr: atom_expr "(" [arguments] ")"      -> funccall
+          | atom_expr "[" subscriptlist "]"  -> getitem
+          | atom_expr "." NAME               -> getattr
+          | atom
 """
 
 

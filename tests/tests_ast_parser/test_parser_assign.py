@@ -1,5 +1,5 @@
 """
-    Current state of the rule:
+    Current state of assign rule:
 
     ?assign: (testlist_star_expr ("=" (yield_expr|testlist_star_expr))*)
          | ("set" testlist_star_expr ("to" (yield_expr | testlist_star_expr))*)

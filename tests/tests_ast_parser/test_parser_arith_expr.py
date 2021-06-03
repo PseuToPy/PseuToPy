@@ -1,15 +1,15 @@
 """
-Current state of the `arith_expr` rule (plus any rules that the `arith_expr` rule is based
-on:)
+    Current state of the `arith_expr` rule (plus any rules that the `arith_expr` rule is based
+    on:)
 
-?arith_expr: term (_add_op term)*
-?term: factor (_mul_op factor)*
-?factor: factor_op factor | power
+    ?arith_expr: term (_add_op term)*
+    ?term: factor (_mul_op factor)*
+    ?factor: factor_op factor | power
 
 
-Note:
-    - Unnecessary parentheses in PseuToPy will not be rendered when translated into Python
-    - Quotes will always be translated into double quotes when handling Strings
+    Note:
+        - Unnecessary parentheses in PseuToPy will not be rendered when translated into Python
+        - Quotes will always be translated into double quotes when handling Strings
 """
 
 

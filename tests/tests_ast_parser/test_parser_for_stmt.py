@@ -1,7 +1,7 @@
 """
-Current state of for rule: 
+    Current state of for/else rule: 
 
-for_stmt: "for" exprlist "in" testlist (":" | "do" | "do:") suite ["else" (":" | "do" | "do:") suite]
+    for_stmt: "for" exprlist "in" testlist (":" | "do" | "do:") suite ["else" (":" | "do" | "do:") suite]
 """
 
 def test_simple_for(pseutopy):

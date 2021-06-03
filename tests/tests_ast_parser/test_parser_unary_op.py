@@ -1,6 +1,11 @@
 """
-Unary ops are ast.UAdd() and ast.USub() operations
-Note that ast.Not() is also considered a ast.UnaryOp, but is tested in test_parser_bool_op
+    Current state of unary operators rule:
+
+    plus_op: ("+" | "plus") -> plus
+    minus_op : ("-" | "minus") -> minus
+
+    Unary ops are ast.UAdd() and ast.USub() operations
+    Note that ast.Not() is also considered a ast.UnaryOp, but is tested in test_parser_bool_op
 """
 
 

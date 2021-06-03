@@ -1,27 +1,27 @@
 """
-Current state of comparison operator :
+    Current state of comparison operator :
 
-_comp_op: less_than_op
-        | more_than_op
-        | equal_to_op
-        | less_or_equal_to_op
-        | more_or_equal_to_op
-        | "<>"
-        | is_not_equal_to_op
-        | in_op
-        | not_in_op
-        | is_op
-        | is_not_op
-less_than_op: ("<" | "is" "lower" "than") -> less_than
-more_than_op: (">" | "is" "greater" "than") -> more_than
-equal_to_op: ("==" | "is" "equal" "to") -> equal_to
-less_or_equal_to_op: ("<=" | "is" "lower" "or" "equal" "to") -> less_or_equal_to
-more_or_equal_to_op: (">=" | "is" "greater" "or" "equal" "to") -> more_or_equal_to
-is_not_equal_to_op: ("!=" | "is" "not" "equal" "to" | "is" "different" "from") -> is_not_equal_to
-in_op: ("in") -> in
-not_in_op: ("not" "in") -> not_in
-is_op: ("is") -> is
-is_not_op: ("is" "not") -> is_not
+    _comp_op: less_than_op
+            | more_than_op
+            | equal_to_op
+            | less_or_equal_to_op
+            | more_or_equal_to_op
+            | "<>"
+            | is_not_equal_to_op
+            | in_op
+            | not_in_op
+            | is_op
+            | is_not_op
+    less_than_op: ("<" | "is" "lower" "than") -> less_than
+    more_than_op: (">" | "is" "greater" "than") -> more_than
+    equal_to_op: ("==" | "is" "equal" "to") -> equal_to
+    less_or_equal_to_op: ("<=" | "is" "lower" "or" "equal" "to") -> less_or_equal_to
+    more_or_equal_to_op: (">=" | "is" "greater" "or" "equal" "to") -> more_or_equal_to
+    is_not_equal_to_op: ("!=" | "is" "not" "equal" "to" | "is" "different" "from") -> is_not_equal_to
+    in_op: ("in") -> in
+    not_in_op: ("not" "in") -> not_in
+    is_op: ("is") -> is
+    is_not_op: ("is" "not") -> is_not
 """
 
 

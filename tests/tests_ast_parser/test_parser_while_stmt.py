@@ -1,7 +1,7 @@
 """
-Current state of while rule:
+    Current state of while/else rule:
 
-while_stmt: "while" test (":" | "do" | "do:") suite ["else" (":" | "do" | "do:") suite]
+    while_stmt: "while" test (":" | "do" | "do:") suite ["else" (":" | "do" | "do:") suite]
 """
 
 

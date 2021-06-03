@@ -1,8 +1,8 @@
 """
-Current state of if rule:
+    Current state of if/elif/else rule:
 
-if_stmt: "if" test (":" | "then" | "then:") suite (elif_stmt test (":" | "then" | "then:") suite)* ["else" (":" | "then" | "then:") suite]
-elif_stmt : ("elif" | "else" "if") -> elseif
+    if_stmt: "if" test (":" | "then" | "then:") suite (elif_stmt test (":" | "then" | "then:") suite)* ["else" (":" | "then" | "then:") suite]
+    elif_stmt : ("elif" | "else" "if") -> elseif
 """
 
 
