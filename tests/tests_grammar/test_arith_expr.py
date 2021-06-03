@@ -1,10 +1,10 @@
 """
-Current state of the `arith_expr` rule (plus any rules that the `arith_expr` rule is based
-on:)
+    Current state of the `arith_expr` rule (plus any rules that the `arith_expr` rule is based
+    on:)
 
-?arith_expr: term (_add_op term)*
-?term: factor (_mul_op factor)*
-?factor: factor_op factor | power
+    ?arith_expr: term (_add_op term)*
+    ?term: factor (_mul_op factor)*
+    ?factor: factor_op factor | power
 """
 
 

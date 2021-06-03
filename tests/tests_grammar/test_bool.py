@@ -1,11 +1,11 @@
 """
-Current state of all the boolean rules (and any other rules that are also required)
+    Current state of all the boolean rules (and any other rules that are also required)
 
-?or_test: and_test ("or" and_test)*
-?and_test: not_test ("and" not_test)*
-?not_test: "not" not_test -> not
-         | comparison
-?comparison: expr (_comp_op expr)*
+    ?or_test: and_test ("or" and_test)*
+    ?and_test: not_test ("and" not_test)*
+    ?not_test: "not" not_test -> not
+            | comparison
+    ?comparison: expr (_comp_op expr)*
 """
 
 

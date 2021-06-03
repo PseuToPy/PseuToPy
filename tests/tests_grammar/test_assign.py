@@ -1,8 +1,8 @@
 """
-Current state of assign rule: 
+    Current state of assign rule: 
 
-?assign: (testlist_star_expr ("=" (yield_expr|testlist_star_expr))*)
-         | ("set" testlist_star_expr ("to" (yield_expr | testlist_star_expr))*)
+    ?assign: (testlist_star_expr ("=" (yield_expr|testlist_star_expr))*)
+            | ("set" testlist_star_expr ("to" (yield_expr | testlist_star_expr))*)
 """
 
 def test_simple_assign(pseutopy):

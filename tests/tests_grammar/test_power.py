@@ -1,10 +1,10 @@
 """
-Current state of the `power` rule (plus any non-obvious rules that the `power` rule is
-based on):
+    Current state of the `power` rule (plus any non-obvious rules that the `power` rule is
+    based on):
 
-?power: await_expr (("**" | "to the power of") factor)?
-?factor: _factor_op factor | power
-?await_expr: AWAIT? atom_expr
+    ?power: await_expr (("**" | "to the power of") factor)?
+    ?factor: _factor_op factor | power
+    ?await_expr: AWAIT? atom_expr
 """
 
 
