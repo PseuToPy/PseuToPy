@@ -324,6 +324,34 @@ class ListExpr:
         return read_node(tree[0].data).to_node(tree[0].children)
 
 
+class GetItem:
+    @staticmethod
+    def to_node(tree):
+        value, slice = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.Subscript(value=value, slice=slice, ctx=ast.Load(), type_ignores=[])
+
+
+class Subscript:
+    @staticmethod
+    def to_node(tree):
+        lower = read_node(tree[0].data).to_node(tree[0].children)
+        return ast.Slice(lower=lower, upper=None, step=None)
+
+
+class Slice:
+    @staticmethod
+    def to_node(tree):
+        lower, upper = [read_node(child.data).to_node(child.children) for child in tree[:2]]
+        step = None if len(tree) < 3 else read_node(tree[2].data).to_node(tree[2].children)
+        return ast.Slice(lower=lower, upper=upper, step=step)
+
+
+class SliceOp:
+    @staticmethod
+    def to_node(tree):
+        return read_node(tree[0].data).to_node(tree[0].children)
+
+
 ##########################
 ##  Statements classes  ##
 ##########################
@@ -659,6 +687,10 @@ def read_node(node):
         'is': Is,
         'is_not': IsNot,
         'exprlist': ListExpr,
+        'getitem': GetItem,
+        'subscript': Subscript,
+        'slice': Slice,
+        'sliceop': SliceOp,
         # Statement classes
         'assign': Assign,
         'augassign': AugAssign,
