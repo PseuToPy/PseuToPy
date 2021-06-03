@@ -3,8 +3,8 @@ PseuToPy parser that transforms pseudocode instructions into valid Python 3.8 in
 """
 from io import open
 
-from src.pseutopy.grammar_parser import PythonIndenter
-from src.pseutopy.builder.ast_parser import parse_ast_to_python
+from pseutopy.grammar_parser import PythonIndenter
+from pseutopy.builder.ast_parser import parse_ast_to_python
 from lark import Lark, exceptions
 import astor
 import re
