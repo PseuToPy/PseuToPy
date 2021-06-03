@@ -74,7 +74,7 @@ def test_list(pseutopy):
     assert pseutopy.convert_from_string(pseudo_code) == python_code + '\n'
 
 
-def test_dict(pseutopy):
+def test_tuple(pseutopy):
     pseudo_code = 'tuple = (1, true, "test", a)'
     python_code = 'tuple = (1, True, "test", a)'
     assert pseutopy.convert_from_string(pseudo_code) == python_code + '\n'
