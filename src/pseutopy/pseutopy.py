@@ -59,7 +59,7 @@ class PseuToPy:
     def __clean_python_result(self, result):
         result = result.replace("\'\"", "\"")
         result = result.replace("\"\'", "\"")
-        pattern = re.compile(r'\((\d+)\):')
+        pattern = re.compile(r'(?:\{|[,][ ])\((\d+)\):')
         template = """({}):"""
         for match in re.findall(pattern, result):
             result = result.replace(template.format(match), match+":")

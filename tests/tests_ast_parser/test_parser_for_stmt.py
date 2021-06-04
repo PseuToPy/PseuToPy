@@ -5,24 +5,24 @@
 """
 
 def test_simple_for(pseutopy):
-    python_code = """for i in 5:
+    python_code = """for i in range(5):
     a = a + i
 """
     pseutopy_code = """
-for i in 5 do
+for i in range(5) do
     set a to a + i
 """
     assert pseutopy.convert_from_string(pseutopy_code) == python_code
 
 def test_for_orelse(pseutopy):
-    python_code = """for i in 5:
+    python_code = """for i in range(5):
     a = a + i
     print(a)
 else:
     b = a + 1
 """
     pseutopy_code = """
-for i in 5 do:
+for i in range(5) do:
     a = a + i
     print(a)
 else do set b to (a + 1)
@@ -30,7 +30,7 @@ else do set b to (a + 1)
     assert pseutopy.convert_from_string(pseutopy_code) == python_code
 
 def test_for_orelse_with_stmt_inside(pseutopy):
-    python_code = """for i in 5:
+    python_code = """for i in range(5):
     if i <= 3:
         print(a)
         do_something(len(tab) - a)
@@ -47,7 +47,7 @@ else:
             print(a - cmp)
 """
     pseutopy_code = """
-for i in 5:
+for i in range(5):
     if i<= 3 then
         print(a)
         do_something(len(tab)-a)
