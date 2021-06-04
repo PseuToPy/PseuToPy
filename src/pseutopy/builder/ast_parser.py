@@ -559,6 +559,13 @@ class ReturnStmt:
         return ast.Return(value=value)
 
 
+class TestlistTuple:
+    @staticmethod
+    def to_node(tree):
+        elts = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.Tuple(elts=elts, ctx=ast.Load())
+
+
 class PassStmt:
     @staticmethod
     def to_node(tree):
@@ -742,6 +749,7 @@ def read_node(node):
         'continue_stmt': ContinueStmt,
         'break_stmt': BreakStmt,
         'return_stmt': ReturnStmt,
+        'testlist_tuple': TestlistTuple,
         'funccall': FuncCall,
         'getattr': GetAttribute,
         'arguments': Argument,
