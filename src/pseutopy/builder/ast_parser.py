@@ -559,6 +559,13 @@ class ReturnStmt:
         return ast.Return(value=value)
 
 
+class TestlistTuple:
+    @staticmethod
+    def to_node(tree):
+        elts = [read_node(child.data).to_node(child.children) for child in tree]
+        return ast.Tuple(elts=elts, ctx=ast.Load())
+
+
 class PassStmt:
     @staticmethod
     def to_node(tree):
@@ -644,7 +651,10 @@ def parse_ast_to_python(tree):
     ast_module = ast.Module()
     ast_module.body = []
     for child in tree.children:
-        ast_module.body.append(read_node(child.data).to_node(child.children))
+        if child.data == 'funccall':
+            ast_module.body.append(ast.Expr(value=read_node(child.data).to_node(child.children)))
+        else:
+            ast_module.body.append(read_node(child.data).to_node(child.children))
     return ast_module
 
 
@@ -739,6 +749,7 @@ def read_node(node):
         'continue_stmt': ContinueStmt,
         'break_stmt': BreakStmt,
         'return_stmt': ReturnStmt,
+        'testlist_tuple': TestlistTuple,
         'funccall': FuncCall,
         'getattr': GetAttribute,
         'arguments': Argument,

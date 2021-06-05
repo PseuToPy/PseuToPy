@@ -3,8 +3,8 @@ PseuToPy parser that transforms pseudocode instructions into valid Python 3.8 in
 """
 from io import open
 
-from src.pseutopy.grammar_parser import PythonIndenter
-from src.pseutopy.builder.ast_parser import parse_ast_to_python
+from pseutopy.grammar_parser import PythonIndenter
+from pseutopy.builder.ast_parser import parse_ast_to_python
 from lark import Lark, exceptions
 import astor
 import re
@@ -59,7 +59,7 @@ class PseuToPy:
     def __clean_python_result(self, result):
         result = result.replace("\'\"", "\"")
         result = result.replace("\"\'", "\"")
-        pattern = re.compile(r'\((\d+)\):')
+        pattern = re.compile(r'(?:\{|[,][ ])\((\d+)\):')
         template = """({}):"""
         for match in re.findall(pattern, result):
             result = result.replace(template.format(match), match+":")

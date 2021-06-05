@@ -1,4 +1,10 @@
 language: python
+branches:
+  except:
+    - /feat\/.*/
+  only:
+    - master
+    - dev
 python:
   - "3.6"
   - "3.7"
@@ -6,6 +12,7 @@ python:
   - "3.9"
 # Command to install dependencies
 install:
+  - python3 -m pip install --upgrade pip
   - pip install -r requirements.txt
   - pip install -e .
 # Scripts to run tests

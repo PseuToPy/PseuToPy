@@ -97,3 +97,14 @@ define function foo(a, b=1, *args, **kwargs) to do
     return a
 """
     assert pseutopy.convert_from_string(pseutopy_code) == python_code
+
+
+def test_funcdef_return(pseutopy):
+    python_code = """def foo():
+    return a, b, 1
+"""
+    pseutopy_code = """
+define function foo() to do
+    return a, b, 1
+"""
+    assert pseutopy.convert_from_string(pseutopy_code) == python_code
