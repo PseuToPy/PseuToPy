@@ -22,7 +22,7 @@ else:
     b = a + 1
 """
     pseutopy_code = """
-for i in range(5) do:
+for i in range(5) do    :
     a = a + i
     print(a)
 else do set b to (a + 1)
@@ -55,7 +55,7 @@ for i in range(5):
         a = len(super_tab)
     else: print("There is something wrong here")
 else do:
-    while cmp < 5 do
+    while cmp < 5 do     :
         print(cmp)
         if (cmp-a)<2 then:
             set b to cmp
