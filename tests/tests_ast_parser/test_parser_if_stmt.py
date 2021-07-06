@@ -25,9 +25,9 @@ else:
     b = 2
 """
     pseutopy_code = """
-if a is lower than b then
+if a is lower than b then    :
     set a to 2
-else then
+else then:
     set b to 2
 """
     assert pseutopy.convert_from_string(pseutopy_code) == python_code
